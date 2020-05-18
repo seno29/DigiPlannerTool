@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6"> 
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <legend>Username</legend>
+                    <input type="text" placeholder = "Username" (keyup.Enter) = "setUsername($event)">
+                </li>
+                <li class="list-group-item">
+                    <legend>Room Id</legend>
+                    <input type="text" placeholder="Room Id" (keyup.Enter) = "createRoom($event)">
+                </li>
+                <li class="list-group-item">
+                    <button type="button" class="btn btn-large btn-block btn-default" routerLink="/drawing" >
+                        Submit
+                    </button> 
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+</div>

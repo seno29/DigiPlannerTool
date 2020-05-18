@@ -11,8 +11,6 @@ import { UserBoardComponent } from './user-board/user-board.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    AdminComponent,
-    UserComponent,
     AdminBoardComponent,
     UserBoardComponent
   ],

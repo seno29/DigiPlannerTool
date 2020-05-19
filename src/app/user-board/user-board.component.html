@@ -5,6 +5,7 @@
       <div class="title">User UI</div>
   
       <div class="button-row-right" >
+
         <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="connectPressed">
             <mat-icon>add_box</mat-icon>
             Rectangle
@@ -25,7 +26,7 @@
   
     </div>
   
-    <div class="canvasContainer">
+    <div id="canvas-div" (window:resize)="scaleCanvas()">
     
         <canvas id="canvas-container"></canvas>
       
@@ -63,4 +64,4 @@
   
     </div>
   
-  </div>
+</div>

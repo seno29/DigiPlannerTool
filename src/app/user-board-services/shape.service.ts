@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
-import { fabric}  from 'fabric';
+import { fabric } from 'fabric';
+import { TextBoxService } from './text-box.service';
 import { ShapeInterFace } from '../user-board/user-board.component';
-//import {DrawingColours, FabricObjectType} from '../user-board/model';
 
-/*@Injectable({
+@Injectable({
   providedIn: 'root'
-})*/
-
-
+})
 export class ShapeService {
 
-  constructor() { }
-  
+  constructor(private textService: TextBoxService) { }
 
   addEllipse(canvas:fabric.Canvas, color:string){
     const ellipse = new fabric.Ellipse({
@@ -20,9 +17,9 @@ export class ShapeService {
      fill : color,
      rx:50,
      ry:30,
-     opacity: 0.5,
     });
-    canvas.add(ellipse);
+    const text = this.textService.addText(ellipse, canvas);
+    this.textService.createGroup(rect, text, canvas, 100, 100);
   }
 
   /*addCircle(canvas : fabric.Canvas, color:string) {
@@ -37,8 +34,6 @@ export class ShapeService {
     canvas.add(circle);
       }*/
 
-
-  
   addRectangle(canvas: fabric.Canvas, color:string) {
     const rect = new fabric.Rect({
       width: 200,
@@ -48,8 +43,10 @@ export class ShapeService {
         left: 10,
         top: 10,
       });
-      canvas.add(rect);
-      }
+      
+    const text = this.textService.addText(rect, canvas);
+    this.textService.createGroup(rect, text, canvas, 100, 100););
+     }
 
       addImage(canvas:fabric.Canvas){
       fabric.Image.fromURL("https://i.dlpng.com/static/png/6661426_preview.png", function(img){
@@ -59,8 +56,10 @@ export class ShapeService {
          scaleX: scale,
           scaleY: scale
         });
-       canvas.add(img)
+       
       });
+      const text = this.textService.addText(rect, canvas);
+    this.textService.createGroup(rect, text, canvas, 100, 100););
       
       }
 

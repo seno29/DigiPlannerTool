@@ -5,10 +5,9 @@
     margin-top: 1%;
 }
 
-.canvasContainer{
+#canvas{
     width: 70%;
     padding-top: 42.1875%;
-    margin: auto;
     border: 2px solid black;
     border-radius: 10px;
     margin: 0 auto;

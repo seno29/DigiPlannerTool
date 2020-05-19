@@ -5,6 +5,7 @@
     <div class="title">Admin UI</div>
 
     <div class="button-row-right">
+      <mat-slide-toggle (change)="togglePen()"><span style="font-weight: bold;">Pen Mode</span></mat-slide-toggle>
       <button mat-flat-button (click)="box()" color="primary" >
         <mat-icon>crop_3_2</mat-icon>
       </button>

@@ -7,7 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserBoardComponent implements OnInit {
 
-  constructor() { }
+  colors = ['red', 'blue', 'green', 'yellow', 'orange'];
+  selectedColor: string;
+  connectPressed: boolean;
+
+  constructor() {
+    this.selectedColor = 'red';
+    this.connectPressed = false;
+  }
 
   ngOnInit(): void {
   }

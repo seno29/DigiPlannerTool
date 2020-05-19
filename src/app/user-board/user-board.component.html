@@ -1,1 +1,47 @@
-<p>user-board works!</p>
+<div class="userUI">
+
+    <div class="button-row">
+
+      <div class="title">User UI</div>
+  
+      <div class="button-row-right">
+        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+            <mat-icon>add_box</mat-icon>
+            Rectangle
+        </button>
+        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+            <mat-icon>add_circle</mat-icon>
+            Circle
+        </button>
+        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+          <mat-icon>stars</mat-icon>
+          Image
+        </button>
+        <button mat-flat-button (click)="0" color="primary">
+          <mat-icon>timeline</mat-icon>
+          Connect
+        </button>
+      </div>
+  
+    </div>
+  
+    <div class="canvasContainer"></div>
+  
+    <div class="button-row">
+  
+        <div class="button-row-left" *ngFor = "let color of colors;">
+          <button mat-mini-fab class={{color}} style="box-shadow: none;" (click)="selectedColor = color">
+            <mat-icon *ngIf="selectedColor == color" [style.color]="'black'">done</mat-icon>
+          </button>
+        </div>
+  
+        <div class="button-row-right">
+          <button mat-flat-button class="orange">
+            <mat-icon>cloud_download</mat-icon>
+            Export
+          </button>
+        </div>
+  
+    </div>
+  
+  </div>

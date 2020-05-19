@@ -1,0 +1,61 @@
+.title{
+    font-size: xx-large;
+    font-weight: bold;
+    float: left;
+    margin-top: 1%;
+}
+
+.canvasContainer{
+    height: 45em;
+    width: 64em;
+    margin: auto;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin: 0 auto;
+}
+
+.button-row{
+    width: 64em;
+    margin: 5px auto;
+    contain: content;
+}
+
+.button-row-left{
+    float: left;
+}
+
+.button-row-right{
+    float: right;
+}
+
+.button-row-left button{
+    margin-right: 8px;
+}
+
+.button-row-right button{
+    margin-left: 8px;
+}
+
+.red{
+    background-color: red;
+}
+
+.green{
+    background-color: green;
+}
+
+.blue{
+    background-color: blue;
+}
+
+.orange{
+    background-color: orange;
+}
+
+.yellow{
+    background-color: yellow;
+}
+
+.white{
+    background-color: whitesmoke;
+}

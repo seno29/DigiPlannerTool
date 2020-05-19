@@ -49,8 +49,7 @@ export class TextBoxService {
   }
 
   createGroup(shape, text, canvas, x, y): void{
-    console.log(`shape: ${shape},\n
-     text: ${text}`);
+    shape.selectable = false;
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,

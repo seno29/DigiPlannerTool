@@ -11,7 +11,7 @@ import { ShapeService } from '../user-board-services/shape.service';
 export class UserBoardComponent implements OnInit {
   shapesList: Array<ShapeInterFace> = [];
   colors = ['red', 'blue', 'green', 'yellow', 'orange'];
-  background= 'white';
+  background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
   canvasAspectRatio = 16 / 9;
@@ -41,40 +41,30 @@ export class UserBoardComponent implements OnInit {
     this.canvas.setHeight(height);
     this.canvas.setWidth(width);
   }
-}
-  /*addCircle() {
-   this.shapeService.addCircle(this.canvas, this.selectedColor);
-   
-  }*/
 
   addEllipse(){
-    this.shapeService.addEllipse(this.canvas,this.selectedColor);
+    this.shapeService.addEllipse(this.canvas, this.selectedColor);
   }
 
   addRectangle() {
-    this.shapeService.addRectangle(this.canvas,this.selectedColor);
-     }
+    this.shapeService.addRectangle(this.canvas, this.selectedColor);
+  }
 
-  addImage (){
+  addImage(){
     this.shapeService.addImage(this.canvas);
   }
 
   clear() {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
-      this.canvas.backgroundColor = this.background ;
-      scaleCanvas();
+      this.scaleCanvas();
       this.counter1 = this.jsonArray.length;
       this.counter2 = this.counter1;
     }
   }
+}
 
-
-  }
-
-  export interface ShapeInterFace{
+export interface ShapeInterFace{
    // name : string;
     color: string;
-    
-  }
-  
+}

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {fabric } from 'fabric';
-import { ShapeService} from '../services/shape.service';
+import { ShapeService} from '../user-board-services/shape.service';
 //import { FabricObjectType } from '../model';
 @Component({
   selector: 'app-user-board',

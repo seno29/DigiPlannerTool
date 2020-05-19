@@ -17,11 +17,14 @@
       <button mat-flat-button (click)="textBox()" color="primary" >
         <mat-icon>text_rotation_none</mat-icon>
       </button>
-      <button mat-flat-button (click)="textBox()" color="accent" >
+      <button mat-flat-button (click)="undo()" color="accent" >
         <mat-icon>undo</mat-icon>
       </button>
-      <button mat-flat-button (click)="textBox()" color="accent" >
+      <button mat-flat-button (click)="redo()" color="accent" >
         <mat-icon>redo</mat-icon>
+      </button>
+      <button mat-flat-button (click)="save()" color="accent" >
+        <mat-icon>save</mat-icon>
       </button>
       <button mat-flat-button (click)="reset()" color="warn" >
         <mat-icon>settings_backup_restore</mat-icon>

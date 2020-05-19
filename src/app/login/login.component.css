@@ -1,0 +1,41 @@
+.image_illus{
+    width:100%;
+    height:auto;
+    max-width: 500px;
+    float: left;
+    margin-top:10%;
+    margin-left: auto;
+}
+
+.loginForm{
+    float:right;
+    text-align: center;
+    padding:30px;
+    max-width:400px;
+    margin-top:10%;
+    margin-right: 10%;
+    color:#173F5F;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+    padding:20px;
+}
+
+.signInBtn{
+    border:2px solid #173F5F;
+}
+
+.signInBtn:hover{
+    background-color: #173F5F;
+    color:white;
+}
+
+.gIcon{
+    padding:5px;
+    float:left;
+}
+
+.btnText{
+    padding: 10px;
+}

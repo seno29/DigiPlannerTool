@@ -1,1 +1,14 @@
-<p>login works!</p>
+<img class="image_illus" src="../../assets/illustration.png" width="500" height="400">
+<div *ngIf="!currentUser">
+    <div class="loginForm">
+        <h2>Select user type and sign in:</h2>
+        <mat-radio-group #typeOfUser (change)="onChange($event)" class="radioBtn">
+            <mat-radio-button value="admin" color="accent" checked="true">Admin</mat-radio-button>
+            <mat-radio-button value="user">User</mat-radio-button>
+        </mat-radio-group><br>
+        <button mat-button class="signInBtn" (click)="signIn()">
+            <span><img src="../../assets/icons8-google-48.png" width="30" height="30" class="gIcon"></span>
+            <span class="btnText">Sign in with Google</span>
+        </button>
+    </div>
+</div>

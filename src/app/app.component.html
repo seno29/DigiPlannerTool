@@ -1,1 +1,8 @@
-<p>Root Component</p>
+<mat-toolbar>
+  <span>Welcome To DigiPlanner</span>
+  <span class="spacer"></span>
+  <button *ngIf="currentUser" mat-button class="logout">
+    <img  src="../assets/icons8-exit-26.png" width="30" height="30" (click)="signOut()">
+  </button>
+</mat-toolbar>
+<router-outlet></router-outlet>

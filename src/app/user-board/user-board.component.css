@@ -6,11 +6,13 @@
 }
 
 .canvasContainer{
-    height: 45em;
-    width: 64em;
+    height: 500;
+    width: 65em;
     margin: auto;
     border: 2px solid black;
     border-radius: 10px;
+    padding-left: 50;
+    padding-right: 50;
     margin: 0 auto;
 }
 

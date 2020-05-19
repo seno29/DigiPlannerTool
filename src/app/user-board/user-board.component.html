@@ -4,12 +4,12 @@
 
       <div class="title">User UI</div>
   
-      <div class="button-row-right">
-        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+      <div class="button-row-right" >
+        <button mat-flat-button (click)="rectangle()" color="primary" [disabled]="connectPressed">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+        <button mat-flat-button (click)="circle()" color="primary" [disabled]="connectPressed">
             <mat-icon>add_circle</mat-icon>
             Circle
         </button>
@@ -25,7 +25,11 @@
   
     </div>
   
-    <div class="canvasContainer"></div>
+    <div class="canvasContainer">
+    
+        <canvas id="canvas-container"></canvas>
+      
+    </div>
   
     <div class="button-row">
   
@@ -36,6 +40,10 @@
         </div>
   
         <div class="button-row-right">
+          <button mat-flat-button class="orange" (click)="clear()">
+            <mat-icon>delete</mat-icon>
+            Clear
+          </button>
           <button mat-flat-button class="orange">
             <mat-icon>cloud_download</mat-icon>
             Export

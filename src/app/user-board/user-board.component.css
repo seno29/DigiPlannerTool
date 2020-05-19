@@ -5,11 +5,13 @@
     margin-top: 1%;
 }
 
-#canvas{
+#canvas-div{
     width: 70%;
-    padding-top: 42.1875%;
+    margin: auto;
     border: 2px solid black;
     border-radius: 10px;
+    padding-left: 50;
+    padding-right: 50;
     margin: 0 auto;
 }
 

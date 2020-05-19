@@ -38,16 +38,21 @@ export class UserBoardComponent implements OnInit {
     this.counter2 = 0;
   }
 
-  circle() {
-   this.shapeService.circle(this.canvas);
+  /*addCircle() {
+   this.shapeService.addCircle(this.canvas, this.selectedColor);
    
+  }*/
+
+  addEllipse(){
+    this.shapeService.addEllipse(this.canvas,this.selectedColor);
   }
 
-  rectangle() {
-    
-   
-    this.shapeService.rectangle(this.canvas,this.selectedColor);
-   
+  addRectangle() {
+    this.shapeService.addRectangle(this.canvas,this.selectedColor);
+     }
+
+  addImage (){
+    this.shapeService.addImage(this.canvas);
   }
 
   clear() {

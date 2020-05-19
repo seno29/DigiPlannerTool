@@ -13,33 +13,55 @@ export class ShapeService {
   constructor() { }
   
 
-  
+  addEllipse(canvas:fabric.Canvas, color:string){
+    const ellipse = new fabric.Ellipse({
+     left : 10,
+     top: 10,
+     fill : color,
+     rx:50,
+     ry:30,
+     opacity: 0.5,
+    });
+    canvas.add(ellipse);
+  }
 
-  circle(canvas : fabric.Canvas) {
+  /*addCircle(canvas : fabric.Canvas, color:string) {
     const circle = new fabric.Circle({
       radius : 50,
-        fill: 'red',
-        opacity: 0.5,
-        left: 10,
-        top: 10,
-      });
-    
-    canvas.add(circle);
-      }
-
-
-  
-  rectangle(canvas: fabric.Canvas, color:string) {
-    const rect = new fabric.Rect({
-      width: 100,
-        height: 100,
         fill: color,
         opacity: 0.5,
         left: 10,
         top: 10,
       });
     
-    canvas.add(rect);
+    canvas.add(circle);
+      }*/
+
+
+  
+  addRectangle(canvas: fabric.Canvas, color:string) {
+    const rect = new fabric.Rect({
+      width: 200,
+        height: 100,
+        fill: color,
+        opacity: 0.5,
+        left: 10,
+        top: 10,
+      });
+      canvas.add(rect);
+      }
+
+      addImage(canvas:fabric.Canvas){
+      fabric.Image.fromURL("https://i.dlpng.com/static/png/6661426_preview.png", function(img){
+        let scale = 300 / img.width;
+
+       img.set({
+         scaleX: scale,
+          scaleY: scale
+        });
+       canvas.add(img)
+      });
+      
       }
 
  

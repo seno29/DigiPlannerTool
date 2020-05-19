@@ -4,16 +4,16 @@
 
       <div class="title">User UI</div>
   
-      <div class="button-row-right">
-        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+      <div class="button-row-right" >
+        <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="connectPressed">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+        <button mat-flat-button (click)="addEllipse()" color="primary" [disabled]="connectPressed">
             <mat-icon>add_circle</mat-icon>
-            Circle
+            Ellipse
         </button>
-        <button mat-flat-button (click)="0" color="primary" [disabled]="connectPressed">
+        <button mat-flat-button (click)="addImage()" color="primary" [disabled]="connectPressed">
           <mat-icon>stars</mat-icon>
           Image
         </button>
@@ -25,7 +25,11 @@
   
     </div>
   
-    <div id="canvas"></div>
+    <div class="canvasContainer">
+    
+        <canvas id="canvas-container"></canvas>
+      
+    </div>
   
     <div class="button-row">
   
@@ -36,6 +40,21 @@
         </div>
   
         <div class="button-row-right">
+          <button mat-flat-button class="red" (click)="clear()">
+            <mat-icon>delete</mat-icon>
+            Clear
+          </button>
+          <div class="button-row-right" >
+            <button mat-flat-button class="orange" (click)="0">
+              <mat-icon>undo</mat-icon>
+              Undo
+            </button>
+        
+            
+              <button mat-flat-button class="orange" (click)="0">
+                <mat-icon>redo</mat-icon>
+               Redo
+              </button>
           <button mat-flat-button class="orange">
             <mat-icon>cloud_download</mat-icon>
             Export

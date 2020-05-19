@@ -9,6 +9,7 @@ import { SharingService } from './service/sharing.service';
 import { InputComponent } from './input/input.component';
 import { Routes, Router, RouterModule } from '@angular/router';
 import { DrawingComponent } from './drawing/drawing.component';
+import { MovementDirective } from './movement.directive';
 
 const config : SocketIoConfig = { url: "http://localhost:3000", options: {}};
 
@@ -20,7 +21,8 @@ const routes : Routes = [
   declarations: [
     AppComponent,
     InputComponent,
-    DrawingComponent
+    DrawingComponent,
+    MovementDirective
   ],
   imports: [
     BrowserModule,

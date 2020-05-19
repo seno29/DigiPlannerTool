@@ -40,10 +40,21 @@
         </div>
   
         <div class="button-row-right">
-          <button mat-flat-button class="orange" (click)="clear()">
+          <button mat-flat-button class="red" (click)="clear()">
             <mat-icon>delete</mat-icon>
             Clear
           </button>
+          <div class="button-row-right" >
+            <button mat-flat-button class="orange" (click)="undo()">
+              <mat-icon>undo</mat-icon>
+              
+            </button>
+        
+            
+              <button mat-flat-button class="orange" (click)="redo()">
+                <mat-icon>redo</mat-icon>
+               
+              </button>
           <button mat-flat-button class="orange">
             <mat-icon>cloud_download</mat-icon>
             Export

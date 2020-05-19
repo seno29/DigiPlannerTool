@@ -7,12 +7,14 @@ import { ShapeService} from '../services/shape.service';
   templateUrl: './user-board.component.html',
   styleUrls: ['./user-board.component.css']
 })
+
 export class UserBoardComponent implements OnInit {
+  shapesList: Array<ShapeInterFace> = [];
   canvas : fabric.Canvas;
   counter1 ;
   counter2 ;
   jsonArray = [];
-  //selectedColor = 'Thistle';
+  
   xDim = 900;
   yDim = 500;
   colors = ['red', 'blue', 'green', 'yellow', 'orange'];
@@ -37,28 +39,15 @@ export class UserBoardComponent implements OnInit {
   }
 
   circle() {
-    this.canvas.add(
-      new fabric.Circle({
-        radius: 50,
-        fill: 'selectedColor',
-        left: 10,
-        top: 10,
-        opacity: 0.5,
-      })
-    );
+   this.shapeService.circle(this.canvas);
+   
   }
 
   rectangle() {
-    this.canvas.add(
-      new fabric.Rect({
-        width: 100,
-        height: 100,
-        fill: 'selectedColor',
-        opacity: 0.5,
-        left: 10,
-        top: 10,
-      })
-    );
+    
+   
+    this.shapeService.rectangle(this.canvas,this.selectedColor);
+   
   }
 
   clear() {
@@ -71,6 +60,15 @@ export class UserBoardComponent implements OnInit {
       this.counter2 = this.counter1;
     }
   }
+
+
   }
+
+  export interface ShapeInterFace{
+   // name : string;
+    color: string;
+    
+  }
+  
 
 

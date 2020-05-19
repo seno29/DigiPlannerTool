@@ -9,28 +9,35 @@ import { fabric } from 'fabric';
 export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
 
-  colors = ['red', 'blue', 'green', 'yellow', 'orange','brown','pink','violet'];
+  colors = [
+    'red',
+    'blue',
+    'green',
+    'yellow',
+    'orange',
+    'brown',
+    'pink',
+    'violet',
+  ];
   aspectRatio = 16 / 9;
   height;
   width;
-  counter1 ;
-  counter2 ;
+  counter1;
   jsonArray = [];
-  selectedColor:string ;
+  selectedColor: string;
 
   constructor() {
-    this.selectedColor='red';
+    this.selectedColor = 'red';
   }
 
   ngOnInit(): void {
     this.canvas = new fabric.Canvas('canvas-container', {
-      backgroundColor: "white",
+      backgroundColor: 'white',
       isDrawingMode: false,
     });
 
     this.counter1 = 0;
-    this.counter2 = 0;
-    this.width = window.innerWidth * 0.70;
+    this.width = window.innerWidth * 0.7;
     this.height = this.width / this.aspectRatio;
     this.canvas.setHeight(this.height);
     this.canvas.setWidth(this.width);
@@ -41,10 +48,9 @@ export class AdminBoardComponent implements OnInit {
   }
 
   reset() {
-    if (confirm('Are you sure?')) {
+    if (confirm('Are you sure you want to reset canvas?')) {
       this.canvas.clear();
-      this.counter1 = this.jsonArray.length;
-      this.counter2 = this.counter1;
+      this.counter1 = this.jsonArray.length-1;
     }
   }
 
@@ -91,10 +97,11 @@ export class AdminBoardComponent implements OnInit {
         width: 150,
         top: 5,
         left: 5,
-        stroke:this.selectedColor,
-        fontSize: 16,
+        stroke: this.selectedColor,
+        fontSize: 20,
+        fontFamily: 'Quicksand',
         textAlign: 'center',
-        fixedWidth: 150,
+        // fixedWidth: 150,
       })
     );
   }
@@ -103,7 +110,7 @@ export class AdminBoardComponent implements OnInit {
     var activeObject = this.canvas.getActiveObjects();
     console.log(activeObject);
     if (activeObject) {
-      if (confirm('Are you sure?')) {
+      if (confirm('Are you sure to delete selection?')) {
         activeObject.forEach((object) => {
           this.canvas.remove(object);
         });
@@ -112,26 +119,35 @@ export class AdminBoardComponent implements OnInit {
     }
   }
 
-  canvasToJson() {
+  save() {
     this.jsonArray.push(JSON.stringify(this.canvas));
-    this.counter1 = this.jsonArray.length;
-    this.counter2 = this.counter1;
-    console.log(JSON.stringify(this.canvas))
+    this.counter1 = this.jsonArray.length-1;
   }
 
-  loadJson() {
-    var x = this.counter2;
-    this.counter2--;
-    this.finalLoadScreen(x-1);
+  undo() {
+    if (this.counter1 >= 0) {
+      this.canvas.loadFromJSON(
+        this.jsonArray[this.counter1],
+        this.counter1--,
+        this.canvas.renderAll.bind(this.canvas)
+      );
+    }
+    else{
+      return;
+    }
   }
 
-  finalLoadScreen(pos){
-    this.canvas.loadFromJSON(
-      this.jsonArray[pos],
-      this.canvas.renderAll.bind(this.canvas)
-      // function (o, object) {
-      //   fabric.log(o, object);
-      // }
-    );
+  redo() {
+    if(this.counter1<this.jsonArray.length){
+      this.canvas.loadFromJSON(
+        this.jsonArray[this.counter1],
+        this.counter1++,
+        this.canvas.renderAll.bind(this.canvas)
+      );
+    }
+    else{
+      return;
+    }
   }
+
 }

@@ -13,13 +13,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import { GoogleLoginProvider} from "angularx-social-login";
 
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
-import { CardComponent } from './card/card.component';
 
 let config = new AuthServiceConfig([
   {
@@ -39,7 +41,6 @@ export function provideConfig() {
     AdminBoardComponent,
     UserBoardComponent,
     HomeComponent,
-    CardComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +51,10 @@ export function provideConfig() {
     MatRadioModule,
     AppRoutingModule,
     MatSnackBarModule,
-    MatCardModule
+    MatCardModule,
+    MatTooltipModule,
+    MatGridListModule,
+    MatDialogModule
   ],
   providers: [
     {

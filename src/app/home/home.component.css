@@ -4,6 +4,29 @@
     max-width: 500px;
     float: left;
     margin-top:10%;
-    margin-left: auto;
+    margin-left: 12%;
 }
 
+.options{
+    clear:right;
+    float:right;
+    margin-right:20%;
+}
+
+.icon{
+  padding:10px;  
+}
+
+.card{
+    width: 400px;
+    text-align: left;
+    border: 2px solid #0080FF;
+    /* background-color: rgba(154, 205, 255,0.5); */
+    color:rgb(0, 75, 150);
+    font-size: 18px;
+}
+
+.card:hover{
+    background-color: #0080FF;
+    color:white;
+}

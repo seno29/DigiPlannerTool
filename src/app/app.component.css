@@ -1,8 +1,23 @@
 mat-toolbar{
-    background-color: #173F5F;
+    background-color: #0080FF;
     color:white;
+}
+
+.title{
+    margin-left:5px;
 }
 
 .spacer{
     flex: 1 1 auto;
+}
+
+.userIdLabel{
+    font-size: 14px;
+    padding:10px;
+    color:white;
+}
+
+
+.logoutBtn:hover{
+    background-color: rgb(67, 160, 253);
 }

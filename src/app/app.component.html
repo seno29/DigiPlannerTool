@@ -1,8 +1,11 @@
 <mat-toolbar>
-  <span>Welcome To DigiPlanner</span>
+  <img src="../assets/library.png" width="25" height="25">
+  <span class="title">   DigiPlanner</span>
   <span class="spacer"></span>
-  <button *ngIf="currentUser" mat-button class="logout">
-    <img  src="../assets/icons8-exit-26.png" width="30" height="30" (click)="signOut()">
+  <span class="userIdLabel" *ngIf="currentUser">{{currentUser.email}}</span>
+  <button *ngIf="currentUser" mat-button matTooltip="logout" class="logoutBtn">
+    <img  src="../assets/exit.png" width="25" height="25" (click)="signOut()">
   </button>
 </mat-toolbar>
+
 <router-outlet></router-outlet>

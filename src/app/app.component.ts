@@ -19,12 +19,11 @@ export class AppComponent {
     this.authService.authState.subscribe((user)=>{
       this.currentUser = user;
       if(this.currentUser){
-        this.router.navigate(['/home']);
-        // if(this.userService.isAdmin(this.currentUser.email)){
-        //   this.router.navigate(['/home']);
-        // }else if(this.userService.isUser(this.currentUser.email)){
-        //   this.router.navigate(['/home']);
-        // }
+        if(this.userService.isAdmin(this.currentUser.email)){
+          this.router.navigate(['/home'],{queryParams: {userType: 'admin'},skipLocationChange: true});
+        }else if(this.userService.isUser(this.currentUser.email)){
+          this.router.navigate(['/home'],{queryParams:{userType: 'user'},skipLocationChange: true});
+        }
       }else{
         console.log('not logged in');
         this.router.navigate(['/login']);

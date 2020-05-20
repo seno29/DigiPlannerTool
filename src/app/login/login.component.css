@@ -4,38 +4,37 @@
     max-width: 500px;
     float: left;
     margin-top:10%;
-    margin-left: auto;
+    margin-left: 12%;
 }
 
+.card{
+    width: 300px;
+    border: 2px solid #0080FF;
+    color:rgb(0, 75, 150);
+    font-size: 18px;
+}
+.card:hover{
+    background-color: #0080FF;
+    color:white;
+}
 .loginForm{
-    float:right;
     text-align: center;
-    padding:30px;
-    max-width:400px;
-    margin-top:10%;
-    margin-right: 10%;
-    color:#173F5F;
 }
-
 .mat-radio-button ~ .mat-radio-button {
     margin-left: 16px;
     padding:20px;
 }
 
 .signInBtn{
-    border:2px solid #173F5F;
+    border:2px solid #0080FF;
 }
 
 .signInBtn:hover{
-    background-color: #173F5F;
+    background-color: #0080FF;
     color:white;
 }
 
 .gIcon{
     padding:5px;
     float:left;
-}
-
-.btnText{
-    padding: 10px;
 }

@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   currentUser:SocialUser;
   userType:string="admin";
+  inH:number;
   // isAdmin:boolean;
   // isUser:boolean;
   constructor(
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
     private userService:UserService,
     private snackBar:MatSnackBar,
     private router:Router){
-
+      this.inH = window.innerHeight*0.9;
   }
 
   ngOnInit(): void {
@@ -44,7 +45,7 @@ export class LoginComponent implements OnInit {
       if(user){
         if(this.isValid(user)){
           this.showSnackBar('Login Successful','cancel');
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home'],{queryParams: {userType: this.userType},skipLocationChange: true});
           console.log(`signed in:${user.email} ${this.userType}`);
         }else{
           this.showSnackBar('invalid User Type','Try again!');

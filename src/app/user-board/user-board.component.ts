@@ -17,10 +17,7 @@ export class UserBoardComponent implements OnInit {
   canvas: fabric.Canvas;
   shapesArray;
   canvasAspectRatio = 16 / 9;
-  counter1 ;
-  counter2 ;
-  jsonArray = [];
-  
+
   constructor(private shapeService: ShapeService, private scaleService: ScalingService) {
     this.selectedColor = 'red';
     this.shapesArray = [];
@@ -34,8 +31,6 @@ export class UserBoardComponent implements OnInit {
     });
     this.scaleCanvas();
     // this.scaleService.assignEventListenersCanvas(this.canvas);
-    this.counter1 = 0;
-    this.counter2 = 0;
     this.canvas.selectedElements = [];
     this.canvas.connect = false;
     this.canvas.connectButtonText = 'Connect';
@@ -65,8 +60,6 @@ export class UserBoardComponent implements OnInit {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
       this.scaleCanvas();
-      this.counter1 = this.jsonArray.length;
-      this.counter2 = this.counter1;
     }
   }
 

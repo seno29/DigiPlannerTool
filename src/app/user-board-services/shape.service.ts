@@ -19,7 +19,7 @@ export class ShapeService {
     });
     const text = this.textService.addText(ellipse, canvas);
     const group = this.textService.createGroup(ellipse, text, canvas, 100, 100, []);
-    return {name: 'ellipse', object: group, text: text.text};
+    return group;
   }
 
   addRectangle(canvas: fabric.Canvas, color: string) {
@@ -32,7 +32,7 @@ export class ShapeService {
     });
     const text = this.textService.addText(rect, canvas);
     const group = this.textService.createGroup(rect, text, canvas, 100, 100, []);
-    return {name: 'rect', object: group, text: text.text};
+    return group;
   }
 
   addImage(canvas: fabric.Canvas){
@@ -45,7 +45,7 @@ export class ShapeService {
     });
     const text = this.textService.addText(image, canvas);
     const group = this.textService.createGroup(image, text, canvas, 100, 100, []);
-    return {name: 'image', object: group, text: text.text};
+    return group;
   }
 
 

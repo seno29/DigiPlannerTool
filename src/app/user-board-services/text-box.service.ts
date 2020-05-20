@@ -84,16 +84,16 @@ export class TextBoxService {
       }
     });
     canvas.add(group);
-    this.setOpacity(canvas, 1);
+    // this.setOpacity(canvas, 1);
     return group;
   }
 
-  setOpacity(canvas, opacity){
-    canvas.forEachObject( (obj) => { obj.opacity = opacity; });
-    canvas.renderAll();
-  }
+  // setOpacity(canvas, opacity){
+  //   canvas.forEachObject( (obj) => { obj.opacity = opacity; });
+  //   canvas.renderAll();
+  // }
 
-  //set dimension according to text
+  // set dimension according to text
   setDimen(shape, textBoundingRect){
     if (shape.height < textBoundingRect.height){
       shape.height = textBoundingRect.height + 20;

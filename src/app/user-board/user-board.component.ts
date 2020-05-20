@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { ShapeService } from '../user-board-services/shape.service';
 import { ScalingService } from '../user-board-services/scaling.service';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-user-board',
@@ -15,28 +16,21 @@ export class UserBoardComponent implements OnInit {
   background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
-  shapesArray: Array<ShapeInterface>;
+  shapesArray: Array<ShapeInterface>=[];
   canvasAspectRatio = 16 / 9;
   counter1 ;
-  counter2 ;
-  jsonArray = [];
-<<<<<<< HEAD
-  redo=[];
-  undo=[];
-  state;
-  xDim = 900;
-  yDim = 500;
-  colors = ['red', 'blue', 'green', 'yellow', 'orange'];
-  background= 'white';
-  selectedColor: string;
-=======
->>>>>>> ca9b25b339d00fb65c3e77f1e1f768e98cb14d62
+  redoArray =[];
+  undoArray=[];
   connectPressed: boolean;
-
+  state1;
+ 
   constructor(private shapeService: ShapeService, private scaleService: ScalingService) {
     this.selectedColor = 'red';
     this.connectPressed = false;
     this.shapesArray = [];
+    this.counter1=0;
+    this.undoArray=this.shapeService.JSONarray;
+    this.redoArray=[];
   }
 
   ngOnInit(): void {
@@ -47,76 +41,10 @@ export class UserBoardComponent implements OnInit {
     });
     this.scaleCanvas();
     // this.scaleService.assignEventListenersCanvas(this.canvas);
-    this.counter1 = 0;
-    this.counter2 = 0;
-    this.save();
-    this.canvas.on('object:modified', function() {
-      this.save();
-    });
-  }
-
   
-   save():void {
-    // clear the redo stack
-    this.redo = [];
-    $('#redo').prop('disabled', true);
-    // initial call won't have a state
-    if (this.state) {
-     this.undo.push(this.state);
-      $('#undo').prop('disabled', false);
-    }
-    this.state = JSON.stringify(this.canvas);
+    
   }
 
-   replay(playStack, saveStack, buttonsOn, buttonsOff): void {
-    saveStack.push(this.state);
-    this.state = playStack.pop();
-    var on = $(buttonsOn);
-    var off = $(buttonsOff);
-    // turn both buttons off for the moment to prevent rapid clicking
-    on.prop('disabled', true);
-    off.prop('disabled', true);
-    this.canvas.clear();
-    this.canvas.loadFromJSON(this.state, function() {
-      this.canvas.renderAll();
-      // now turn the buttons back on if applicable
-      on.prop('disabled', false);
-      if (playStack.length) {
-        off.prop('disabled', false);
-      }
-    });
-  }
-
-<<<<<<< HEAD
-  /*addCircle() {
-   this.shapeService.addCircle(this.canvas, this.selectedColor);
-   
-  }*/ 
-  
-  addEllipse(){
-    this.shapeService.addEllipse(this.canvas,this.selectedColor);
-    this.canvas.renderAll();
-    this.save();
-  }
-
-  addRectangle() {
-    this.shapeService.addRectangle(this.canvas,this.selectedColor);
-    this.canvas.renderAll();
-    this.save();
-     }
-
-  addImage (){
-    this.shapeService.addImage(this.canvas);
-    this.canvas.renderAll();
-    this.save();
-  }
-
-  doUndo() {
-    this.replay(this.undo, this.redo, '#redo', this);
-  }
- doRedo()  {
-    this.replay(this.redo, this.undo, '#undo', this);
-=======
   scaleCanvas(){
     const width = window.innerWidth * 0.7 - 10;
     const height = width / this.canvasAspectRatio;
@@ -124,32 +52,131 @@ export class UserBoardComponent implements OnInit {
     this.canvas.setHeight(height);
     this.canvas.setWidth(width);
   }
+  doUndo() {
+    if (this.counter1 >= 0) {
+      this.canvas.loadFromJSON(
+        this.undoArray[this.counter1],
+        this.counter1--,
+        this.canvas.renderAll.bind(this.canvas)
+      );
+    }
+    else{
+      return;
+    }
+  }
 
+  doRedo() {
+    if(this.counter1<this.undoArray.length){
+      this.canvas.loadFromJSON(
+        this.undoArray[this.counter1],
+        this.counter1++,
+        this.canvas.renderAll.bind(this.canvas)
+      );
+    }
+    else{
+      return;
+    }
+  }
+ /*  Undo(playStack, saveStack):void {
+    this.state1 = playStack.pop();
+    saveStack.push(this.state1);
+    //this.canvas.clear();
+    this.canvas.loadFromJSON(playStack, ()=> {
+    this.canvas.renderAll();
+      
+    });
+  }
+  Redo(playStack, saveStack):void {
+    this.state1 = playStack.pop();
+    saveStack.push(this.state1);
+    this.canvas.clear();
+    this.canvas.loadFromJSON(this.state1, ()=> {
+    this.canvas.renderAll();
+      
+    });
+  }
+  doUndo(){
+    this.Undo(this.undoArray,this.redoArray);
+  }
+  doRedo(){
+    this.Undo(this.redoArray,this.undoArray);
+  }
+ /* save(object:fabric.Group) {
+    this.redoArray.push(JSON.stringify(object));
+    this.counter1 = this.redoArray.length-1;
+  
+  }*/
+
+ 
+  
+ 
+  /*doUndo() {
+    this.redoArray.push(this.undoArray.pop());
+    //this.canvas.clear();
+
+    this.counter1=this.undoArray.length-1;
+
+    if (this.counter1 >= 0) {
+      this.canvas.loadFromJSON(this.redoArray,()=>{
+        this.canvas.renderAll();
+      });
+        this.counter1--;
+    }
+   
+  }
+
+  doRedo() {
+    this.undoArray.push(this.redoArray.pop());
+       this.counter1=this.undoArray.length-1;
+        this.canvas.loadFromJSON( this.undoArray[this.counter1],()=>{
+          this.canvas.renderAll();
+        }
+           
+      );
+  }
+
+ /* doUndo() {
+     this.redoArray.push(this.shapesArray.pop());
+     this.canvas.clear();
+    this.shapesArray.forEach(element =>{
+        if(element.name === "rect"){
+          
+        this.shapeService.addRectangle(this.canvas, this.selectedColor,element.x,element.y);
+        }
+        else if(element.name === "ellipse"){
+          this.shapeService.addEllipse(this.canvas, this.selectedColor,element.x,element.y);
+        }
+        else if(element.name === "image"){
+          this.shapeService.addImage(this.canvas);
+        }
+    });
+  }*/
+
+  /*doRedo() {
+    this.Redo(this.redo, this.shapesArray)
+  }*/
   addEllipse(){
     this.shapesArray.push(this.shapeService.addEllipse(this.canvas, this.selectedColor));
+        
+  
   }
 
   addRectangle() {
     this.shapesArray.push(this.shapeService.addRectangle(this.canvas, this.selectedColor));
+   
   }
 
   addImage(){
     this.shapesArray.push(this.shapeService.addImage(this.canvas));
->>>>>>> ca9b25b339d00fb65c3e77f1e1f768e98cb14d62
+    
   }
 
   clear() {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
-<<<<<<< HEAD
-     // this.canvas.backgroundColor = this.background ;
-    // this.canvas.setHeight(this.yDim);
-     // this.canvas.setWidth(this.xDim);
-=======
       this.scaleCanvas();
->>>>>>> ca9b25b339d00fb65c3e77f1e1f768e98cb14d62
-      this.counter1 = this.jsonArray.length;
-      this.counter2 = this.counter1;
+     
+      
     }
   }
 }
@@ -159,4 +186,5 @@ export interface ShapeInterface{
   object: fabric.Group;
   text: string;
   connectingNodes: Array<ShapeInterface>;
+
 }

@@ -5,12 +5,8 @@
       <div class="title">User UI</div>
   
       <div class="button-row-right" >
-<<<<<<< HEAD
-        <button class= "draw" name=""mat-flat-button (click)="addRectangle()" color="primary" [disabled]="connectPressed">
-=======
 
         <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="connectPressed">
->>>>>>> ca9b25b339d00fb65c3e77f1e1f768e98cb14d62
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
@@ -50,13 +46,14 @@
             Clear
           </button>
           <div class="button-row-right" >
-            <button mat-flat-button class="orange" id ="undo" disabled (click)="doUndo()">
+            
+            <button mat-flat-button class="orange"  (click)="doUndo()">
               <mat-icon>undo</mat-icon>
               Undo
             </button>
         
             
-              <button mat-flat-button class="orange" id="redo" disabled (click)="doRedo()">
+              <button mat-flat-button class="orange"  (click)="doRedo()">
                 <mat-icon>redo</mat-icon>
                Redo
               </button>

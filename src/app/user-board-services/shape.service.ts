@@ -52,14 +52,15 @@ export class ShapeService {
       }
 
       addImage(canvas:fabric.Canvas){
-      fabric.Image.fromURL("https://i.dlpng.com/static/png/6661426_preview.png", function(img){
+      fabric.Image.fromURL("http://clipart-library.com/img1/830512.png", function(img){
+        
         let scale = 300 / img.width;
 
        img.set({
          scaleX: scale,
           scaleY: scale
         });
-       canvas.add(img)
+        canvas.add(img);
       });
       
       }

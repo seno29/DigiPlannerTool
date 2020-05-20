@@ -5,15 +5,15 @@
       <div class="title">User UI</div>
   
       <div class="button-row-right" >
-        <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="connectPressed">
+        <button class= "draw" name=""mat-flat-button (click)="addRectangle()" color="primary" [disabled]="connectPressed">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button (click)="addEllipse()" color="primary" [disabled]="connectPressed">
+        <button class=" draw" mat-flat-button (click)="addEllipse()" color="primary" [disabled]="connectPressed">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
-        <button mat-flat-button (click)="addImage()" color="primary" [disabled]="connectPressed">
+        <button class="draw" mat-flat-button (click)="addImage()" color="primary" [disabled]="connectPressed">
           <mat-icon>stars</mat-icon>
           Image
         </button>
@@ -45,13 +45,13 @@
             Clear
           </button>
           <div class="button-row-right" >
-            <button mat-flat-button class="orange" (click)="0">
+            <button mat-flat-button class="orange" id ="undo" disabled (click)="doUndo()">
               <mat-icon>undo</mat-icon>
               Undo
             </button>
         
             
-              <button mat-flat-button class="orange" (click)="0">
+              <button mat-flat-button class="orange" id="redo" disabled (click)="doRedo()">
                 <mat-icon>redo</mat-icon>
                Redo
               </button>

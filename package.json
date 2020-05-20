@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~9.1.7",
     "@angular/platform-browser-dynamic": "~9.1.7",
     "@angular/router": "~9.1.7",
+    "@types/jquery": "^3.3.38",
     "fabric": "^3.4.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

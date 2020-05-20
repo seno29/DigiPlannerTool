@@ -7,6 +7,7 @@ import { fabric } from 'fabric';
 export class TextBoxService {
 
   editingGroupCoord;
+  editingGroupConnections;
 
   constructor() { }
 
@@ -22,7 +23,9 @@ export class TextBoxService {
       left: 0,
     });
     // Event listener on Itext
-    text.on('editing:exited', () => { this.createGroup(shape, text, canvas, this.editingGroupCoord.x, this.editingGroupCoord.y); });
+    text.on('editing:exited', () => {
+      this.createGroup(shape, text, canvas, this.editingGroupCoord.x, this.editingGroupCoord.y, this.editingGroupConnections);
+    });
     return text;
   }
 
@@ -40,6 +43,7 @@ export class TextBoxService {
 
   unGroup(group, canvas){
     this.editingGroupCoord = group.getPointByOrigin(0, 0);
+    this.editingGroupConnections = group.connections;
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
@@ -49,24 +53,38 @@ export class TextBoxService {
     canvas.renderAll();
   }
 
-  createGroup(shape, text, canvas, x, y){
-    const textBoundingRect = text.getBoundingRect();
-    this.setDimen(shape, textBoundingRect);
+  createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line}>){
+    this.setDimen(shape, text.getBoundingRect());
     shape.selectable = false;
     text.selectable = false;
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
     });
+    group.connections = connections;
     // Event Listener for double click on group
-    group.on('mousedown', this.doubleClickEvent(group, (obj) => {
-      this.unGroup(group, canvas);
-      canvas.setActiveObject(text);
-      text.enterEditing();
-      text.selectAll();
+    group.on('mousedown', this.doubleClickEvent(group, () => {
+      if (canvas.connect){
+        canvas.selectedElements.push(group);
+        if (canvas.selectedElements.length === 2){ this.drawLineTwoPoints(canvas); }
+      }
+      else{
+        // this.setListenerConnect(canvas, group);
+        this.unGroup(group, canvas);
+        canvas.setActiveObject(text);
+        text.enterEditing();
+        text.selectAll();
+      }
     }));
+    group.on('moving', (event) => {
+      if (group.connections.length > 0){
+        // group.moveLine();
+        this.moveLines(group);
+        canvas.renderAll();
+      }
+    });
     canvas.add(group);
-    this.setOpacity(canvas, 0.7);
+    this.setOpacity(canvas, 1);
     return group;
   }
 
@@ -77,18 +95,52 @@ export class TextBoxService {
 
   //set dimension according to text
   setDimen(shape, textBoundingRect){
-    let resize = false;
     if (shape.height < textBoundingRect.height){
       shape.height = textBoundingRect.height + 20;
-      resize = true;
     }
     if (shape.width < textBoundingRect.width){
       shape.width = textBoundingRect.width + 20;
-      resize = true;
     }
-    if (resize){
-      shape.top = textBoundingRect.top * textBoundingRect.scaleY;
-      shape.left = textBoundingRect.left * textBoundingRect.scaleX;
+  }
+
+  drawLineTwoPoints(canvas) {
+    const from = canvas.selectedElements[0].getCenterPoint(0, 0);
+    const to = canvas.selectedElements[1].getCenterPoint(0, 0);
+    const line = this.makeLine([from.x, from.y, to.x, to.y]);
+    canvas.add(line);
+    canvas.sendToBack(line);
+    canvas.selectedElements[0].connections.push({name: 'p1', line});
+    canvas.selectedElements[1].connections.push({name: 'p2', line});
+    console.log('dont cry ');
+    canvas.connect = false;
+    canvas.connectButtonText = 'Connect';
+    console.log('Line :' + line + '\nGroup1: ' + canvas.selectedElements[0] + '\nGroup2:' + canvas.selectedElements[1]);
+  }
+
+  moveLines(group){
+    const newPoint = group.getCenterPoint();
+    for (const connection of group.connections){
+      if (connection.name === 'p1'){
+        connection.line.set({
+          x1: newPoint.x,
+          y1: newPoint.y
+        });
+      }
+      else{
+        connection.line.set({
+          x2: newPoint.x,
+          y2: newPoint.y
+        });
+      }
     }
+  }
+
+  makeLine(coords){
+    return new fabric.Line(coords, {
+      stroke: 'black',
+      strokeWidth: 2,
+      opacity: 0.7,
+      selectable: false,
+  });
   }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { fabric } from 'fabric';
 import { TextBoxService } from './text-box.service';
-import {ShapeInterface} from '../user-board/user-board.component';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,7 @@ export class ShapeService {
 
   constructor(private textService: TextBoxService) { }
 
-  addEllipse(canvas: fabric.Canvas, color: string): ShapeInterface{
+  addEllipse(canvas: fabric.Canvas, color: string){
     const ellipse = new fabric.Ellipse({
     originX: 'center',
     originY: 'center',
@@ -18,10 +17,9 @@ export class ShapeService {
     rx: 100,
     ry: 50,
     });
-    console.log(ellipse);
     const text = this.textService.addText(ellipse, canvas);
-    const group = this.textService.createGroup(ellipse, text, canvas, 100, 100);
-    return {name: 'ellipse', object: group, text: text.text, connectingNodes: []};
+    const group = this.textService.createGroup(ellipse, text, canvas, 100, 100, []);
+    return {name: 'ellipse', object: group, text: text.text};
   }
 
   addRectangle(canvas: fabric.Canvas, color: string) {
@@ -33,8 +31,8 @@ export class ShapeService {
       fill: color,
     });
     const text = this.textService.addText(rect, canvas);
-    const group = this.textService.createGroup(rect, text, canvas, 100, 100);
-    return {name: 'rect', object: group, text: text.text, connectingNodes: []};
+    const group = this.textService.createGroup(rect, text, canvas, 100, 100, []);
+    return {name: 'rect', object: group, text: text.text};
   }
 
   addImage(canvas: fabric.Canvas){
@@ -46,7 +44,10 @@ export class ShapeService {
       });
     });
     const text = this.textService.addText(image, canvas);
-    const group = this.textService.createGroup(image, text, canvas, 100, 100);
-    return {name: 'image', object: group, text: text.text, connectingNodes: []};
+    const group = this.textService.createGroup(image, text, canvas, 100, 100, []);
+    return {name: 'image', object: group, text: text.text};
   }
+
+
+
 }

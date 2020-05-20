@@ -3,6 +3,7 @@ import { fabric } from 'fabric';
 import { ShapeService } from '../user-board-services/shape.service';
 import { ScalingService } from '../user-board-services/scaling.service';
 import { element } from 'protractor';
+import { TextBoxService } from '../user-board-services/text-box.service';
 
 @Component({
   selector: 'app-user-board',
@@ -16,21 +17,16 @@ export class UserBoardComponent implements OnInit {
   background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
-  shapesArray: Array<ShapeInterface>=[];
+  shapesArray;
+  redoArray;
   canvasAspectRatio = 16 / 9;
-  counter1 ;
-  redoArray =[];
-  undoArray=[];
-  connectPressed: boolean;
-  state1;
- 
-  constructor(private shapeService: ShapeService, private scaleService: ScalingService) {
+
+  constructor(private shapeService: ShapeService, private scaleService: ScalingService, private textService:TextBoxService) {
     this.selectedColor = 'red';
-    this.connectPressed = false;
     this.shapesArray = [];
-    this.counter1=0;
-    this.undoArray=this.shapeService.JSONarray;
-    this.redoArray=[];
+   this.redoArray=[];
+  
+   
   }
 
   ngOnInit(): void {
@@ -41,8 +37,9 @@ export class UserBoardComponent implements OnInit {
     });
     this.scaleCanvas();
     // this.scaleService.assignEventListenersCanvas(this.canvas);
-  
-    
+    this.canvas.selectedElements = [];
+    this.canvas.connect = false;
+    this.canvas.connectButtonText = 'Connect';
   }
 
   scaleCanvas(){
@@ -52,7 +49,19 @@ export class UserBoardComponent implements OnInit {
     this.canvas.setHeight(height);
     this.canvas.setWidth(width);
   }
-  doUndo() {
+  doUndo(){
+    var data = this.shapesArray[this.shapesArray.length-1];
+    this.redoArray.push(this.shapesArray.pop());
+    this.canvas.remove(data);
+   
+  }
+  
+  doRedo(){
+    var data=this.redoArray[this.redoArray.length-1];
+    this.shapesArray.push(this.redoArray.pop());
+    this.canvas.add(data);
+  }
+  /*doUndo() {
     if (this.counter1 >= 0) {
       this.canvas.loadFromJSON(
         this.undoArray[this.counter1],
@@ -77,7 +86,7 @@ export class UserBoardComponent implements OnInit {
       return;
     }
   }
- /*  Undo(playStack, saveStack):void {
+   Undo(playStack, saveStack):void {
     this.state1 = playStack.pop();
     saveStack.push(this.state1);
     //this.canvas.clear();
@@ -101,16 +110,13 @@ export class UserBoardComponent implements OnInit {
   doRedo(){
     this.Undo(this.redoArray,this.undoArray);
   }
- /* save(object:fabric.Group) {
+  save(object:fabric.Group) {
     this.redoArray.push(JSON.stringify(object));
     this.counter1 = this.redoArray.length-1;
   
-  }*/
-
+  }
  
-  
- 
-  /*doUndo() {
+  doUndo() {
     this.redoArray.push(this.undoArray.pop());
     //this.canvas.clear();
 
@@ -134,8 +140,7 @@ export class UserBoardComponent implements OnInit {
            
       );
   }
-
- /* doUndo() {
+   doUndo() {
      this.redoArray.push(this.shapesArray.pop());
      this.canvas.clear();
     this.shapesArray.forEach(element =>{
@@ -152,9 +157,6 @@ export class UserBoardComponent implements OnInit {
     });
   }*/
 
-  /*doRedo() {
-    this.Redo(this.redo, this.shapesArray)
-  }*/
   addEllipse(){
     this.shapesArray.push(this.shapeService.addEllipse(this.canvas, this.selectedColor));
         
@@ -175,16 +177,20 @@ export class UserBoardComponent implements OnInit {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
       this.scaleCanvas();
-     
-      
     }
   }
-}
 
-export interface ShapeInterface{
-  name: string;
-  object: fabric.Group;
-  text: string;
-  connectingNodes: Array<ShapeInterface>;
-
+  connect(){
+    if (this.canvas.connect){
+      this.canvas.connect = false;
+      this.canvas.connectButtonText = 'Connect';
+    }
+    else{
+      while (this.canvas.selectedElements.length > 0 ){
+        this.canvas.selectedElements.pop();
+      }
+      this.canvas.connect = true;
+      this.canvas.connectButtonText = 'Stop';
+    }
+  }
 }

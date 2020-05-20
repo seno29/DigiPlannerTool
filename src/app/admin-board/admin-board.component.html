@@ -5,32 +5,39 @@
     <div class="title">Admin UI</div>
 
     <div class="button-row-right">
-      <mat-slide-toggle (change)="togglePen()"><span style="font-weight: bold;">Pen Mode</span></mat-slide-toggle>
-      <button mat-flat-button (click)="box()" color="primary" >
+      <mat-slide-toggle title="pen" class="orange" (change)="togglePen()"><mat-icon>edit</mat-icon></mat-slide-toggle>
+
+      <button mat-flat-button title="Box" (click)="box()" color="primary" >
         <mat-icon>crop_3_2</mat-icon>
       </button>
-      <button mat-flat-button (click)="circle()" color="primary" >
+      <button mat-flat-button title="Circle" (click)="circle()" color="primary" >
         <mat-icon>brightness_1</mat-icon>
       </button>
-      <button mat-flat-button (click)="triangle()" color="primary" >
+      <button mat-flat-button title="Triangle" (click)="triangle()" color="primary" >
         <mat-icon>change_history</mat-icon>
       </button>
-      <button mat-flat-button (click)="textBox()" color="primary" >
+      <button mat-flat-button title="Cloud Shape" (click)="cloud()" color="primary" >
+        <mat-icon>cloud_queue</mat-icon>
+      </button>
+      <button mat-flat-button title="Dialog Box" (click)="dialog()" color="primary" >
+        <mat-icon>chat_bubble_outline</mat-icon>
+      </button>
+      <button mat-flat-button title="TextBox" (click)="textBox()" color="primary" >
         <mat-icon>text_rotation_none</mat-icon>
       </button>
-      <button mat-flat-button (click)="undo()" color="accent" >
+      <button mat-flat-button title="Undo" (click)="undo()" color="accent" >
         <mat-icon>undo</mat-icon>
       </button>
-      <button mat-flat-button (click)="redo()" color="accent" >
+      <button mat-flat-button title="Redo" (click)="redo()" color="accent" >
         <mat-icon>redo</mat-icon>
       </button>
-      <button mat-flat-button (click)="save()" color="accent" >
+      <button mat-flat-button title="Save" (click)="save()" color="accent" >
         <mat-icon>save</mat-icon>
       </button>
-      <button mat-flat-button (click)="reset()" color="warn" >
+      <button mat-flat-button title="Reset" (click)="reset()" color="warn" >
         <mat-icon>settings_backup_restore</mat-icon>
       </button>
-      <button mat-flat-button (click)="deleteObjects()" color="warn" >
+      <button mat-flat-button title="Delete" (click)="deleteObjects()" color="warn" >
         <mat-icon>delete_forever</mat-icon>
       </button>
 
@@ -51,7 +58,7 @@
       </div>
 
       <div class="button-row-right">
-        <button mat-flat-button class="orange">
+        <button mat-flat-button title="Export Canvas" class="orange">
           <mat-icon>backup</mat-icon>
           Export
         </button>

@@ -18,6 +18,9 @@ export class AdminBoardComponent implements OnInit {
     'brown',
     'pink',
     'violet',
+    'Blueviolet',
+    'magenta',
+    'lime'
   ];
   aspectRatio = 16 / 9;
   height;
@@ -45,12 +48,44 @@ export class AdminBoardComponent implements OnInit {
 
   togglePen() {
     this.canvas.isDrawingMode = !this.canvas.isDrawingMode;
+    this.canvas.renderAll().bind(this.canvas);
+  }
+
+  dialog(){
+    fabric.Image.fromURL('../assets/images/dialog.jpg', (img)=> {
+      const scale = 150/img.width;
+      img.set({
+           transparentCorners: false,
+           top:10,
+           left:10,
+           scaleX: scale,
+          scaleY: scale,
+         });
+         this.canvas.add(img);
+        this.canvas.renderAll().bind(this.canvas);
+       });
+  }
+
+  cloud(){
+    fabric.Image.fromURL('../assets/images/cloud.png', (img)=> {
+      const scale = 150/img.width;
+      img.set({
+           transparentCorners: false,
+           top:10,
+           left:10,
+           scaleX: scale,
+          scaleY: scale
+         });
+         this.canvas.add(img);
+         this.canvas.renderAll().bind(this.canvas);
+       });
   }
 
   reset() {
     if (confirm('Are you sure you want to reset canvas?')) {
       this.canvas.clear();
       this.counter1 = this.jsonArray.length-1;
+      this.canvas.renderAll().bind(this.canvas);
     }
   }
 
@@ -64,6 +99,7 @@ export class AdminBoardComponent implements OnInit {
         opacity: 0.8,
       })
     );
+    this.canvas.renderAll().bind(this.canvas);
   }
 
   box() {
@@ -77,6 +113,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
       })
     );
+    this.canvas.renderAll().bind(this.canvas);
   }
 
   triangle() {
@@ -89,6 +126,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
       })
     );
+    this.canvas.renderAll().bind(this.canvas);
   }
 
   textBox() {
@@ -104,6 +142,7 @@ export class AdminBoardComponent implements OnInit {
         // fixedWidth: 150,
       })
     );
+    this.canvas.renderAll().bind(this.canvas);
   }
 
   deleteObjects() {
@@ -115,6 +154,7 @@ export class AdminBoardComponent implements OnInit {
           this.canvas.remove(object);
         });
         this.canvas.discardActiveObject();
+        this.canvas.renderAll().bind(this.canvas);
       }
     }
   }
@@ -122,6 +162,7 @@ export class AdminBoardComponent implements OnInit {
   save() {
     this.jsonArray.push(JSON.stringify(this.canvas));
     this.counter1 = this.jsonArray.length-1;
+    this.canvas.renderAll().bind(this.canvas);
   }
 
   undo() {

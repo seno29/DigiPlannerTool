@@ -18,6 +18,7 @@ export class ShapeService {
     rx: 100,
     ry: 50,
     });
+    console.log(ellipse);
     const text = this.textService.addText(ellipse, canvas);
     const group = this.textService.createGroup(ellipse, text, canvas, 100, 100);
     return {name: 'ellipse', object: group, text: text.text, connectingNodes: []};

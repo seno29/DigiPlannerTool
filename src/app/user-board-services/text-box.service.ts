@@ -51,7 +51,7 @@ export class TextBoxService {
 
   createGroup(shape, text, canvas, x, y){
     const textBoundingRect = text.getBoundingRect();
-    // this.setDimen(shape, textBoundingRect);
+    this.setDimen(shape, textBoundingRect);
     shape.selectable = false;
     text.selectable = false;
     const group = new fabric.Group([shape, text], {
@@ -75,14 +75,20 @@ export class TextBoxService {
     canvas.renderAll();
   }
 
+  //set dimension according to text
   setDimen(shape, textBoundingRect){
-    if (shape.height < textBoundingRect.height || shape.ry < textBoundingRect.height){
-      if ( true ){ shape.height = textBoundingRect.height; }
-      else if (shape instanceof fabric.Ellipse){ shape.ry = textBoundingRect.height; }
+    let resize = false;
+    if (shape.height < textBoundingRect.height){
+      shape.height = textBoundingRect.height + 20;
+      resize = true;
     }
-    if (shape.width < textBoundingRect.width || shape.rx < textBoundingRect.width){
-      if (shape instanceof fabric.Rect){ shape.width = textBoundingRect.width; console.log('rect'); }
-      else if (shape instanceof fabric.Ellipse){ shape.rx = textBoundingRect.width; console.log('ellipse');}
+    if (shape.width < textBoundingRect.width){
+      shape.width = textBoundingRect.width + 20;
+      resize = true;
+    }
+    if (resize){
+      shape.top = textBoundingRect.top * textBoundingRect.scaleY;
+      shape.left = textBoundingRect.left * textBoundingRect.scaleX;
     }
   }
 }

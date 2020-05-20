@@ -1,0 +1,63 @@
+<div class="userUI">
+
+  <div class="button-row">
+
+    <div class="title">Admin UI</div>
+
+    <div class="button-row-right">
+      <mat-slide-toggle (change)="togglePen()"><span style="font-weight: bold;">Pen Mode</span></mat-slide-toggle>
+      <button mat-flat-button (click)="box()" color="primary" >
+        <mat-icon>crop_3_2</mat-icon>
+      </button>
+      <button mat-flat-button (click)="circle()" color="primary" >
+        <mat-icon>brightness_1</mat-icon>
+      </button>
+      <button mat-flat-button (click)="triangle()" color="primary" >
+        <mat-icon>change_history</mat-icon>
+      </button>
+      <button mat-flat-button (click)="textBox()" color="primary" >
+        <mat-icon>text_rotation_none</mat-icon>
+      </button>
+      <button mat-flat-button (click)="undo()" color="accent" >
+        <mat-icon>undo</mat-icon>
+      </button>
+      <button mat-flat-button (click)="redo()" color="accent" >
+        <mat-icon>redo</mat-icon>
+      </button>
+      <button mat-flat-button (click)="save()" color="accent" >
+        <mat-icon>save</mat-icon>
+      </button>
+      <button mat-flat-button (click)="reset()" color="warn" >
+        <mat-icon>settings_backup_restore</mat-icon>
+      </button>
+      <button mat-flat-button (click)="deleteObjects()" color="warn" >
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+
+    </div>
+
+  </div>
+
+  <div id="canvas">
+    <canvas id="canvas-container"></canvas>
+  </div>
+
+  <div class="button-row">
+
+      <div class="button-row-left" *ngFor = "let color of colors;">
+        <button mat-mini-fab class={{color}} style="box-shadow: none;" (click)="selectedColor = color">
+          <mat-icon *ngIf="selectedColor == color" [style.color]="'black'">done</mat-icon>
+        </button>
+      </div>
+
+      <div class="button-row-right">
+        <button mat-flat-button class="orange">
+          <mat-icon>backup</mat-icon>
+          Export
+        </button>
+      </div>
+
+  </div>
+
+</div>
+

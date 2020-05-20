@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { ShapeService } from '../user-board-services/shape.service';
+import { ScalingService } from '../user-board-services/scaling.service';
 
 @Component({
   selector: 'app-user-board',
@@ -9,27 +10,32 @@ import { ShapeService } from '../user-board-services/shape.service';
 })
 
 export class UserBoardComponent implements OnInit {
-  shapesList: Array<ShapeInterFace> = [];
+  shapesList: Array<fabric.Group> = [];
   colors = ['red', 'blue', 'green', 'yellow', 'orange'];
   background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
+  shapesArray: Array<ShapeInterface>;
   canvasAspectRatio = 16 / 9;
   counter1 ;
   counter2 ;
   jsonArray = [];
   connectPressed: boolean;
 
-  constructor(private shapeService: ShapeService) {
+  constructor(private shapeService: ShapeService, private scaleService: ScalingService) {
     this.selectedColor = 'red';
     this.connectPressed = false;
+    this.shapesArray = [];
   }
 
   ngOnInit(): void {
     fabric.Object.prototype.transparentCorners = false;
-    fabric.Object.prototype.padding = 5;
-    this.canvas = new fabric.Canvas('canvas-container', {isDrawingMode: false});
+    this.canvas = new fabric.Canvas('canvas-container', {
+      hoverCursor: 'pointer',
+      selection: true
+    });
     this.scaleCanvas();
+    // this.scaleService.assignEventListenersCanvas(this.canvas);
     this.counter1 = 0;
     this.counter2 = 0;
   }
@@ -43,15 +49,15 @@ export class UserBoardComponent implements OnInit {
   }
 
   addEllipse(){
-    this.shapeService.addEllipse(this.canvas, this.selectedColor);
+    this.shapesArray.push(this.shapeService.addEllipse(this.canvas, this.selectedColor));
   }
 
   addRectangle() {
-    this.shapeService.addRectangle(this.canvas, this.selectedColor);
+    this.shapesArray.push(this.shapeService.addRectangle(this.canvas, this.selectedColor));
   }
 
   addImage(){
-    this.shapeService.addImage(this.canvas);
+    this.shapesArray.push(this.shapeService.addImage(this.canvas));
   }
 
   clear() {
@@ -64,7 +70,9 @@ export class UserBoardComponent implements OnInit {
   }
 }
 
-export interface ShapeInterFace{
-   // name : string;
-    color: string;
+export interface ShapeInterface{
+  name: string;
+  object: fabric.Group;
+  text: string;
+  connectingNodes: Array<ShapeInterface>;
 }

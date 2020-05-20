@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { fabric } from 'fabric';
 import { TextBoxService } from './text-box.service';
-import { ShapeInterFace } from '../user-board/user-board.component';
+import {ShapeInterface} from '../user-board/user-board.component';
 
 @Injectable({
   providedIn: 'root'
@@ -10,35 +10,30 @@ export class ShapeService {
 
   constructor(private textService: TextBoxService) { }
 
-  addEllipse(canvas: fabric.Canvas, color: string){
+  addEllipse(canvas: fabric.Canvas, color: string): ShapeInterface{
     const ellipse = new fabric.Ellipse({
-     fill : color,
-     rx: 50,
-     ry: 30,
+    originX: 'center',
+    originY: 'center',
+    fill : color,
+    rx: 100,
+    ry: 50,
     });
     const text = this.textService.addText(ellipse, canvas);
-    this.textService.createGroup(ellipse, text, canvas, 100, 100);
+    const group = this.textService.createGroup(ellipse, text, canvas, 100, 100);
+    return {name: 'ellipse', object: group, text: text.text, connectingNodes: []};
   }
-
-  // addCircle(canvas : fabric.Canvas, color:string) {
-  //   const circle = new fabric.Circle({
-  //     radius : 50,
-  //       fill: color,
-  //       opacity: 0.5,
-  //       left: 10,
-  //       top: 10,
-  //     });
-  //   canvas.add(circle);
-  //     }
 
   addRectangle(canvas: fabric.Canvas, color: string) {
     const rect = new fabric.Rect({
+      originX: 'center',
+      originY: 'center',
       width: 200,
       height: 100,
       fill: color,
     });
     const text = this.textService.addText(rect, canvas);
-    this.textService.createGroup(rect, text, canvas, 100, 100);
+    const group = this.textService.createGroup(rect, text, canvas, 100, 100);
+    return {name: 'rect', object: group, text: text.text, connectingNodes: []};
   }
 
   addImage(canvas: fabric.Canvas){
@@ -50,6 +45,7 @@ export class ShapeService {
       });
     });
     const text = this.textService.addText(image, canvas);
-    this.textService.createGroup(image, text, canvas, 100, 100);
+    const group = this.textService.createGroup(image, text, canvas, 100, 100);
+    return {name: 'image', object: group, text: text.text, connectingNodes: []};
   }
 }

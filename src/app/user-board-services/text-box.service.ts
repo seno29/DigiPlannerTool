@@ -12,12 +12,16 @@ export class TextBoxService {
 
   addText(shape, canvas): fabric.IText{
     const text = new fabric.IText('Tap', {
-      fontFamily: 'arial black',
       fill: '#333',
       fontSize: 20,
+      originX: 'center',
+      originY: 'center',
+      textAlign: 'center',
+      fontFamily: 'Segoe UI',
+      top: 0,
+      left: 0,
     });
-
-    // Added on focus remove listener
+    // Event listener on Itext
     text.on('editing:exited', () => { this.createGroup(shape, text, canvas, this.editingGroupCoord.x, this.editingGroupCoord.y); });
     return text;
   }
@@ -36,24 +40,25 @@ export class TextBoxService {
 
   unGroup(group, canvas){
     this.editingGroupCoord = group.getPointByOrigin(0, 0);
-    // console.log(this.editingGroupCoord);
-    // console.log(group);
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
     for (const item of items) {
         canvas.add(item);
     }
-    // if you have disabled render on addition
     canvas.renderAll();
   }
 
-  createGroup(shape, text, canvas, x, y): void{
+  createGroup(shape, text, canvas, x, y){
+    const textBoundingRect = text.getBoundingRect();
+    // this.setDimen(shape, textBoundingRect);
     shape.selectable = false;
+    text.selectable = false;
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
     });
+    // Event Listener for double click on group
     group.on('mousedown', this.doubleClickEvent(group, (obj) => {
       this.unGroup(group, canvas);
       canvas.setActiveObject(text);
@@ -61,11 +66,23 @@ export class TextBoxService {
       text.selectAll();
     }));
     canvas.add(group);
-    this.setOpacity(canvas, 0.5)
+    this.setOpacity(canvas, 0.7);
+    return group;
   }
 
   setOpacity(canvas, opacity){
     canvas.forEachObject( (obj) => { obj.opacity = opacity; });
     canvas.renderAll();
+  }
+
+  setDimen(shape, textBoundingRect){
+    if (shape.height < textBoundingRect.height || shape.ry < textBoundingRect.height){
+      if ( true ){ shape.height = textBoundingRect.height; }
+      else if (shape instanceof fabric.Ellipse){ shape.ry = textBoundingRect.height; }
+    }
+    if (shape.width < textBoundingRect.width || shape.rx < textBoundingRect.width){
+      if (shape instanceof fabric.Rect){ shape.width = textBoundingRect.width; console.log('rect'); }
+      else if (shape instanceof fabric.Ellipse){ shape.rx = textBoundingRect.width; console.log('ellipse');}
+    }
   }
 }

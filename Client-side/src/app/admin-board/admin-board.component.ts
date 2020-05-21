@@ -59,8 +59,23 @@ export class AdminBoardComponent implements OnInit {
       );
       // this.canvas.off("object:added", this.eventHandler);
       // this.canvas.__eventListeners["object:added"] = [];
+      
     });
-  
+
+    this.canvas.on("object:modified", (options) => {
+      console.log("Hi");
+      console.log(this.canvas.__eventListeners);
+      this.ser.somethingModified(this.canvas);
+    });
+
+    this.ser.socket.on("modifiedObject", (h: object) =>{
+      console.log("obj modified");
+      this.canvas.loadFromJSON(
+        h,
+        this.canvas.renderAll.bind(this.canvas)
+      );
+    });
+    
   }
 
   togglePen() {

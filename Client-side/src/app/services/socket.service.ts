@@ -19,4 +19,9 @@ export class SocketService implements OnInit {
   somethingAdded(can: any){
     this.socket.emit("addedObject", can);
   }
+
+  somethingModified(can: any){
+    console.log("li");
+    this.socket.emit("modifiedObject", can);
+  }
 }

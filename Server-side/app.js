@@ -20,6 +20,11 @@ io.on("connection", socket =>{
     socket.on("addedObject", (c) =>{
         socket.broadcast.emit('addedObject', c);
     });
+
+    socket.on("modifiedObject", (c) =>{
+        console.log("Hello");
+        socket.broadcast.emit('modifiedObject', c);
+    });
 });
 
 

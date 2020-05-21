@@ -6,7 +6,7 @@
 }
 
 #canvas-div{
-    width: 75%;
+    width: 70%;
     margin: auto;
     border: 2px solid black;
     border-radius: 10px;
@@ -16,7 +16,7 @@
 }
 
 .button-row{
-    width: 75%;
+    width: 70%;
     margin: 5px auto;
     contain: content;
 }
@@ -59,4 +59,10 @@
 
 .white{
     background-color: whitesmoke;
+}
+
+.mat-h2{
+    text-align: center;
+    margin: 20px auto;
+    color: salmon;
 }

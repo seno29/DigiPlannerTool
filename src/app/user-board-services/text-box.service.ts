@@ -13,7 +13,7 @@ export class TextBoxService {
   constructor(private scalingService: ScalingService) { }
 
   addText(shape, canvas): fabric.IText{
-    const text = new fabric.IText('Tap', {
+    const text = new fabric.IText('Double click to edit', {
       fill: '#333',
       fontSize: 15,
       originX: 'center',
@@ -43,7 +43,7 @@ export class TextBoxService {
 
   createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>){
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
-    console.log(shape.opacity);
+    // console.log(shape.opacity);
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
@@ -54,6 +54,9 @@ export class TextBoxService {
       if (canvas.connect){
         canvas.selectedElements.push(group);
         if (canvas.selectedElements.length === 2){ this.drawLineTwoPoints(canvas); }
+      }
+      else if (canvas.deleteMode){
+        this.delete(canvas, group);
       }
       else{
         // this.setListenerConnect(canvas, group);
@@ -131,5 +134,23 @@ export class TextBoxService {
         });
       }
     }
+  }
+
+  delete(canvas, group){
+    for (const connection of group.connections){
+      // console.log(connection);
+      // tslint:disable-next-line: prefer-for-of
+      for (let i = 0 ; i < connection.connectedGroup.connections.length; i++){
+        const otherGroupConnections = connection.connectedGroup.connections;
+        if (otherGroupConnections[i].connectedGroup === group){
+          otherGroupConnections.splice(i, 1);
+        }
+      }
+      canvas.remove(connection.line);
+    }
+    canvas.remove(group);
+    canvas.renderAll();
+    canvas.deleteMode = false;
+    canvas.deleteText = 'Delete';
   }
 }

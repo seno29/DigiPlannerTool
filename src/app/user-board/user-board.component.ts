@@ -15,16 +15,13 @@ export class UserBoardComponent implements OnInit {
   background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
-  shapesArray;
   canvasAspectRatio = 16 / 9;
 
   constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
     this.selectedColor = 'cornsilk';
-    this.shapesArray = [];
   }
 
   ngOnInit(): void {
-    fabric.Object.prototype.transparentCorners = false;
     this.canvas = this.shapeService.initCanvas();
   }
 
@@ -33,20 +30,16 @@ export class UserBoardComponent implements OnInit {
   }
 
   addEllipse(){
-    this.addToArray(this.shapeService.addEllipse(this.canvas, this.selectedColor));
+    this.shapeService.addEllipse(this.canvas, this.selectedColor);
+    // console.log(this.canvas.getObjects());
   }
 
   addRectangle() {
-    this.addToArray(this.shapeService.addRectangle(this.canvas, this.selectedColor));
+    this.shapeService.addRectangle(this.canvas, this.selectedColor);
   }
 
   addImage(){
-    this.addToArray(this.shapeService.addImage(this.canvas, ''));
-  }
-
-  addToArray(group){
-    group.uuid = this.shapesArray.length;
-    this.shapesArray.push(group);
+    this.shapeService.addImage(this.canvas, '');
   }
 
   clear() {
@@ -66,7 +59,18 @@ export class UserBoardComponent implements OnInit {
         this.canvas.selectedElements.pop();
       }
       this.canvas.connect = true;
-      this.canvas.connectButtonText = 'Stop';
+      this.canvas.connectButtonText = 'Exit Connection Mode';
+    }
+  }
+
+  delete(){
+    if (this.canvas.deleteMode){
+      this.canvas.deleteMode = false;
+      this.canvas.deleteText = 'Delete';
+    }
+    else{
+      this.canvas.deleteMode = true;
+      this.canvas.deleteText = 'Exit Delete Mode';
     }
   }
 }

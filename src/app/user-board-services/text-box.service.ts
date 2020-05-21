@@ -67,11 +67,47 @@ export class TextBoxService {
   }
 
   deleteGroup(group, canvas){
+    for (const connection of group.connections){
+      for (let j = 0 ; j < connection.connectedGroup.connections.length; j++){
+        const groupC = connection.connectedGroup.connections;
+        if (groupC[j].connectedGroup === group){
+          groupC.splice(j, 1);
+        }
+      }
+      canvas.remove(connection.line);
+    }
+    canvas.delete = false;
+    canvas.deleteButtonText = 'Delete';
+
     
-     canvas.remove(group);
-     
+    canvas.remove(group);
     canvas.renderAll();
+   
   }
+    /*if(canvas.delete){
+      var activeObject = canvas.getActiveObject(),
+      activeGroup = canvas.getActiveGroup();
+      if (activeObject) {
+         
+              canvas.remove(activeObject);
+          
+      }
+      else if (activeGroup) {
+          
+              var objectsInGroup = activeGroup.getObjects();
+              canvas.discardActiveGroup();
+              objectsInGroup.forEach(function(object) {
+              canvas.remove(object);
+              });*/
+         
+      
+      
+        
+     
+     
+     
+   
+
   createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line}>){
     this.setDimen(shape, text.getBoundingRect());
     shape.selectable = false;
@@ -87,8 +123,12 @@ export class TextBoxService {
         canvas.selectedElements.push(group);
         if (canvas.selectedElements.length === 2){ this.drawLineTwoPoints(canvas); }
       }
+      else if (canvas.delete){
+          this.deleteGroup(group,canvas);
+        
+      }
       else{
-        // this.setListenerConnect(canvas, group);
+      
         this.unGroup(group, canvas);
         canvas.setActiveObject(text);
         text.enterEditing();
@@ -97,23 +137,18 @@ export class TextBoxService {
     }));
     group.on('moving', (event) => {
       if (group.connections.length > 0){
-        // group.moveLine();
+       
         this.moveLines(group);
         canvas.renderAll();
       }
     });
     canvas.add(group);
     canvas.shapesPresent.push(group);
-    // this.setOpacity(canvas, 1);
+    
     return group;
   }
 
-  // setOpacity(canvas, opacity){
-  //   canvas.forEachObject( (obj) => { obj.opacity = opacity; });
-  //   canvas.renderAll();
-  // }
 
-  // set dimension according to text
   setDimen(shape, textBoundingRect){
     if (shape.height < textBoundingRect.height){
       shape.height = textBoundingRect.height + 20;

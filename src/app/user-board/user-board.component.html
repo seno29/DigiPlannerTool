@@ -6,19 +6,19 @@
   
       <div class="button-row-right" >
 
-        <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button (click)="addEllipse()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button (click)="addEllipse()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
-        <button mat-flat-button (click)="addImage()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button (click)="addImage()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
           <mat-icon>stars</mat-icon>
           Image
         </button>
-        <button mat-flat-button (click)="connect()" color="primary">
+        <button mat-flat-button (click)="connect()" color = "warn" [disabled] = "canvas.deleteMode">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>
@@ -41,21 +41,14 @@
         </div>
   
         <div class="button-row-right">
-          <button mat-flat-button style="background-color: red" (click)="clear()">
-            <mat-icon>delete</mat-icon>
+          <button mat-flat-button color = "warn" (click)="clear()">
+            <mat-icon>layers_clear</mat-icon>
             Clear
           </button>
-          <div class="button-row-right" >
-            <button mat-flat-button style="background-color: orange" (click)="0">
-              <mat-icon>undo</mat-icon>
-              Undo
-            </button>
-        
-            
-              <button mat-flat-button style="background-color: orange" (click)="0">
-                <mat-icon>redo</mat-icon>
-               Redo
-              </button>
+          <button mat-flat-button color = "warn" (click)="delete()" [disabled] = "canvas.connect">
+            <mat-icon>delete</mat-icon>
+            {{canvas.deleteText}}
+          </button>
           <button mat-flat-button style="background-color: orange">
             <mat-icon>cloud_download</mat-icon>
             Export
@@ -63,5 +56,7 @@
         </div>
   
     </div>
+
+    <div color= "warn"> Hello </div>
   
 </div>

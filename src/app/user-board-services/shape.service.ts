@@ -11,6 +11,7 @@ export class ShapeService {
   constructor(private textService: TextBoxService, private scalinService: ScalingService) { }
 
   initCanvas(){
+    fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas-container', {
       hoverCursor: 'pointer',
       selection: true
@@ -19,6 +20,8 @@ export class ShapeService {
     canvas.selectedElements = [];
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
+    canvas.deleteMode = false;
+    canvas.deleteText = 'Delete';
     return canvas;
   }
 
@@ -33,7 +36,7 @@ export class ShapeService {
     strokeWidth : 0.3,
     selectable: false,
     });
-    console.log(ellipse);
+    // console.log(ellipse);
     const text = this.textService.addText(ellipse, canvas);
     const group = this.textService.createGroup(ellipse, text, canvas, 100, 100, []);
     return group;
@@ -78,7 +81,5 @@ export class ShapeService {
       return group;
     };
   }
-
-
 
 }

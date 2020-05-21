@@ -46,6 +46,8 @@ export class UserBoardComponent implements OnInit {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
       this.scaleCanvas();
+      this.canvas.deleteMode = false;
+      this.canvas.deleteText = 'Delete';
     }
   }
 

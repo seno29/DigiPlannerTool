@@ -60,3 +60,9 @@
 .white{
     background-color: whitesmoke;
 }
+
+.mat-h2{
+    text-align: center;
+    margin: 20px auto;
+    color: salmon;
+}

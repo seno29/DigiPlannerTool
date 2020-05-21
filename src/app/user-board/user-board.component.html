@@ -35,28 +35,28 @@
     <div class="button-row">
   
         <div class="button-row-left" *ngFor = "let color of colors;">
-          <button mat-mini-fab class={{color}} style="box-shadow: none;" (click)="selectedColor = color">
+          <button mat-mini-fab class={{color}} style="box-shadow: none; border: 1px solid black;" (click)="selectedColor = color">
             <mat-icon *ngIf="selectedColor == color" [style.color]="'black'">done</mat-icon>
           </button>
         </div>
   
         <div class="button-row-right">
-          <button mat-flat-button class="red" (click)="clear()">
+          <button mat-flat-button style="background-color: red" (click)="clear()">
             <mat-icon>delete</mat-icon>
             Clear
           </button>
           <div class="button-row-right" >
-            <button mat-flat-button class="orange" (click)="0">
+            <button mat-flat-button style="background-color: orange" (click)="0">
               <mat-icon>undo</mat-icon>
               Undo
             </button>
         
             
-              <button mat-flat-button class="orange" (click)="0">
+              <button mat-flat-button style="background-color: orange" (click)="0">
                 <mat-icon>redo</mat-icon>
                Redo
               </button>
-          <button mat-flat-button class="orange">
+          <button mat-flat-button style="background-color: orange">
             <mat-icon>cloud_download</mat-icon>
             Export
           </button>

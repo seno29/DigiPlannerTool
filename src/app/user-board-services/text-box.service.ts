@@ -35,13 +35,15 @@ export class TextBoxService {
     return new fabric.Line(coords, {
       stroke: 'black',
       strokeWidth: 2,
-      opacity: 0.7,
+      opacity: 0.6,
       selectable: false,
+      preserveObjectStacking: true,
   });
   }
 
   createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>){
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
+    console.log(shape.opacity);
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
@@ -63,25 +65,15 @@ export class TextBoxService {
       }
     }));
     group.on('moving', (event) => {
-      group.isEditable = false;
       if (group.connections.length > 0){
         this.moveLines(group);
         canvas.renderAll();
       }
     });
-    group.on('moved', (event) => {
-      group.isEditable = true;
-      // console.log('voilaa');
-    });
     canvas.add(group);
-    // this.setOpacity(canvas, 1);
+    // this.scalingService.setOpacity(canvas, 0.5);
     return group;
   }
-
-  // setOpacity(canvas, opacity){
-  //   canvas.forEachObject( (obj) => { obj.opacity = opacity; });
-  //   canvas.renderAll();
-  // }
 
   // Assigning double click handler to groups
   doubleClickEvent(obj, handler){

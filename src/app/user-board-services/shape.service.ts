@@ -1,13 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { fabric } from 'fabric';
 import { TextBoxService } from './text-box.service';
+import { ScalingService } from './scaling.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShapeService {
 
-  constructor(private textService: TextBoxService) { }
+  constructor(private textService: TextBoxService, private scalinService: ScalingService) { }
+
+  initCanvas(){
+    const canvas = new fabric.Canvas('canvas-container', {
+      hoverCursor: 'pointer',
+      selection: true
+    });
+    this.scalinService.scaleBoard(canvas, 16 / 9);
+    canvas.selectedElements = [];
+    canvas.connect = false;
+    canvas.connectButtonText = 'Connect';
+    return canvas;
+  }
 
   addEllipse(canvas: fabric.Canvas, color: string){
     const ellipse = new fabric.Ellipse({
@@ -16,7 +29,9 @@ export class ShapeService {
     fill : color,
     rx: 100,
     ry: 50,
-    selectable: false
+    stroke : 'black',
+    strokeWidth : 0.3,
+    selectable: false,
     });
     console.log(ellipse);
     const text = this.textService.addText(ellipse, canvas);
@@ -30,8 +45,13 @@ export class ShapeService {
       originY: 'center',
       width: 200,
       height: 100,
+      rx: 10,
+      ry: 10,
+      stroke : 'black',
+      strokeWidth : 0.3,
       fill: color,
-      selectable: false
+      selectable: false,
+      strokeLineJoin: 'round',
     });
     const text = this.textService.addText(rect, canvas);
     const group = this.textService.createGroup(rect, text, canvas, 100, 100, []);

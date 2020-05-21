@@ -11,7 +11,7 @@ import { ScalingService } from '../user-board-services/scaling.service';
 
 export class UserBoardComponent implements OnInit {
   shapesList: Array<fabric.Group> = [];
-  colors = ['red', 'blue', 'green', 'yellow', 'orange'];
+  colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
   background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
@@ -19,20 +19,13 @@ export class UserBoardComponent implements OnInit {
   canvasAspectRatio = 16 / 9;
 
   constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
-    this.selectedColor = 'red';
+    this.selectedColor = 'cornsilk';
     this.shapesArray = [];
   }
 
   ngOnInit(): void {
     fabric.Object.prototype.transparentCorners = false;
-    this.canvas = new fabric.Canvas('canvas-container', {
-      hoverCursor: 'pointer',
-      selection: true
-    });
-    this.scaleCanvas();
-    this.canvas.selectedElements = [];
-    this.canvas.connect = false;
-    this.canvas.connectButtonText = 'Connect';
+    this.canvas = this.shapeService.initCanvas();
   }
 
   scaleCanvas(){
@@ -40,15 +33,20 @@ export class UserBoardComponent implements OnInit {
   }
 
   addEllipse(){
-    this.shapesArray.push(this.shapeService.addEllipse(this.canvas, this.selectedColor));
+    this.addToArray(this.shapeService.addEllipse(this.canvas, this.selectedColor));
   }
 
   addRectangle() {
-    this.shapesArray.push(this.shapeService.addRectangle(this.canvas, this.selectedColor));
+    this.addToArray(this.shapeService.addRectangle(this.canvas, this.selectedColor));
   }
 
   addImage(){
-    this.shapesArray.push(this.shapeService.addImage(this.canvas, ''));
+    this.addToArray(this.shapeService.addImage(this.canvas, ''));
+  }
+
+  addToArray(group){
+    group.uuid = this.shapesArray.length;
+    this.shapesArray.push(group);
   }
 
   clear() {

@@ -23,7 +23,7 @@ export class ScalingService {
     const width = shape.width * shape.scaleX;
     if (height < textBoundingRect.height){
       if (shape instanceof fabric.Image){
-        const scale = (textBoundingRect.height + 60) / 512;
+        const scale = (textBoundingRect.height + 150) / 512;
         shape.scaleY = scale;
         shape.scaleX = scale;
       }
@@ -34,7 +34,7 @@ export class ScalingService {
     }
     if (width < textBoundingRect.width){
       if (shape instanceof fabric.Image){
-        const scale = (textBoundingRect.width + 60) / 512;
+        const scale = (textBoundingRect.width + 150) / 512;
         shape.scaleY = scale;
         shape.scaleX = scale;
       }
@@ -44,11 +44,18 @@ export class ScalingService {
       resize = true;
     }
     if (shape instanceof fabric.Ellipse && resize){
-      shape.height += 50;
-      shape.width += 50;
+      shape.height += 80;
+      shape.width += 80;
       shape.rx = shape.width / 2;
       shape.ry = shape.height / 2;
     }
+  }
+
+  setOpacity(canvas, opacity){
+    canvas.forEachObject( (obj) => {
+      obj.setOpacity(0.5);
+    });
+    canvas.renderAll();
   }
 
   // 90% implemented just have to fix a few allignment issues

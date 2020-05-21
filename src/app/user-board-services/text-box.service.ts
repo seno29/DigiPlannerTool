@@ -15,7 +15,7 @@ export class TextBoxService {
   addText(shape, canvas): fabric.IText{
     const text = new fabric.IText('Tap', {
       fill: '#333',
-      fontSize: 20,
+      fontSize: 15,
       originX: 'center',
       originY: 'center',
       textAlign: 'center',

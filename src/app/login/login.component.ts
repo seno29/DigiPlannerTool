@@ -27,11 +27,11 @@ export class LoginComponent implements OnInit {
     console.log(this.userType);
     this.authService.authState.subscribe((user)=>{
       this.currentUser = user;
-      // if(this.user){
-      //   this.router.navigate(['/home']);
-      // }else{
-      //   this.router.navigate(['/login']);
-      // }
+      if(this.userService.isAdmin(this.currentUser.email)){
+        this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
+      }else if(this.userService.isUser(this.currentUser.email)){
+        this.router.navigate(['/home'],{queryParams:{userType: 'user'}});
+      }
     }); 
   }
 
@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
       if(user){
         if(this.isValid(user)){
           this.showSnackBar('Login Successful','cancel');
-          this.router.navigate(['/home'],{queryParams: {userType: this.userType},skipLocationChange: true});
+          this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
           console.log(`signed in:${user.email} ${this.userType}`);
         }else{
           this.showSnackBar('invalid User Type','Try again!');

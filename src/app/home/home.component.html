@@ -9,15 +9,17 @@
             <img class="icon" src="../../assets/strategy.png" width="48" height="48">
             Create New Board
         </button>
-        <button mat-button class="card" *ngIf="isUser" (click)="joinBoard()">
+        <br><br>
+        <button mat-button class="card" (click)="joinBoard()">
             <img class="icon" src="../../assets/meeting-room.png" width="48" height="48">
-            Join Live Board
+            Join Board
         </button>
         <br><br>
         <button mat-button class="card">
             <img class="icon" src="../../assets/eye.png" width="50" height="50">
-            View Board
+            View Existing Boards
         </button>
         </div> 
     </mat-grid-tile>
 </mat-grid-list>
+<router-outlet></router-outlet>

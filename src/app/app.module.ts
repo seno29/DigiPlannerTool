@@ -16,12 +16,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import { GoogleLoginProvider} from "angularx-social-login";
 
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
+import { JoinRoomDialogComponent } from './join-room-dialog/join-room-dialog.component';
 
 let config = new AuthServiceConfig([
   {
@@ -41,6 +45,7 @@ export function provideConfig() {
     AdminBoardComponent,
     UserBoardComponent,
     HomeComponent,
+    JoinRoomDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,8 +59,12 @@ export function provideConfig() {
     MatCardModule,
     MatTooltipModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule
   ],
+  entryComponents:[JoinRoomDialogComponent],
   providers: [
     {
       provide: AuthServiceConfig,

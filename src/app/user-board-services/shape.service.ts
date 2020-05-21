@@ -16,6 +16,7 @@ export class ShapeService {
     fill : color,
     rx: 100,
     ry: 50,
+    selectable: false
     });
     const text = this.textService.addText(ellipse, canvas);
     const group = this.textService.createGroup(ellipse, text, canvas, 100, 100, []);
@@ -29,6 +30,7 @@ export class ShapeService {
       width: 200,
       height: 100,
       fill: color,
+      selectable: false
     });
     const text = this.textService.addText(rect, canvas);
     const group = this.textService.createGroup(rect, text, canvas, 100, 100, []);
@@ -40,7 +42,8 @@ export class ShapeService {
       const scale = 300 / img.width;
       img.set({
          scaleX: scale,
-         scaleY: scale
+         scaleY: scale,
+         selectable: false
       });
     });
     const text = this.textService.addText(image, canvas);

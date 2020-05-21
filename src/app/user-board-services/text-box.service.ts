@@ -21,6 +21,7 @@ export class TextBoxService {
       fontFamily: 'Segoe UI',
       top: 0,
       left: 0,
+      selectable: false,
     });
     // Event listener on Itext
     text.on('editing:exited', () => {
@@ -53,16 +54,14 @@ export class TextBoxService {
     canvas.renderAll();
   }
 
-  createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line}>){
+  createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>){
     this.setDimen(shape, text.getBoundingRect());
-    shape.selectable = false;
-    text.selectable = false;
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
+      connections,
+      isEditable: true,
     });
-    group.connections = connections;
-    // Event Listener for double click on group
     group.on('mousedown', this.doubleClickEvent(group, () => {
       if (canvas.connect){
         canvas.selectedElements.push(group);
@@ -70,6 +69,7 @@ export class TextBoxService {
       }
       else{
         // this.setListenerConnect(canvas, group);
+        group.isEditable = false;
         this.unGroup(group, canvas);
         canvas.setActiveObject(text);
         text.enterEditing();
@@ -77,11 +77,16 @@ export class TextBoxService {
       }
     }));
     group.on('moving', (event) => {
+      group.isEditable = false;
       if (group.connections.length > 0){
         // group.moveLine();
         this.moveLines(group);
         canvas.renderAll();
       }
+    });
+    group.on('moved', (event) => {
+      group.isEditable = true;
+      console.log('voilaa');
     });
     canvas.add(group);
     // this.setOpacity(canvas, 1);
@@ -104,17 +109,18 @@ export class TextBoxService {
   }
 
   drawLineTwoPoints(canvas) {
-    const from = canvas.selectedElements[0].getCenterPoint(0, 0);
-    const to = canvas.selectedElements[1].getCenterPoint(0, 0);
-    const line = this.makeLine([from.x, from.y, to.x, to.y]);
+    const group1 = canvas.selectedElements[0];
+    const group2 = canvas.selectedElements[1];
+    const line = this.makeLine([group1.getCenterPoint().x, group1.getCenterPoint().y,
+                                group2.getCenterPoint().x, group2.getCenterPoint().y]);
     canvas.add(line);
     canvas.sendToBack(line);
-    canvas.selectedElements[0].connections.push({name: 'p1', line});
-    canvas.selectedElements[1].connections.push({name: 'p2', line});
-    console.log('dont cry ');
+    group1.connections.push({name: 'p1', line, connectedGroup: group2});
+    group2.connections.push({name: 'p2', line, connectedGroup: group1});
+    // console.log('dont cry ');
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
-    console.log('Line :' + line + '\nGroup1: ' + canvas.selectedElements[0] + '\nGroup2:' + canvas.selectedElements[1]);
+    // console.log('Line :' + line + '\nGroup1: ' + canvas.selectedElements[0] + '\nGroup2:' + canvas.selectedElements[1]);
   }
 
   moveLines(group){

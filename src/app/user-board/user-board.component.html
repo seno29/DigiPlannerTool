@@ -4,24 +4,24 @@
 
       <div class="title">User UI</div>
   
-      <div class="button-row-right" >
+      <div class="button-row-right"  >
 
-        <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button class= "button-effect" (click)="addRectangle()" color="primary" [disabled]="canvas.connect" >
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
 
-        <button mat-flat-button (click)="addEllipse()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button class= "button-effect" (click)="addEllipse()" color="primary" [disabled]="canvas.connect">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
 
-        <button mat-flat-button (click)="addImage()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button class= "button-effect" (click)="addImage()" color="primary" [disabled]="canvas.connect">
           <mat-icon>stars</mat-icon>
           Image
         </button>
 
-        <button mat-flat-button (click)="connect()" color="primary">
+        <button mat-flat-button class= "button-effect" (click)="connect()" color="primary">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>
@@ -51,13 +51,13 @@
 
           <div class="button-row-right" >
             
-            <button mat-flat-button class="orange"  (click)="doUndo()">
+            <button mat-flat-button  class="orange"  id="undo" (click)="doUndo()" enabled >
               <mat-icon>undo</mat-icon>
               Undo
             </button>
         
             
-              <button mat-flat-button class="orange"  (click)="doRedo()">
+              <button mat-flat-button  class="orange" id="redo" (click)="doRedo()" enabled >
                 <mat-icon>redo</mat-icon>
                Redo
               </button>

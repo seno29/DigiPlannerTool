@@ -12,7 +12,7 @@ export class ScalingService {
   scaleBoard(canvas: fabric.Canvas, aspectRatio: number){
     const width = window.innerWidth * 0.7;
     const height = width * aspectRatio;
-    console.log(width + ' hello ' + height);
+    //console.log(width + ' hello ' + height);
     canvas.setHeight(height);
     canvas.setWidth(width);
     canvas.renderAll();

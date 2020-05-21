@@ -33,12 +33,15 @@ export class ShapeService {
       fill: color,
     });
     const text = this.textService.addText(rect, canvas);
+    
     const group = this.textService.createGroup(rect, text, canvas, 100, 100, []);
+    
     return group;
+
   }
 
   addImage(canvas: fabric.Canvas){
-    const image = fabric.Image.fromURL('', (img) => {
+    const image = fabric.Image.fromURL('..assets/cloud.png', (img) => {
       const scale = 300 / img.width;
       img.set({
          scaleX: scale,

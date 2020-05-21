@@ -14,52 +14,69 @@ import { TextBoxService } from '../user-board-services/text-box.service';
 export class UserBoardComponent implements OnInit {
   shapesList: Array<fabric.Group> = [];
   colors = ['red', 'blue', 'green', 'yellow', 'orange'];
-  background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
   shapesArray;
   redoArray;
   canvasAspectRatio = 16 / 9;
-
+ //btu;
+ //btr;
   constructor(private shapeService: ShapeService, private scaleService: ScalingService, private textService:TextBoxService) {
     this.selectedColor = 'red';
     this.shapesArray = [];
    this.redoArray=[];
+   /*this.btu=<HTMLInputElement> document.getElementById("undo");
+  this.btr=<HTMLInputElement> document.getElementById("redo");
+   this.btu.disabled=false;
   
-   
+   this.btr.disabled=false;*/
   }
 
   ngOnInit(): void {
     fabric.Object.prototype.transparentCorners = false;
     this.canvas = new fabric.Canvas('canvas-container', {
       hoverCursor: 'pointer',
-      selection: true
+      selection: true,
+    
     });
     this.scaleCanvas();
     // this.scaleService.assignEventListenersCanvas(this.canvas);
     this.canvas.selectedElements = [];
     this.canvas.connect = false;
     this.canvas.connectButtonText = 'Connect';
+    this.canvas.shapesPresent=[];
   }
 
   scaleCanvas(){
     const width = window.innerWidth * 0.7 - 10;
     const height = width / this.canvasAspectRatio;
-    // console.log(width + ' hello ' + height);
     this.canvas.setHeight(height);
     this.canvas.setWidth(width);
   }
   doUndo(){
-    var data = this.shapesArray[this.shapesArray.length-1];
-    this.redoArray.push(this.shapesArray.pop());
-    this.canvas.remove(data);
+    
+    if(this.canvas.shapesPresent.length>0){
+      console.log(this.canvas.shapesPresent[this.canvas.shapesPresent.length-1]._objects[1]);
+      var data = this.canvas.shapesPresent[this.canvas.shapesPresent.length-1];
+      this.redoArray.push(this.canvas.shapesPresent.pop());
+      //this.textService.unGroup(data,this.canvas);
+      this.textService.deleteGroup(data, this.canvas);
+     
+      
+    }
+  
+    
    
   }
   
   doRedo(){
+    
+    if(this.redoArray.length>0){
+     
     var data=this.redoArray[this.redoArray.length-1];
     this.shapesArray.push(this.redoArray.pop());
-    this.canvas.add(data);
+    this.canvas.add(data);}
+    
   }
   /*doUndo() {
     if (this.counter1 >= 0) {
@@ -158,18 +175,18 @@ export class UserBoardComponent implements OnInit {
   }*/
 
   addEllipse(){
-    this.shapesArray.push(this.shapeService.addEllipse(this.canvas, this.selectedColor));
+    this.shapeService.addEllipse(this.canvas, this.selectedColor);
         
   
   }
 
   addRectangle() {
-    this.shapesArray.push(this.shapeService.addRectangle(this.canvas, this.selectedColor));
+    this.shapeService.addRectangle(this.canvas, this.selectedColor);
    
   }
 
   addImage(){
-    this.shapesArray.push(this.shapeService.addImage(this.canvas));
+    this.shapeService.addImage(this.canvas);
     
   }
 
@@ -177,6 +194,8 @@ export class UserBoardComponent implements OnInit {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
       this.scaleCanvas();
+      this.redoArray=[];
+      this.shapesArray=[];
     }
   }
 

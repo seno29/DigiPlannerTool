@@ -8,7 +8,7 @@ export class TextBoxService {
 
   editingGroupCoord;
   editingGroupConnections;
-
+  groupList=[];
   constructor() { }
 
   addText(shape, canvas): fabric.IText{
@@ -22,11 +22,17 @@ export class TextBoxService {
       top: 0,
       left: 0,
     });
+     
     // Event listener on Itext
     text.on('editing:exited', () => {
+     /*const mgroup= this.makeGroup(shape,text,this.editingGroupCoord.x, this.editingGroupCoord.y);
+      this.groupList.push(mgroup);
+      console.log(this.groupList);*/
       this.createGroup(shape, text, canvas, this.editingGroupCoord.x, this.editingGroupCoord.y, this.editingGroupConnections);
     });
+    
     return text;
+    
   }
 
   doubleClickEvent(obj, handler){
@@ -40,19 +46,32 @@ export class TextBoxService {
       }
   };
   }
-
+  makeGroup(shape, text, x,y):fabric.Group{
+    const group = new fabric.Group([shape, text], {
+      left: x,
+      top: y,
+    });
+    return group;
+  }
   unGroup(group, canvas){
     this.editingGroupCoord = group.getPointByOrigin(0, 0);
     this.editingGroupConnections = group.connections;
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
+    canvas.shapesPresent.pop();
     for (const item of items) {
         canvas.add(item);
     }
     canvas.renderAll();
   }
 
+  deleteGroup(group, canvas){
+    
+     canvas.remove(group);
+     
+    canvas.renderAll();
+  }
   createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line}>){
     this.setDimen(shape, text.getBoundingRect());
     shape.selectable = false;
@@ -84,6 +103,7 @@ export class TextBoxService {
       }
     });
     canvas.add(group);
+    canvas.shapesPresent.push(group);
     // this.setOpacity(canvas, 1);
     return group;
   }
@@ -111,7 +131,6 @@ export class TextBoxService {
     canvas.sendToBack(line);
     canvas.selectedElements[0].connections.push({name: 'p1', line});
     canvas.selectedElements[1].connections.push({name: 'p2', line});
-    console.log('dont cry ');
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
     console.log('Line :' + line + '\nGroup1: ' + canvas.selectedElements[0] + '\nGroup2:' + canvas.selectedElements[1]);

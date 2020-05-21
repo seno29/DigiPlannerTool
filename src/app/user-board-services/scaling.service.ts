@@ -10,7 +10,7 @@ export class ScalingService {
   constructor() { }
 
   scaleBoard(canvas: fabric.Canvas, aspectRatio: number){
-    const width = window.innerWidth * 0.75 - 10;
+    const width = window.innerWidth * 0.70 - 10;
     const height = width / aspectRatio;
     canvas.setHeight(height);
     canvas.setWidth(width);

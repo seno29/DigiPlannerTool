@@ -6,19 +6,19 @@
   
       <div class="button-row-right" >
 
-        <button mat-flat-button (click)="addRectangle()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button class="blueButton" mat-flat-button (click)="addRectangle()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button (click)="addEllipse()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button class="blueButton" mat-flat-button (click)="addEllipse()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
-        <button mat-flat-button (click)="addImage()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button class="blueButton" mat-flat-button (click)="addImage()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
           <mat-icon>stars</mat-icon>
           Image
         </button>
-        <button mat-flat-button (click)="connect()" color = "warn" [disabled] = "canvas.deleteMode">
+        <button class="redButton" mat-flat-button (click)="connect()" color = "warn" [disabled] = "canvas.deleteMode">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>
@@ -41,15 +41,15 @@
         </div>
   
         <div class="button-row-right">
-          <button mat-flat-button color = "warn" (click)="clear()">
+          <button class="redButton" mat-flat-button color = "warn" (click)="clear()">
             <mat-icon>layers_clear</mat-icon>
             Clear
           </button>
-          <button mat-flat-button color = "warn" (click)="delete()" [disabled] = "canvas.connect">
+          <button class="redButton" mat-flat-button color = "warn" (click)="delete()" [disabled] = "canvas.connect">
             <mat-icon>delete</mat-icon>
             {{canvas.deleteText}}
           </button>
-          <button mat-flat-button style="background-color: orange">
+          <button class="redButton" mat-flat-button color = "warn">
             <mat-icon>cloud_download</mat-icon>
             Export
           </button>

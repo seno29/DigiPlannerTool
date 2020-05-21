@@ -43,7 +43,6 @@ export class TextBoxService {
 
   createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>){
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
-    // console.log(shape.opacity);
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
@@ -59,7 +58,6 @@ export class TextBoxService {
         this.delete(canvas, group);
       }
       else{
-        // this.setListenerConnect(canvas, group);
         group.isEditable = false;
         this.unGroup(group, canvas);
         canvas.setActiveObject(text);
@@ -74,11 +72,9 @@ export class TextBoxService {
       }
     });
     canvas.add(group);
-    // this.scalingService.setOpacity(canvas, 0.5);
     return group;
   }
 
-  // Assigning double click handler to groups
   doubleClickEvent(obj, handler){
     return () => {
       if (obj.clicked) { handler(obj); }
@@ -112,10 +108,8 @@ export class TextBoxService {
     canvas.sendToBack(line);
     group1.connections.push({name: 'p1', line, connectedGroup: group2});
     group2.connections.push({name: 'p2', line, connectedGroup: group1});
-    // console.log('dont cry ');
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
-    // console.log('Line :' + line + '\nGroup1: ' + canvas.selectedElements[0] + '\nGroup2:' + canvas.selectedElements[1]);
   }
 
   moveLines(group){
@@ -138,7 +132,6 @@ export class TextBoxService {
 
   delete(canvas, group){
     for (const connection of group.connections){
-      // console.log(connection);
       // tslint:disable-next-line: prefer-for-of
       for (let i = 0 ; i < connection.connectedGroup.connections.length; i++){
         const otherGroupConnections = connection.connectedGroup.connections;

@@ -31,7 +31,6 @@ export class UserBoardComponent implements OnInit {
 
   addEllipse(){
     this.shapeService.addEllipse(this.canvas, this.selectedColor);
-    // console.log(this.canvas.getObjects());
   }
 
   addRectangle() {

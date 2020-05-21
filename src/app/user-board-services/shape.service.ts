@@ -18,6 +18,7 @@ export class ShapeService {
     ry: 50,
     selectable: false
     });
+    console.log(ellipse);
     const text = this.textService.addText(ellipse, canvas);
     const group = this.textService.createGroup(ellipse, text, canvas, 100, 100, []);
     return group;
@@ -37,18 +38,25 @@ export class ShapeService {
     return group;
   }
 
-  addImage(canvas: fabric.Canvas){
-    const image = fabric.Image.fromURL('https://i.dlpng.com/static/png/6661426_preview.png', (img) => {
-      const scale = 300 / img.width;
-      img.set({
-         scaleX: scale,
-         scaleY: scale,
-         selectable: false
-      });
-    });
-    const text = this.textService.addText(image, canvas);
-    const group = this.textService.createGroup(image, text, canvas, 100, 100, []);
-    return group;
+  addImage(canvas: fabric.Canvas, imageURL: string){
+    const imgURL = imageURL || '../assets/stars-black-48dp.svg';
+
+    const imageEle = new Image();
+    imageEle.src = imgURL;
+    let image;
+    imageEle.onload = (img) => {
+      image = new fabric.Image(imageEle, {
+          originX: 'center',
+          originY: 'center',
+          scaleX: .30,
+          scaleY: .30,
+          selectable: false,
+        });
+        // console.log(image);
+      const text = this.textService.addText(image, canvas);
+      const group = this.textService.createGroup(image, text, canvas, 100, 100, []);
+      return group;
+    };
   }
 
 

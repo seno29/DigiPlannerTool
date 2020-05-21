@@ -18,7 +18,7 @@ export class UserBoardComponent implements OnInit {
   shapesArray;
   canvasAspectRatio = 16 / 9;
 
-  constructor(private shapeService: ShapeService, private scaleService: ScalingService) {
+  constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
     this.selectedColor = 'red';
     this.shapesArray = [];
   }
@@ -30,18 +30,13 @@ export class UserBoardComponent implements OnInit {
       selection: true
     });
     this.scaleCanvas();
-    // this.scaleService.assignEventListenersCanvas(this.canvas);
     this.canvas.selectedElements = [];
     this.canvas.connect = false;
     this.canvas.connectButtonText = 'Connect';
   }
 
   scaleCanvas(){
-    const width = window.innerWidth * 0.7 - 10;
-    const height = width / this.canvasAspectRatio;
-    // console.log(width + ' hello ' + height);
-    this.canvas.setHeight(height);
-    this.canvas.setWidth(width);
+    this.scalingService.scaleBoard(this.canvas, 16 / 9);
   }
 
   addEllipse(){
@@ -53,7 +48,7 @@ export class UserBoardComponent implements OnInit {
   }
 
   addImage(){
-    this.shapesArray.push(this.shapeService.addImage(this.canvas));
+    this.shapesArray.push(this.shapeService.addImage(this.canvas, ''));
   }
 
   clear() {

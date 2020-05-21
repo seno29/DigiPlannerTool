@@ -10,12 +10,45 @@ export class ScalingService {
   constructor() { }
 
   scaleBoard(canvas: fabric.Canvas, aspectRatio: number){
-    const width = window.innerWidth * 0.7;
-    const height = width * aspectRatio;
-    console.log(width + ' hello ' + height);
+    const width = window.innerWidth * 0.75 - 10;
+    const height = width / aspectRatio;
     canvas.setHeight(height);
     canvas.setWidth(width);
     canvas.renderAll();
+  }
+
+  scaleShapes(shape, textBoundingRect){
+    let resize = false;
+    const height = shape.height * shape.scaleY;
+    const width = shape.width * shape.scaleX;
+    if (height < textBoundingRect.height){
+      if (shape instanceof fabric.Image){
+        const scale = (textBoundingRect.height + 60) / 512;
+        shape.scaleY = scale;
+        shape.scaleX = scale;
+      }
+      else{
+        shape.height = textBoundingRect.height + 20;
+      }
+      resize = true;
+    }
+    if (width < textBoundingRect.width){
+      if (shape instanceof fabric.Image){
+        const scale = (textBoundingRect.width + 60) / 512;
+        shape.scaleY = scale;
+        shape.scaleX = scale;
+      }
+      else{
+        shape.width = textBoundingRect.width + 20;
+      }
+      resize = true;
+    }
+    if (shape instanceof fabric.Ellipse && resize){
+      shape.height += 50;
+      shape.width += 50;
+      shape.rx = shape.width / 2;
+      shape.ry = shape.height / 2;
+    }
   }
 
   // 90% implemented just have to fix a few allignment issues

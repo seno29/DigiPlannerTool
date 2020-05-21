@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { fabric } from 'fabric';
+import { ScalingService } from './scaling.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class TextBoxService {
   editingGroupCoord;
   editingGroupConnections;
 
-  constructor() { }
+  constructor(private scalingService: ScalingService) { }
 
   addText(shape, canvas): fabric.IText{
     const text = new fabric.IText('Tap', {
@@ -30,32 +31,17 @@ export class TextBoxService {
     return text;
   }
 
-  doubleClickEvent(obj, handler){
-    return () => {
-      if (obj.clicked) { handler(obj); }
-      else {
-          obj.clicked = true;
-          setTimeout(() => {
-              obj.clicked = false;
-          }, 500);
-      }
-  };
-  }
-
-  unGroup(group, canvas){
-    this.editingGroupCoord = group.getPointByOrigin(0, 0);
-    this.editingGroupConnections = group.connections;
-    const items = group._objects;
-    group._restoreObjectsState();
-    canvas.remove(group);
-    for (const item of items) {
-        canvas.add(item);
-    }
-    canvas.renderAll();
+  makeLine(coords){
+    return new fabric.Line(coords, {
+      stroke: 'black',
+      strokeWidth: 2,
+      opacity: 0.7,
+      selectable: false,
+  });
   }
 
   createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>){
-    this.setDimen(shape, text.getBoundingRect());
+    this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
@@ -79,14 +65,13 @@ export class TextBoxService {
     group.on('moving', (event) => {
       group.isEditable = false;
       if (group.connections.length > 0){
-        // group.moveLine();
         this.moveLines(group);
         canvas.renderAll();
       }
     });
     group.on('moved', (event) => {
       group.isEditable = true;
-      console.log('voilaa');
+      // console.log('voilaa');
     });
     canvas.add(group);
     // this.setOpacity(canvas, 1);
@@ -98,14 +83,29 @@ export class TextBoxService {
   //   canvas.renderAll();
   // }
 
-  // set dimension according to text
-  setDimen(shape, textBoundingRect){
-    if (shape.height < textBoundingRect.height){
-      shape.height = textBoundingRect.height + 20;
+  // Assigning double click handler to groups
+  doubleClickEvent(obj, handler){
+    return () => {
+      if (obj.clicked) { handler(obj); }
+      else {
+          obj.clicked = true;
+          setTimeout(() => {
+              obj.clicked = false;
+          }, 500);
+      }
+    };
+  }
+
+  unGroup(group, canvas){
+    this.editingGroupCoord = group.getPointByOrigin(0, 0);
+    this.editingGroupConnections = group.connections;
+    const items = group._objects;
+    group._restoreObjectsState();
+    canvas.remove(group);
+    for (const item of items) {
+        canvas.add(item);
     }
-    if (shape.width < textBoundingRect.width){
-      shape.width = textBoundingRect.width + 20;
-    }
+    canvas.renderAll();
   }
 
   drawLineTwoPoints(canvas) {
@@ -139,14 +139,5 @@ export class TextBoxService {
         });
       }
     }
-  }
-
-  makeLine(coords){
-    return new fabric.Line(coords, {
-      stroke: 'black',
-      strokeWidth: 2,
-      opacity: 0.7,
-      selectable: false,
-  });
   }
 }

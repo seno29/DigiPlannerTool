@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 
 @Component({
@@ -25,12 +25,9 @@ export class AdminBoardComponent implements OnInit {
   aspectRatio = 16 / 9;
   height;
   width;
-  counter1;
-  jsonArray = [];
   selectedColor: string;
 
   constructor() {
-    this.selectedColor = 'red';
   }
 
   ngOnInit(): void {
@@ -39,16 +36,15 @@ export class AdminBoardComponent implements OnInit {
       isDrawingMode: false,
     });
 
-    this.counter1 = 0;
     this.width = window.innerWidth * 0.7;
     this.height = this.width / this.aspectRatio;
     this.canvas.setHeight(this.height);
     this.canvas.setWidth(this.width);
+    this.selectedColor = 'red';
   }
 
   togglePen() {
     this.canvas.isDrawingMode = !this.canvas.isDrawingMode;
-    this.canvas.renderAll().bind(this.canvas);
   }
 
   dialog(){
@@ -62,34 +58,33 @@ export class AdminBoardComponent implements OnInit {
           scaleY: scale,
          });
          this.canvas.add(img);
-        this.canvas.renderAll().bind(this.canvas);
        });
+       this.canvas.isDrawingMode=false;
   }
 
   cloud(){
     fabric.Image.fromURL('../assets/images/cloud.png', (img)=> {
       const scale = 150/img.width;
       img.set({
-           transparentCorners: false,
            top:10,
            left:10,
            scaleX: scale,
           scaleY: scale
          });
          this.canvas.add(img);
-         this.canvas.renderAll().bind(this.canvas);
        });
+       this.canvas.isDrawingMode=false;
   }
 
   reset() {
     if (confirm('Are you sure you want to reset canvas?')) {
       this.canvas.clear();
-      this.counter1 = this.jsonArray.length-1;
-      this.canvas.renderAll().bind(this.canvas);
+      this.canvas.isDrawingMode=false;
     }
   }
 
   circle() {
+    this.canvas.isDrawingMode=false;
     this.canvas.add(
       new fabric.Circle({
         radius: 50,
@@ -99,10 +94,10 @@ export class AdminBoardComponent implements OnInit {
         opacity: 0.8,
       })
     );
-    this.canvas.renderAll().bind(this.canvas);
   }
 
   box() {
+    this.canvas.isDrawingMode=false;
     this.canvas.add(
       new fabric.Rect({
         width: 100,
@@ -113,10 +108,10 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
       })
     );
-    this.canvas.renderAll().bind(this.canvas);
   }
 
   triangle() {
+    this.canvas.isDrawingMode=false;
     this.canvas.add(
       new fabric.Triangle({
         width: 80,
@@ -126,10 +121,10 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
       })
     );
-    this.canvas.renderAll().bind(this.canvas);
   }
 
   textBox() {
+    this.canvas.isDrawingMode=false;
     this.canvas.add(
       new fabric.Textbox('MyText', {
         width: 150,
@@ -139,56 +134,21 @@ export class AdminBoardComponent implements OnInit {
         fontSize: 20,
         fontFamily: 'Quicksand',
         textAlign: 'center',
-        // fixedWidth: 150,
       })
     );
-    this.canvas.renderAll().bind(this.canvas);
   }
 
   deleteObjects() {
+    this.canvas.isDrawingMode=false;
     var activeObject = this.canvas.getActiveObjects();
-    console.log(activeObject);
+    console.log(activeObject.length);
     if (activeObject) {
       if (confirm('Are you sure to delete selection?')) {
         activeObject.forEach((object) => {
           this.canvas.remove(object);
         });
-        this.canvas.discardActiveObject();
-        this.canvas.renderAll().bind(this.canvas);
       }
+      this.canvas.discardActiveObject();
     }
   }
-
-  save() {
-    this.jsonArray.push(JSON.stringify(this.canvas));
-    this.counter1 = this.jsonArray.length-1;
-    this.canvas.renderAll().bind(this.canvas);
-  }
-
-  undo() {
-    if (this.counter1 >= 0) {
-      this.canvas.loadFromJSON(
-        this.jsonArray[this.counter1],
-        this.counter1--,
-        this.canvas.renderAll.bind(this.canvas)
-      );
-    }
-    else{
-      return;
-    }
-  }
-
-  redo() {
-    if(this.counter1<this.jsonArray.length){
-      this.canvas.loadFromJSON(
-        this.jsonArray[this.counter1],
-        this.counter1++,
-        this.canvas.renderAll.bind(this.canvas)
-      );
-    }
-    else{
-      return;
-    }
-  }
-
 }

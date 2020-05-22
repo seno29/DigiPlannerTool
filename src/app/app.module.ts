@@ -3,22 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-
 import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { UserBoardComponent } from './user-board/user-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatCardModule } from '@angular/material/card';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { MatModule } from '../app/material.module';
 
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import { GoogleLoginProvider} from "angularx-social-login";
@@ -26,6 +14,8 @@ import { GoogleLoginProvider} from "angularx-social-login";
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { JoinRoomDialogComponent } from './join-room-dialog/join-room-dialog.component';
+import { ViewBoardsComponent } from './view-boards/view-boards.component';
+import { CreateBoardDialogComponent } from './create-board-dialog/create-board-dialog.component';
 
 let config = new AuthServiceConfig([
   {
@@ -46,25 +36,20 @@ export function provideConfig() {
     UserBoardComponent,
     HomeComponent,
     JoinRoomDialogComponent,
+    ViewBoardsComponent,
+    CreateBoardDialogComponent,
   ],
   imports: [
     BrowserModule,
     SocialLoginModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatRadioModule,
+    MatModule,
     AppRoutingModule,
-    MatSnackBarModule,
-    MatCardModule,
-    MatTooltipModule,
-    MatGridListModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule
   ],
-  entryComponents:[JoinRoomDialogComponent],
+  entryComponents:[
+    JoinRoomDialogComponent,
+    CreateBoardDialogComponent
+  ],
   providers: [
     {
       provide: AuthServiceConfig,

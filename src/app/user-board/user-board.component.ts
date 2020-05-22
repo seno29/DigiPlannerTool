@@ -10,15 +10,17 @@ import { ScalingService } from '../user-board-services/scaling.service';
 })
 
 export class UserBoardComponent implements OnInit {
-  shapesList: Array<fabric.Group> = [];
-  colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
-  background = 'white';
+  colors: Array<string>;
+  background: string;
   selectedColor: string;
   canvas: fabric.Canvas;
-  canvasAspectRatio = 16 / 9;
+  canvasAspectRatio: number;
 
   constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
     this.selectedColor = 'cornsilk';
+    this.canvasAspectRatio = 16 / 9;
+    this.background = 'white';
+    this.colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
   }
 
   ngOnInit(): void {

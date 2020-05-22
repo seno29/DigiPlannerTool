@@ -17,7 +17,7 @@ export class ScalingService {
     canvas.renderAll();
   }
 
-  scaleShapes(shape, textBoundingRect){
+  scaleShapes(shape: fabric.Object, textBoundingRect){
     let resize = false;
     const height = shape.height * shape.scaleY;
     const width = shape.width * shape.scaleX;

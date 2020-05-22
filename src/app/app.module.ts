@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { UserBoardComponent } from './user-board/user-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatModule } from '../app/material.module';
+import { MatModule } from './material.module';
 
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import { GoogleLoginProvider} from "angularx-social-login";

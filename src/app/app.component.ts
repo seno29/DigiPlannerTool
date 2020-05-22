@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  title = 'digi-planner';
+  title:string = 'digi-planner';
   currentUser:SocialUser;
 
   constructor(private authService:AuthService,private userService:UserService,private router:Router){
@@ -35,4 +35,17 @@ export class AppComponent implements OnInit{
   signOut(){
     this.authService.signOut();
   }
+
+  goToHome(){
+    if(this.currentUser){
+      if(this.userService.isAdmin(this.currentUser.email)){
+        this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
+      }else if(this.userService.isUser(this.currentUser.email)){
+        this.router.navigate(['/home'],{queryParams:{userType: 'user'}});
+      }
+    }else{
+      console.log('not logged in');
+      this.router.navigate(['/login']);
+    }
+  }  
 }

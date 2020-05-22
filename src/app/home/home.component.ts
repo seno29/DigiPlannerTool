@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  createBoard(){
+  createBoard():void{
     let dialogRef = this.dialog.open(CreateBoardDialogComponent,{
       data:{boardTitle:null,roomCode:null}
     });
@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  joinBoard(){
+  joinBoard():void{
     let dialogRef = this.dialog.open(JoinRoomDialogComponent,{
       data:{roomCode:null}
     });
@@ -61,13 +61,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  showSnackBar(message:string,action:string){
+  showSnackBar(message:string,action:string):void{
     this.snackBar.open(message,action,{
       duration:3000
     });
   }
 
-  viewBoard(){
+  viewBoard():void{
     this.router.navigate(['/viewboard']);
   }
 }

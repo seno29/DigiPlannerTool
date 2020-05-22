@@ -5,6 +5,7 @@ mat-toolbar{
 
 .title{
     margin-left:5px;
+    cursor:pointer;
 }
 
 .spacer{

@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     }); 
   }
 
-  onChange(event){   
+  onChange(event):void{   
     this.userType=event.value;
     console.log(this.userType);
   }
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  signOut(){
+  signOut():void{
     this.authService.signOut();
   }
 
@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
     return false;
   }
 
-  showSnackBar(message:string,action:string){
+  showSnackBar(message:string,action:string):void{
     this.snackBar.open(message,action,{
       duration:3000,
     });

@@ -25,6 +25,8 @@ export class TextBoxService {
       selectable: false,
     });
     text.on('editing:exited', () => {
+      canvas.remove(shape);
+      canvas.remove(text);
       this.createGroup(shape, text, canvas, this.editingGroupCoord.x, this.editingGroupCoord.y, this.editingGroupConnections);
     });
     this.createGroup(shape, text, canvas, 100, 100, []);

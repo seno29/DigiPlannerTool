@@ -9,17 +9,9 @@ export class UserService {
   constructor() { }
 
   isAdmin(email:string):boolean { 
-    if(this.adminList.find(adminId=>adminId === email)){
-      return true;
-    }else{
-      return false;
-    }
+    return !!this.adminList.find(adminId=>adminId === email);
   }
   isUser(email:string):boolean { 
-    if(this.userList.find(userId=>userId === email)){
-      return true;
-    }else{
-      return false;
-    }
+    return !!this.userList.find(userId=>userId === email);
   }
 }

@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
-  adminList:string[] = ['dikshagupta2012@gmail.com','svj456@gmail.com'];
-  userList:string[] = ['harshita234@gmail.com','johnDoe@gmail.com'];
+  adminList:string[] = ['svj456@gmail.com'];
+  userList:string[] = ['dikshagupta2012@gmail.com','harshita234@gmail.com','johnDoe@gmail.com'];
   constructor() { }
 
   isAdmin(email:string):boolean { 

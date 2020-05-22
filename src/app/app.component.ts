@@ -18,16 +18,17 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.authService.authState.subscribe((user)=>{
       this.currentUser = user;
-      if(this.currentUser){
-        if(this.userService.isAdmin(this.currentUser.email)){
-          this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
-        }else if(this.userService.isUser(this.currentUser.email)){
-          this.router.navigate(['/home'],{queryParams:{userType: 'user'}});
-        }
-      }else{
-        console.log('not logged in');
-        this.router.navigate(['/login']);
-      }
+      this.goToHome();
+      // if(this.currentUser){
+      //   if(this.userService.isAdmin(this.currentUser.email)){
+      //     this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
+      //   }else if(this.userService.isUser(this.currentUser.email)){
+      //     this.router.navigate(['/home'],{queryParams:{userType: 'user'}});
+      //   }
+      // }else{
+      //   console.log('not logged in');
+      //   this.router.navigate(['/login']);
+      // }
     }); 
      
   }

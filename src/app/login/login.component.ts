@@ -13,8 +13,7 @@ export class LoginComponent implements OnInit {
   currentUser:SocialUser;
   userType:string="admin";
   inH:number;
-  // isAdmin:boolean;
-  // isUser:boolean;
+ 
   constructor(
     private authService:AuthService,
     private userService:UserService,
@@ -46,7 +45,6 @@ export class LoginComponent implements OnInit {
         if(this.isValid(user)){
           this.showSnackBar('Login Successful','cancel');
           this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
-          // console.log(`signed in:${user.email} ${this.userType}`);
         }else{
           this.showSnackBar('invalid User Type','Try again!');
           this.signOut();

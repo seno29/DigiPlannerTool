@@ -40,6 +40,9 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result=>{
       if(result && result.roomCode && result.boardTitle){
         this.showSnackBar('Board created!','OK');
+        this.router.navigate(['/adminboard'],{
+          queryParams:{roomCode:result.roomCode, boardTitle:result.boardTitle}
+        });
         console.log(`room code is: ${result.roomCode} and board name:${result.boardTitle}`);
       }else{
         console.log('not valid info');

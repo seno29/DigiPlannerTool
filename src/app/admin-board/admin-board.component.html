@@ -5,8 +5,9 @@
     <div class="title">Admin UI</div>
 
     <div class="button-row-right">
-      <mat-slide-toggle title="pen" class="orange" (change)="togglePen()"><mat-icon>edit</mat-icon></mat-slide-toggle>
-
+      <button mat-flat-button title="Pen" (click)="togglePen()" color="primary" >
+        <mat-icon>edit</mat-icon>
+      </button>
       <button mat-flat-button title="Box" (click)="box()" color="primary" >
         <mat-icon>crop_3_2</mat-icon>
       </button>
@@ -24,15 +25,6 @@
       </button>
       <button mat-flat-button title="TextBox" (click)="textBox()" color="primary" >
         <mat-icon>text_rotation_none</mat-icon>
-      </button>
-      <button mat-flat-button title="Undo" (click)="undo()" color="accent" >
-        <mat-icon>undo</mat-icon>
-      </button>
-      <button mat-flat-button title="Redo" (click)="redo()" color="accent" >
-        <mat-icon>redo</mat-icon>
-      </button>
-      <button mat-flat-button title="Save" (click)="save()" color="accent" >
-        <mat-icon>save</mat-icon>
       </button>
       <button mat-flat-button title="Reset" (click)="reset()" color="warn" >
         <mat-icon>settings_backup_restore</mat-icon>

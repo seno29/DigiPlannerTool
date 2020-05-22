@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
       data:{boardTitle:null,roomCode:null}
     });
     dialogRef.afterClosed().subscribe(result=>{
-      if(result.roomCode && result.boardTitle){
+      if(result && result.roomCode && result.boardTitle){
         this.showSnackBar('Board created!','OK');
         console.log(`room code is: ${result.roomCode} and board name:${result.boardTitle}`);
       }else{

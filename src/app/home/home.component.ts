@@ -34,16 +34,11 @@ export class HomeComponent implements OnInit {
   }
 
   createBoard(){
-    //DBMS interaction
-    //roomcode uniqueness
-    //add room code to its x-set
-    // this.router.navigate(['/adminboard'],{roomcode});
     let dialogRef = this.dialog.open(CreateBoardDialogComponent,{
       data:{boardTitle:null,roomCode:null}
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result.roomCode && result.boardTitle){
-        // this.router.navigate(['/userboard'],{queryParams:{room_code:result.roomCode}});
         this.showSnackBar('Board created!','OK');
         console.log(`room code is: ${result.roomCode} and board name:${result.boardTitle}`);
       }else{
@@ -53,8 +48,6 @@ export class HomeComponent implements OnInit {
   }
 
   joinBoard(){
-    //validity of room code and if valid add it to set
-
     let dialogRef = this.dialog.open(JoinRoomDialogComponent,{
       data:{roomCode:null}
     });
@@ -75,7 +68,6 @@ export class HomeComponent implements OnInit {
   }
 
   viewBoard(){
-    //display roomcode and corresponding board name for user
     this.router.navigate(['/viewboard']);
   }
 }

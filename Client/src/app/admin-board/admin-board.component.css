@@ -1,0 +1,75 @@
+.title{
+  font-size: xx-large;
+  font-weight: bold;
+  float: left;
+  margin-top: 1%;
+}
+
+#canvas{
+  width: 70%;
+  /* padding-top: 42.1875%; */
+  /* border: 2px solid black; */
+
+  margin: 0 auto;
+}
+
+#canvas-container{
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.button-row{
+  width: 70%;
+  margin: 5px auto;
+  contain: content;
+}
+
+.button-row-left{
+  float: left;
+}
+
+.button-row-right{
+  float: right;
+}
+
+.button-row-left button{
+  margin-right: 8px;
+}
+
+.button-row-right button{
+  margin-left: 8px;
+}
+
+.red{
+  background-color: red;
+}
+
+.green{
+  background-color: green;
+}
+
+.blue{
+  background-color: blue;
+}
+
+.orange{
+  background-color: orange;
+}
+
+.yellow{
+  background-color: yellow;
+}
+
+.white{
+  background-color: whitesmoke;
+}
+
+.brown{
+  background-color: brown;
+}
+.pink{
+  background-color: pink;
+}
+.violet{
+  background-color: violet;
+}

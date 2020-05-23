@@ -47,7 +47,7 @@ export class TextBoxService {
       isEditable: true,
     });
     group.setControlsVisibility(HideControls);
-    this.addEventListeners(group, canvas, text);
+    this.addEventListeners(canvas, group, text);
     canvas.add(group);
     canvas.setActiveObject(group);
   }
@@ -77,7 +77,7 @@ export class TextBoxService {
     canvas.renderAll();
   }
 
-  regroup(shape, text, canvas){
+  regroup(shape: fabric.Object, text: fabric.IText, canvas: fabric.Canvas){
     canvas.remove(shape);
     canvas.remove(text);
     const groupCoord = this.selectedGroup.getPointByOrigin(0, 0);
@@ -131,7 +131,7 @@ export class TextBoxService {
     canvas.renderAll();
   }
 
-  addDeleteBtn(x, y, canvas){
+  addDeleteBtn(x: number, y: number, canvas: fabric.Canvas){
     document.getElementById('deleteBtn')?.remove();
     const btnLeft = x - 10;
     const btnTop = y - 10;
@@ -149,7 +149,7 @@ export class TextBoxService {
   }
 
   // For the delete button
-  addEventListeners(group: fabric.Group, canvas, text){
+  addEventListeners(canvas: fabric.Canvas, group: fabric.Group, text: fabric.IText){
     group.on('selected', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas); });
 
     group.on('modified', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas); });
@@ -187,7 +187,7 @@ export class TextBoxService {
     });
   }
 
-  changeColor(canvas, color){
+  changeColor(canvas: fabric.Canvas, color: string){
     const group = canvas.getActiveObject();
     if (group){
       const shape = group._objects[0];

@@ -26,17 +26,11 @@ export class UserBoardComponent implements OnInit {
     this.canvas = this.shapeService.initCanvas(this.renderer);
   }
 
-  addEllipse(){
-    this.shapeService.addEllipse(this.canvas);
-  }
+  addEllipse(){ this.shapeService.addEllipse(this.canvas); }
 
-  addRectangle() {
-    this.shapeService.addRectangle(this.canvas);
-  }
+  addRectangle() { this.shapeService.addRectangle(this.canvas); }
 
-  addImage(){
-    this.shapeService.addImage(this.canvas, '');
-  }
+  addImage(){ this.shapeService.addImage(this.canvas, ''); }
 
   clear() {
     if (confirm('Do you want to clear')) {

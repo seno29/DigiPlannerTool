@@ -24,19 +24,18 @@ client.on('connect', function() {
 });
 
 //getUsers
-app.get('/login',(req,res,next) => {
-  client.hgetall('users', function(err, obj){
-    if(!obj){
+app.get('/users',(req,res,next) => {
+  client.hgetall('users', function(err, userList){
+    if(!userList){
       res.send(err);
     } else {
-      res.send(obj);
+      res.send(userList);
     }
   });
 });   
 
-// //View Board in Admin View, User View
-app.get('/adminView/:userId',(req,res,next) => {
-  //Here you can see a list of all rooms which you have visited
+//View Existing Boards in Admin View, User View
+app.get('/boards/:userId',(req,res,next) => {
   let userId = req.params.userId;
   let rooms = [];
   let roomsinfo = {};
@@ -45,7 +44,6 @@ app.get('/adminView/:userId',(req,res,next) => {
       res.send(err);
     } else {
       rooms = roomsOfUser;
-      console.log(rooms);
       async.forEach(rooms, function(room, callback) { 
         client.hgetall(room, (err,reply)=>{
           if(err){
@@ -55,74 +53,92 @@ app.get('/adminView/:userId',(req,res,next) => {
             // console.log(roomsinfo);
             callback();
           }
-      });
-      }, function(err) {
+        });
+        }, function(err) {
           if (err) return next(err);
           res.send(roomsinfo);
       });
     };
-  });  
+  }); 
 });
 
 // //Create Board in Admin View
-
-app.post('/adminView/:userId',(req,res,next) => {
+app.post('/boards/:userId',(req,res,next) => {
   let userId = req.params.userId;
   let roomId = req.body.room_id;
-  client.sadd('rooms', roomId, (err, reply) => {
-    if(!reply){
-      res.send(err);
+  let roomTitle = req.body.room_title;
+  if(roomId != null && roomTitle != null){
+    client.sadd('rooms', roomId, (err, reply) => {
+      if(!reply){
+        res.send(err);
+      }else{
+        client.sadd(userId, roomId, (err, reply) => {
+          if(!reply){
+            res.send(err);
+          }else{
+              client.hmset(roomId, {
+              'room_title' : roomTitle,
+              'admin_id' : userId,
+              'canvas_json': '',
+            },(err,reply) => {
+              if(!reply){
+                res.send(err);
+              }else{
+                res.send(reply);
+              }
+            });
+          }
+        });
+      }
+    });
+  }else{
+    if(roomId == null && roomTitle == null){
+      res.send("Send proper details");
+    }else if(roomId == null){
+      res.send("Send roomId");
     }else{
-      client.sadd(userId, roomId, (err, reply) => {
-        if(!reply){
-          res.send(err);
-        }else{
-            client.hmset(roomId, {
-            'room_title' : req.body.room_title,
-            'admin_id' : userId,
-            'canvas_json': '',
-          },(err,reply) => {
-            if(!reply){
-              res.send(err);
-            }else{
-              res.send(reply);
-            }
-          });
-        }
-      });
+      res.send("Send roomTitle");
     }
-  });
+  }
 });
 
-// // Edit Drawing Board User and Admin
-app.get('/drawing/:roomId',(req,res,next) => {
-  client.hgetall(req.params.roomId, (err,roomData) => {
+// Edit Drawing Board User and Admin
+app.get('/drawing/:room_id',(req,res,next) => {
+  let roomId = req.params.room_id;
+  client.hgetall(roomId, (err,roomData) => {
     if(!roomData){
       res.send(err);
     }else{
-      if(roomData.canvas_json != ''){
-        res.send(JSON.parse(roomData.canvas_json));
-      }else{
-        res.send('');
-      }
+      // if(roomData.canvas_json != ''){
+      //   res.send(JSON.parse(roomData.canvas_json));
+      // }else{
+      //   res.send('');
+      // }
+      res.send(roomData);
     }
   });
 });
-app.put('/drawing/:roomId',(req,res,next) => {
-  client.hmset(req.params.roomId, {
-    'canvas_json' : JSON.stringify(req.body.canvas_json),
-  },(err,reply) => {
-    if(!reply){
-      res.send(err);
-    }else{
-      res.send(reply);
-    }
-  });
+app.put('/drawing/:room_id',(req,res,next) => {
+  let roomId = req.params.room_id;
+  let json = req.body.canvas_json;
+  if(json != null){
+    client.hmset(roomId, {
+      'canvas_json' : JSON.stringify(req.body.canvas_json),
+    },(err,reply) => {
+      if(!reply){
+        res.send(err);
+      }else{
+        res.send(reply);
+      }
+    });
+  }else{
+    res.send("Send JSON Content");
+  }
 });
 
-// // Check if room code is valid
+// Check if room code is valid
 app.get('/roomIdExists', (req,res,next) => {
-  var roomId = '';
+  let roomId = '';
   roomId = req.body.room_id;
   client.sismember('rooms',roomId, (err,reply)=>{
     if(!reply){
@@ -130,6 +146,21 @@ app.get('/roomIdExists', (req,res,next) => {
     }
     else{
       res.send(true);
+    }
+  });
+});
+
+// add room id to the userid's set
+app.post('/addJoinedRoom/:userId', (req,res,next) => {
+  let roomId = '';
+  let userId = '';
+  roomId = req.body.room_id;
+  userId = req.params.userId;
+  client.sadd(userId, roomId, (err, reply) => {
+    if(!reply){
+      res.send('0');
+    }else{
+      res.send(reply.toString());
     }
   });
 });

@@ -5,19 +5,25 @@
     margin-top: 1%;
 }
 
-#canvas-div{
-    width: 70%;
-    margin: auto;
+#canvas{
     border: 2px solid black;
     border-radius: 10px;
-    padding-left: 50;
-    padding-right: 50;
-    margin: 0 auto;
+    
+}
+.button-col{
+    display: inline-block;
+    margin: auto 10px 0 10px;
+}
+
+.button-col button{
+    margin-top: 8px;
+    box-shadow: none;
+    display: block;
 }
 
 .button-row{
-    width: 70%;
-    margin: 5px auto;
+    width: 1067px;
+    margin: 10px auto;
     contain: content;
 }
 
@@ -51,7 +57,7 @@
 
 .mat-h2{
     text-align: center;
-    margin: 20px auto;
+    margin: 10px auto;
     color: salmon;
 }
 

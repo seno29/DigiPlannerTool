@@ -1,4 +1,4 @@
-<div class="userUI">
+<div style="text-align: center;">
 
     <div class="button-row">
 
@@ -26,38 +26,28 @@
   
     </div>
   
-    <div id="canvas-div" (window:resize)="scaleCanvas()">
+    <div id="canvas-div" style="display: inline-flex;">
+
+      <div class="button-col">
+        <div *ngFor = "let color of colors;">
+        <button mat-mini-fab class={{color}} style="border: 1px solid black;" (click)="changeColor(color)">
+          <mat-icon *ngIf="canvas.selectedColor == color" [style.color]="'black'">done</mat-icon>
+        </button>
+        </div>
+      </div>
     
-        <canvas id="canvas-container"></canvas>
-      
-    </div>
-  
-    <div class="button-row">
-  
-        <div class="button-row-left" *ngFor = "let color of colors;">
-          <button mat-mini-fab class={{color}} style="box-shadow: none; border: 1px solid black;" (click)="selectedColor = color">
-            <mat-icon *ngIf="selectedColor == color" [style.color]="'black'">done</mat-icon>
-          </button>
-        </div>
-  
-        <div class="button-row-right">
-          <button class="redButton" mat-flat-button color = "warn" (click)="clear()">
+        <canvas id="canvas"></canvas>
+        
+        <div class="button-col">
+          <button class="redButton but-col-right" mat-fab color = "warn" (click)="clear()">
             <mat-icon>layers_clear</mat-icon>
-            Clear
           </button>
-          <button class="redButton" mat-flat-button color = "warn" (click)="delete()" [disabled] = "canvas.connect">
-            <mat-icon>delete</mat-icon>
-            {{canvas.deleteText}}
-          </button>
-          <button class="redButton" mat-flat-button color = "warn">
+          <button class="redButton but-col-right" mat-fab color = "warn">
             <mat-icon>cloud_download</mat-icon>
-            Export
           </button>
         </div>
-  
     </div>
 
     <p class = "mat-h2" *ngIf = "canvas.connect"> Note: Double click on any two cards to connect. {{canvas.selectedElements.length}} selected</p>
-    <p class = "mat-h2" *ngIf = "canvas.deleteMode"> Note: Double click on any one card to delete. </p>
   
 </div>

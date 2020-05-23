@@ -66,8 +66,6 @@ export class TextBoxService {
 
   unGroup(group: fabric.Group, canvas: fabric.Canvas){
     this.selectedGroup = group;
-    // this.editingGroupCoord = group.getPointByOrigin(0, 0);
-    // this.editingGroupConnections = group.connections;
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
@@ -148,7 +146,6 @@ export class TextBoxService {
     document.getElementById('deleteBtn').addEventListener('click', (event) => {this.delete(canvas); });
   }
 
-  // For the delete button
   addEventListeners(canvas: fabric.Canvas, group: fabric.Group, text: fabric.IText){
     group.on('selected', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas); });
 

@@ -2,8 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 
 import { ShapeService } from '../user-board-services/shape.service';
-import { ScalingService } from '../user-board-services/scaling.service';
-import { TextBoxService } from '../user-board-services/text-box.service';
+import { GroupService } from '../user-board-services/group.service';
 
 
 @Component({
@@ -18,7 +17,7 @@ export class UserBoardComponent implements OnInit {
   selectedColor: string;
   canvas: fabric.Canvas;
 
-  constructor(private shapeService: ShapeService, private renderer: Renderer2, private textService: TextBoxService) {
+  constructor(private shapeService: ShapeService, private renderer: Renderer2, private groupService: GroupService) {
     this.selectedColor = 'cornsilk';
     this.background = 'white';
     this.colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
@@ -56,6 +55,6 @@ export class UserBoardComponent implements OnInit {
 
   changeColor(color: string){
     this.canvas.selectedColor = color;
-    this.textService.changeColor(this.canvas, color);
+    this.groupService.changeColor(this.canvas, color);
   }
 }

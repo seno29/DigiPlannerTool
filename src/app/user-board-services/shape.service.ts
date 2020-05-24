@@ -1,13 +1,13 @@
 import { Injectable, Optional, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
-import { TextBoxService } from './text-box.service';
 import { ScalingService } from './scaling.service';
+import { GroupService } from './group.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShapeService {
-  constructor(private textService: TextBoxService) { }
+  constructor(private groupService: GroupService) { }
   initCanvas(renderer){
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
@@ -35,7 +35,7 @@ export class ShapeService {
     strokeWidth : 0.3,
     selectable: false,
     });
-    this.textService.addText(ellipse, canvas);
+    this.addText(ellipse, canvas);
   }
 
   addRectangle(canvas: fabric.Canvas) {
@@ -52,7 +52,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.textService.addText(rect, canvas);
+    this.addText(rect, canvas);
   }
 
   addImage(canvas: fabric.Canvas, imageURL: string){
@@ -69,8 +69,24 @@ export class ShapeService {
           scaleY: .30,
           selectable: false,
         });
-      this.textService.addText(image, canvas);
+      this.addText(image, canvas);
     };
+  }
+
+  addText(shape: fabric.Object, canvas: fabric.Canvas): fabric.IText{
+    const text = new fabric.IText('Double click to edit', {
+      fill: '#333',
+      fontSize: 15,
+      originX: 'center',
+      originY: 'center',
+      textAlign: 'center',
+      fontFamily: 'Segoe UI',
+      top: 0,
+      left: 0,
+      selectable: false,
+    });
+    this.groupService.createGroup(shape, text, canvas, 100, 100, []);
+    text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas); });
   }
 
 }

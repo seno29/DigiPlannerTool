@@ -45,28 +45,17 @@
         </div>
   
         <div class="button-row-right">
-          <button class="redButton" mat-mini-fab style="background-color: orange"  (click)="doUndo()" [disabled] = "canvas.deleteMode">
-            <mat-icon>undo</mat-icon>
-          </button>
-  
-  
-           
-            <button class="redButton" mat-mini-fab style="background-color: orange"  (click)="doRedo()" [disabled] = "canvas.deleteMode">
-              <mat-icon>redo</mat-icon>
-              </button>
-              
-          <button class= "redButton" mat-flat-button color = "warn"  (click)="clear()" [disabled] = "canvas.deleteMode" >
-            <mat-icon> layers_clear </mat-icon>
+          
+          <button class="redButton" mat-flat-button color = "warn" (click)="clear()">
+            <mat-icon>layers_clear</mat-icon>
             Clear
           </button>
-
           <button class="redButton" mat-flat-button color = "warn" (click)="delete()" [disabled] = "canvas.connect">
             <mat-icon>delete</mat-icon>
             {{canvas.deleteText}}
           </button>
-          
 
-          <button mat-flat-button style="background-color: orange">
+          <button class="redButton" mat-flat-button color = "warn">
             <mat-icon>cloud_download</mat-icon>
             Export
           </button>
@@ -75,7 +64,7 @@
   
     </div>
 
-    <p class = "mat-h2" *ngIf = "canvas.connect"> Note: Double click on any two cards to connect. </p>
+    <p class = "mat-h2" *ngIf = "canvas.connect"> Note: Double click on any two cards to connect. {{canvas.selectedElements.length}} selected</p>
     <p class = "mat-h2" *ngIf = "canvas.deleteMode"> Note: Double click on any one card to delete. </p>
   
 </div>

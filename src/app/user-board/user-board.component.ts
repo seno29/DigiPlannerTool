@@ -15,17 +15,18 @@ import { VirtualTimeScheduler } from 'rxjs';
 })
 
 export class UserBoardComponent implements OnInit {
-  shapesList: Array<fabric.Group> = [];
-  colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
-  background = 'white';
+  colors: Array<string>;
+  background: string;
   selectedColor: string;
   canvas: fabric.Canvas;
-  canvasAspectRatio = 16 / 9;
- 
+
+  canvasAspectRatio: number;
 
   constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
     this.selectedColor = 'cornsilk';
-    
+    this.canvasAspectRatio = 16 / 9;
+    this.background = 'white';
+    this.colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
   }
 
   ngOnInit(): void {
@@ -39,8 +40,6 @@ export class UserBoardComponent implements OnInit {
 
   addEllipse(){
     this.shapeService.addEllipse(this.canvas, this.selectedColor);
-        
-  
   }
 
   addRectangle() {
@@ -55,8 +54,9 @@ export class UserBoardComponent implements OnInit {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
       this.scaleCanvas();
-      
-      
+
+      this.canvas.deleteMode = false;
+      this.canvas.deleteText = 'Delete';
     }
   }
 
@@ -113,16 +113,5 @@ export class UserBoardComponent implements OnInit {
     }
   }
 
- /* window.load( ()=> {
-    (this.bt1).click(()=> {
-       (this.bt2).show();
-    });
-    (this.bt2).click(()=>{
-       (this.bt2).hide();
-    });
-    (this.bt3).click(()=>{
-        (this.bt2).hide();
-    });
-});*/
 
 }

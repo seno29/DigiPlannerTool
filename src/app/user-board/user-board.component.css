@@ -58,6 +58,24 @@
     background-color: rgb(255,128,0);
 }
 
+.blueButton:hover{
+    background-color: #0080FF;
+}
+
+.redButton:hover{
+    background-color: rgb(255,128,0);
+}
+
+.mat-mini-fab:hover{
+    opacity: 0.5;
+}
+
+.mat-h2{
+    text-align: center;
+    margin: 20px auto;
+    color: salmon;
+}
+
 .cornsilk{
     background-color: cornsilk;
 }

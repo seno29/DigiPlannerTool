@@ -21,7 +21,7 @@ export class ScalingService {
     let resize = false;
     const height = shape.height * shape.scaleY;
     const width = shape.width * shape.scaleX;
-   
+
     if (height < textBoundingRect.height  ){
       if (shape instanceof fabric.Image){
         const scale = (textBoundingRect.height + 80) / 512;
@@ -44,17 +44,16 @@ export class ScalingService {
       }
       resize = true;
     }
-    
+
     if (shape instanceof fabric.Ellipse && resize){
-      if( shape.width<textBoundingRect.width ){
+      if (shape.width < textBoundingRect.width ){
         shape.width += 60;
-        shape.height = textBoundingRect.height+ 20;
+        shape.height = textBoundingRect.height + 20;
       }
-      if(shape.height<textBoundingRect.height){
+      if (shape.height < textBoundingRect.height){
         shape.width = textBoundingRect.width + 20;
-        shape.height += 60; 
+        shape.height += 60;
       }
-          
       shape.rx = shape.width / 2;
       shape.ry = shape.height / 2;
     }

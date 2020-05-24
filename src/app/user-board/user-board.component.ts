@@ -31,7 +31,6 @@ export class UserBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.canvas = this.shapeService.initCanvas();
- 
   }
 
   scaleCanvas(){
@@ -60,34 +59,6 @@ export class UserBoardComponent implements OnInit {
     }
   }
 
- 
-  doUndo(){
-   this.canvas.undoMode=true;
-    var data = this.canvas.undoArray[this.canvas.undoArray.length-1];
-    this.canvas.redoArray.push(this.canvas.undoArray.pop());
-    this.canvas.remove(data);
-
-  }
-
-  doRedo(){
-    var data=this.canvas.redoArray[this.canvas.redoArray.length-1];
-    this.canvas.undoArray.push(this.canvas.redoArray.pop());
-    this.canvas.add(data);
-  }
-  /*delete(){
-    if (this.canvas.delete){
-      this.canvas.delete = false;
-      this.canvas.deleteButtonText = 'Delete';
-    }
-    else{
-      //this.deleteSelectedObjectsFromCanvas()
-    
-     
-      this.canvas.delete = true;
-      this.canvas.deleteButtonText = 'Select';
-    }
-  }*/
-  
   connect(){
     if (this.canvas.connect){
       this.canvas.connect = false;

@@ -1,8 +1,10 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
+
 import { ShapeService } from '../user-board-services/shape.service';
 import { ScalingService } from '../user-board-services/scaling.service';
 import { TextBoxService } from '../user-board-services/text-box.service';
+
 
 @Component({
   selector: 'app-user-board',
@@ -56,4 +58,6 @@ export class UserBoardComponent implements OnInit {
     this.canvas.selectedColor = color;
     this.textService.changeColor(this.canvas, color);
   }
+
+
 }

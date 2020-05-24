@@ -72,4 +72,5 @@ export class ShapeService {
       this.textService.addText(image, canvas);
     };
   }
+
 }

@@ -69,6 +69,7 @@ export class TextBoxService {
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
+    canvas.undoArray.pop();
     for (const item of items) {
         canvas.add(item);
     }
@@ -91,6 +92,7 @@ export class TextBoxService {
     canvas.sendToBack(line);
     group1.connections.push({name: 'p1', line, connectedGroup: group2});
     group2.connections.push({name: 'p2', line, connectedGroup: group1});
+
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
   }

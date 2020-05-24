@@ -9,13 +9,6 @@ export class ScalingService {
 
   constructor() { }
 
-  scaleBoard(canvas: fabric.Canvas, aspectRatio: number){
-    const width = window.innerWidth * 0.70 - 10;
-    const height = width / aspectRatio;
-    canvas.setHeight(height);
-    canvas.setWidth(width);
-    canvas.renderAll();
-  }
 
   scaleShapes(shape: fabric.Object, textBoundingRect){
     let resize = false;
@@ -57,12 +50,5 @@ export class ScalingService {
       shape.rx = shape.width / 2;
       shape.ry = shape.height / 2;
     }
-  }
-
-  setOpacity(canvas, opacity){
-    canvas.forEachObject( (obj) => {
-      obj.setOpacity(0.5);
-    });
-    canvas.renderAll();
   }
 }

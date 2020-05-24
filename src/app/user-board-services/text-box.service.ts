@@ -7,8 +7,7 @@ import { ScalingService } from './scaling.service';
 })
 export class TextBoxService {
 
-  editingGroupCoord: fabric.Point;
-  editingGroupConnections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>;
+  selectedGroup: fabric.Group;
 
   constructor(private scalingService: ScalingService) { }
 
@@ -24,13 +23,8 @@ export class TextBoxService {
       left: 0,
       selectable: false,
     });
-
-    text.on('editing:exited', () => {
-      canvas.remove(shape);
-      canvas.remove(text);
-      this.createGroup(shape, text, canvas, this.editingGroupCoord.x, this.editingGroupCoord.y, this.editingGroupConnections);
-    });
     this.createGroup(shape, text, canvas, 100, 100, []);
+    text.on('editing:exited', () => { this.regroup(shape, text, canvas); });
   }
 
   makeLine(coords: fabric.Point){
@@ -52,32 +46,10 @@ export class TextBoxService {
       connections,
       isEditable: true,
     });
-    group.on('mousedown', this.doubleClickEvent(group, () => {
-      if (canvas.connect){
-        canvas.selectedElements.push(group);
-        if (canvas.selectedElements.length === 2){ this.drawLineTwoPoints(canvas); }
-      }
-      else if (canvas.deleteMode){
-        this.delete(canvas, group);
-      }
-      else{
-        group.isEditable = false;
-        this.unGroup(group, canvas);
-        canvas.setActiveObject(text);
-        text.enterEditing();
-        text.selectAll();
-      }
-    }));
-    group.on('moving', (event) => {
-      if (group.connections.length > 0){
-        this.moveLines(group);
-        canvas.renderAll();
-      }
-    });
+    group.setControlsVisibility(HideControls);
+    this.addEventListeners(canvas, group, text);
     canvas.add(group);
-    canvas.undoArray.push(group);
-    return group;
-
+    canvas.setActiveObject(group);
   }
 
   doubleClickEvent(obj, handler){
@@ -93,8 +65,7 @@ export class TextBoxService {
   }
 
   unGroup(group: fabric.Group, canvas: fabric.Canvas){
-    this.editingGroupCoord = group.getPointByOrigin(0, 0);
-    this.editingGroupConnections = group.connections;
+    this.selectedGroup = group;
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
@@ -103,6 +74,13 @@ export class TextBoxService {
         canvas.add(item);
     }
     canvas.renderAll();
+  }
+
+  regroup(shape: fabric.Object, text: fabric.IText, canvas: fabric.Canvas){
+    canvas.remove(shape);
+    canvas.remove(text);
+    const groupCoord = this.selectedGroup.getPointByOrigin(0, 0);
+    this.createGroup(shape, text, canvas, groupCoord.x, groupCoord.y, this.selectedGroup.connections);
   }
 
   drawLineTwoPoints(canvas: fabric.Canvas) {
@@ -137,7 +115,8 @@ export class TextBoxService {
     }
   }
 
-  delete(canvas: fabric.Canvas, group: fabric.Group){
+  delete(canvas: fabric.Canvas){
+    const group = canvas.getActiveObject();
     for (const connection of group.connections){
       // tslint:disable-next-line: forin
       for (const index in connection.connectedGroup.connections){
@@ -150,7 +129,83 @@ export class TextBoxService {
     }
     canvas.remove(group);
     canvas.renderAll();
-    canvas.deleteMode = false;
-    canvas.deleteText = 'Delete';
+  }
+
+  addDeleteBtn(x: number, y: number, canvas: fabric.Canvas){
+    document.getElementById('deleteBtn')?.remove();
+    const btnLeft = x - 10;
+    const btnTop = y - 10;
+    const delteBtn = canvas.renderer.createElement('img');
+    delteBtn.id = 'deleteBtn';
+    delteBtn.src = '../assets/icons8-delete.svg';
+    delteBtn.style = `position:absolute;
+    top:${btnTop}px;
+    left:${btnLeft}px;
+    cursor:pointer;
+    width:20px;
+    height:20px;`;
+    canvas.renderer.appendChild(document.getElementsByClassName('canvas-container')[0], delteBtn);
+    document.getElementById('deleteBtn').addEventListener('click', (event) => {this.delete(canvas); });
+  }
+
+  addEventListeners(canvas: fabric.Canvas, group: fabric.Group, text: fabric.IText){
+    group.on('selected', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas); });
+
+    group.on('modified', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas); });
+
+    group.on('scaling', (e) => { document.getElementById('deleteBtn')?.remove(); });
+
+    group.on('moving', (e) => {
+      document.getElementById('deleteBtn')?.remove();
+      if (group.connections.length > 0){
+        this.moveLines(group);
+        canvas.renderAll();
+      }
+    });
+
+    group.on('rotating', (e) => { document.getElementById('deleteBtn')?.remove(); });
+
+    group.on('removed', (e) => { document.getElementById('deleteBtn')?.remove(); });
+
+    group.on('mousedown', this.doubleClickEvent(group, () => {
+      if (canvas.connect){
+        canvas.selectedElements.push(group);
+        if (canvas.selectedElements.length === 2){ this.drawLineTwoPoints(canvas); }
+      }
+      else{
+        group.isEditable = false;
+        this.unGroup(group, canvas);
+        canvas.setActiveObject(text);
+        text.enterEditing();
+        text.selectAll();
+      }
+    }));
+
+    canvas.on('mouse:down', (e) => {
+      if (!canvas.getActiveObject()){ document.getElementById('deleteBtn')?.remove(); }
+    });
+  }
+
+  changeColor(canvas: fabric.Canvas, color: string){
+    const group = canvas.getActiveObject();
+    if (group){
+      const shape = group._objects[0];
+      const text = group._objects[1];
+      this.unGroup(group, canvas);
+      shape.fill = color;
+      this.regroup(shape, text, canvas);
+    }
   }
 }
+
+const HideControls = {
+  tl: true,
+  tr: false,
+  bl: true,
+  br: true,
+  ml: true,
+  mt: true,
+  mr: true,
+  mb: true,
+  mtr: true
+};

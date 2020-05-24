@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 
 import { ShapeService } from '../user-board-services/shape.service';
 import { ScalingService } from '../user-board-services/scaling.service';
-import { element } from 'protractor';
 import { TextBoxService } from '../user-board-services/text-box.service';
-import { VirtualTimeScheduler } from 'rxjs';
 
 
 @Component({
@@ -20,42 +18,25 @@ export class UserBoardComponent implements OnInit {
   selectedColor: string;
   canvas: fabric.Canvas;
 
-  canvasAspectRatio: number;
-
-  constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
+  constructor(private shapeService: ShapeService, private renderer: Renderer2, private textService: TextBoxService) {
     this.selectedColor = 'cornsilk';
-    this.canvasAspectRatio = 16 / 9;
     this.background = 'white';
     this.colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
   }
 
   ngOnInit(): void {
-    this.canvas = this.shapeService.initCanvas();
+    this.canvas = this.shapeService.initCanvas(this.renderer);
   }
 
-  scaleCanvas(){
-    this.scalingService.scaleBoard(this.canvas, 16 / 9);
-  }
+  addEllipse(){ this.shapeService.addEllipse(this.canvas); }
 
-  addEllipse(){
-    this.shapeService.addEllipse(this.canvas, this.selectedColor);
-  }
+  addRectangle() { this.shapeService.addRectangle(this.canvas); }
 
-  addRectangle() {
-    this.shapeService.addRectangle(this.canvas, this.selectedColor);
-  }
-
-  addImage(){
-    this.shapeService.addImage(this.canvas, '');
-  }
+  addImage(){ this.shapeService.addImage(this.canvas, ''); }
 
   clear() {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
-      this.scaleCanvas();
-
-      this.canvas.deleteMode = false;
-      this.canvas.deleteText = 'Delete';
     }
   }
 
@@ -73,15 +54,9 @@ export class UserBoardComponent implements OnInit {
     }
   }
 
-  delete(){
-    if (this.canvas.deleteMode){
-      this.canvas.deleteMode = false;
-      this.canvas.deleteText = 'Delete';
-    }
-    else{
-      this.canvas.deleteMode = true;
-      this.canvas.deleteText = 'Exit Delete Mode';
-    }
+  changeColor(color: string){
+    this.canvas.selectedColor = color;
+    this.textService.changeColor(this.canvas, color);
   }
 
 

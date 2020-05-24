@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@angular/core';
+import { Injectable, Optional, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { TextBoxService } from './text-box.service';
 import { ScalingService } from './scaling.service';
@@ -7,40 +7,38 @@ import { ScalingService } from './scaling.service';
   providedIn: 'root'
 })
 export class ShapeService {
-
-  constructor(private textService: TextBoxService, private scalinService: ScalingService) { }
-
-  initCanvas(){
+  constructor(private textService: TextBoxService) { }
+  initCanvas(renderer){
     fabric.Object.prototype.transparentCorners = false;
-    const canvas = new fabric.Canvas('canvas-container', {
+    const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
       selection: true
     });
-    this.scalinService.scaleBoard(canvas, 16 / 9);
+    canvas.setHeight(650);
+    canvas.setWidth(1200 - 10);
     canvas.selectedElements = [];
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
-    canvas.deleteMode = false;
-    canvas.deleteText = 'Delete';
+    canvas.selectedColor = 'cornsilk';
+    canvas.renderer = renderer;
     return canvas;
   }
 
-  addEllipse(canvas: fabric.Canvas, color: string){
+  addEllipse(canvas: fabric.Canvas){
     const ellipse = new fabric.Ellipse({
     originX: 'center',
     originY: 'center',
-    fill : color,
+    fill : canvas.selectedColor,
     rx: 100,
     ry: 50,
     stroke : 'black',
     strokeWidth : 0.3,
     selectable: false,
     });
-    const text = this.textService.addText(ellipse, canvas);
-    this.textService.createGroup(ellipse, text, canvas, 100, 100, []);
+    this.textService.addText(ellipse, canvas);
   }
 
-  addRectangle(canvas: fabric.Canvas, color: string) {
+  addRectangle(canvas: fabric.Canvas) {
     const rect = new fabric.Rect({
       originX: 'center',
       originY: 'center',
@@ -50,7 +48,7 @@ export class ShapeService {
       ry: 10,
       stroke : 'black',
       strokeWidth : 0.3,
-      fill: color,
+      fill: canvas.selectedColor,
       selectable: false,
       strokeLineJoin: 'round',
     });

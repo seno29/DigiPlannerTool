@@ -58,6 +58,4 @@ export class UserBoardComponent implements OnInit {
     this.canvas.selectedColor = color;
     this.textService.changeColor(this.canvas, color);
   }
-
-
 }

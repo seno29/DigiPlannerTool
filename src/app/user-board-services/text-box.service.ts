@@ -69,7 +69,6 @@ export class TextBoxService {
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
-    canvas.undoArray.pop();
     for (const item of items) {
         canvas.add(item);
     }

@@ -30,6 +30,26 @@ export class AdminBoardComponent implements OnInit {
     this.selectedColor = 'thistle';
   }
 
+  increaseHeight(){
+    this.height = this.height + 50;
+    this.canvas.setHeight(this.height);
+  }
+
+  decreaseHeight(){
+    this.height = this.height - 50;
+    this.canvas.setHeight(this.height);
+  }
+
+  increaseWidth(){
+    this.width = this.width + 50;
+    this.canvas.setWidth(this.width);
+  }
+
+  decreaseWidth(){
+    this.width = this.width - 50;
+    this.canvas.setWidth(this.width);
+  }
+
   togglePen() {
     this.canvas.isDrawingMode = !this.canvas.isDrawingMode;
   }

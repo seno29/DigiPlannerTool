@@ -21,7 +21,10 @@ export class ShapeService {
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
     canvas.deleteMode = false;
+    canvas.undoMode=false;
     canvas.deleteText = 'Delete';
+    canvas.undoArray=[];
+    canvas.redoArray=[];
     return canvas;
   }
 
@@ -54,7 +57,9 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
+
     this.textService.addText(rect, canvas);
+
   }
 
   addImage(canvas: fabric.Canvas, imageURL: string){
@@ -74,4 +79,5 @@ export class ShapeService {
       this.textService.addText(image, canvas);
     };
   }
+
 }

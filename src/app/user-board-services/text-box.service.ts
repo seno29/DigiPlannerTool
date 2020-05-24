@@ -24,6 +24,7 @@ export class TextBoxService {
       left: 0,
       selectable: false,
     });
+
     text.on('editing:exited', () => {
       canvas.remove(shape);
       canvas.remove(text);
@@ -59,6 +60,7 @@ export class TextBoxService {
       else if (canvas.deleteMode){
         this.delete(canvas, group);
       }
+     
       else{
         group.isEditable = false;
         this.unGroup(group, canvas);
@@ -69,11 +71,15 @@ export class TextBoxService {
     }));
     group.on('moving', (event) => {
       if (group.connections.length > 0){
+       
         this.moveLines(group);
         canvas.renderAll();
       }
     });
     canvas.add(group);
+    canvas.undoArray.push(group);
+    return group;
+
   }
 
   doubleClickEvent(obj, handler){
@@ -94,6 +100,7 @@ export class TextBoxService {
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
+    canvas.undoArray.pop();
     for (const item of items) {
         canvas.add(item);
     }
@@ -109,6 +116,7 @@ export class TextBoxService {
     canvas.sendToBack(line);
     group1.connections.push({name: 'p1', line, connectedGroup: group2});
     group2.connections.push({name: 'p2', line, connectedGroup: group1});
+
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
   }
@@ -147,4 +155,22 @@ export class TextBoxService {
     canvas.deleteMode = false;
     canvas.deleteText = 'Delete';
   }
+
+  /*undo(canvas ,group){
+    for (const connection of group.connections){
+      // console.log(connection);
+      // tslint:disable-next-line: prefer-for-of
+      for (let i = 0 ; i < connection.connectedGroup.connections.length; i++){
+        const otherGroupConnections = connection.connectedGroup.connections;
+        if (otherGroupConnections[i].connectedGroup === group){
+          otherGroupConnections.splice(i, 1);
+        }
+      }
+      canvas.remove(connection.line);
+    }
+    canvas.remove(group);
+    canvas.renderAll();
+    //canvas.deleteMode = false;
+    
+  }*/
 }

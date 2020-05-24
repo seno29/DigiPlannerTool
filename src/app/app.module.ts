@@ -10,7 +10,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ShapeService } from './user-board-services/shape.service';
 import {MatButtonModule} from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+//import {MDCTextField} from '@material/textfield';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,10 @@ import { MatIconModule } from '@angular/material/icon';
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+   MatInputModule
+    //MDCTextField
   ],
   providers: [ShapeService],
   bootstrap: [AppComponent]

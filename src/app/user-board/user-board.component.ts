@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
+
 import { ShapeService } from '../user-board-services/shape.service';
 import { ScalingService } from '../user-board-services/scaling.service';
+import { element } from 'protractor';
+import { TextBoxService } from '../user-board-services/text-box.service';
+import { VirtualTimeScheduler } from 'rxjs';
+
 
 @Component({
   selector: 'app-user-board',
@@ -14,6 +19,7 @@ export class UserBoardComponent implements OnInit {
   background: string;
   selectedColor: string;
   canvas: fabric.Canvas;
+
   canvasAspectRatio: number;
 
   constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
@@ -25,6 +31,7 @@ export class UserBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.canvas = this.shapeService.initCanvas();
+ 
   }
 
   scaleCanvas(){
@@ -47,11 +54,40 @@ export class UserBoardComponent implements OnInit {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
       this.scaleCanvas();
+
       this.canvas.deleteMode = false;
       this.canvas.deleteText = 'Delete';
     }
   }
 
+ 
+  doUndo(){
+   this.canvas.undoMode=true;
+    var data = this.canvas.undoArray[this.canvas.undoArray.length-1];
+    this.canvas.redoArray.push(this.canvas.undoArray.pop());
+    this.canvas.remove(data);
+
+  }
+
+  doRedo(){
+    var data=this.canvas.redoArray[this.canvas.redoArray.length-1];
+    this.canvas.undoArray.push(this.canvas.redoArray.pop());
+    this.canvas.add(data);
+  }
+  /*delete(){
+    if (this.canvas.delete){
+      this.canvas.delete = false;
+      this.canvas.deleteButtonText = 'Delete';
+    }
+    else{
+      //this.deleteSelectedObjectsFromCanvas()
+    
+     
+      this.canvas.delete = true;
+      this.canvas.deleteButtonText = 'Select';
+    }
+  }*/
+  
   connect(){
     if (this.canvas.connect){
       this.canvas.connect = false;
@@ -76,4 +112,6 @@ export class UserBoardComponent implements OnInit {
       this.canvas.deleteText = 'Exit Delete Mode';
     }
   }
+
+
 }

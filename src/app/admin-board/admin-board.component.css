@@ -3,14 +3,22 @@
   font-weight: bold;
   float: left;
   margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.title1{
+  font-size: xx-large;
+  font-weight: bold;
+  float: right;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 
 #canvas{
-  width: 70%;
-  /* padding-top: 42.1875%; */
-  /* border: 2px solid black; */
-
-  margin: 0 auto;
+  margin-left: 5px;
+  margin-right: 5px;
+  overflow: scroll;
+  height: 600px;
 }
 
 #canvas-container{
@@ -19,9 +27,10 @@
 }
 
 .button-row{
-  width: 70%;
+  /* width: 70%; */
   margin: 5px auto;
   contain: content;
+
 }
 
 .button-row-left{
@@ -29,6 +38,7 @@
 }
 
 .button-row-right{
+  margin-top: 3px;
   float: right;
 }
 
@@ -39,7 +49,9 @@
 .button-row-right button{
   margin-left: 8px;
 }
-
+.example-spacer {
+  flex: 1;
+}
 .red{
   background-color: red;
 }
@@ -72,9 +84,6 @@
 }
 .violet{
   background-color: violet;
-}
-.Blueviolet{
-  background-color: blueviolet;
 }
 .magenta{
   background-color: magenta;

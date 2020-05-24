@@ -15,10 +15,8 @@ export class AdminBoardComponent implements OnInit {
     'green',
     'yellow',
     'orange',
-    'brown',
     'pink',
     'violet',
-    'Blueviolet',
     'magenta',
     'lime'
   ];
@@ -36,11 +34,31 @@ export class AdminBoardComponent implements OnInit {
       isDrawingMode: false,
     });
 
-    this.width = window.innerWidth * 0.7;
-    this.height = this.width / this.aspectRatio;
+    this.width = window.innerWidth *0.98;
+    this.height = window.innerHeight * 0.8;
     this.canvas.setHeight(this.height);
     this.canvas.setWidth(this.width);
     this.selectedColor = 'red';
+  }
+
+  increaseHeight(){
+    this.height = this.height + 50;
+    this.canvas.setHeight(this.height);
+  }
+
+  decreaseHeight(){
+    this.height = this.height - 50;
+    this.canvas.setHeight(this.height);
+  }
+
+  increaseWidth(){
+    this.width = this.width + 50;
+    this.canvas.setWidth(this.width);
+  }
+
+  decreaseWidth(){
+    this.width = this.width - 50;
+    this.canvas.setWidth(this.width);
   }
 
   togglePen() {
@@ -80,6 +98,10 @@ export class AdminBoardComponent implements OnInit {
     if (confirm('Are you sure you want to reset canvas?')) {
       this.canvas.clear();
       this.canvas.isDrawingMode=false;
+      this.width = window.innerWidth *0.98;
+      this.height = window.innerHeight * 0.8;
+      this.canvas.setHeight(this.height);
+      this.canvas.setWidth(this.width);
     }
   }
 

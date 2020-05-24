@@ -34,7 +34,7 @@ export class AdminBoardComponent implements OnInit {
       isDrawingMode: false,
     });
 
-    this.width = window.innerWidth *0.98;
+    this.width = window.innerWidth *0.965;
     this.height = window.innerHeight * 0.8;
     this.canvas.setHeight(this.height);
     this.canvas.setWidth(this.width);

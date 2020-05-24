@@ -7,7 +7,9 @@ import { GroupService } from './group.service';
   providedIn: 'root'
 })
 export class ShapeService {
+
   constructor(private groupService: GroupService) { }
+
   initCanvas(renderer){
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
@@ -20,11 +22,10 @@ export class ShapeService {
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
     canvas.selectedColor = 'cornsilk';
-    canvas.renderer = renderer;
     return canvas;
   }
 
-  addEllipse(canvas: fabric.Canvas){
+  addEllipse(canvas: fabric.Canvas, renderer: Renderer2){
     const ellipse = new fabric.Ellipse({
     originX: 'center',
     originY: 'center',
@@ -35,10 +36,10 @@ export class ShapeService {
     strokeWidth : 0.3,
     selectable: false,
     });
-    this.addText(ellipse, canvas);
+    this.addText(ellipse, canvas, renderer);
   }
 
-  addRectangle(canvas: fabric.Canvas) {
+  addRectangle(canvas: fabric.Canvas, renderer: Renderer2) {
     const rect = new fabric.Rect({
       originX: 'center',
       originY: 'center',
@@ -52,10 +53,10 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(rect, canvas);
+    this.addText(rect, canvas, renderer);
   }
 
-  addImage(canvas: fabric.Canvas, imageURL: string){
+  addImage(canvas: fabric.Canvas, imageURL: string, renderer: Renderer2){
     const imgURL = imageURL || '../assets/stars-black-48dp.svg';
 
     const imageEle = new Image();
@@ -69,11 +70,11 @@ export class ShapeService {
           scaleY: .30,
           selectable: false,
         });
-      this.addText(image, canvas);
+      this.addText(image, canvas, renderer);
     };
   }
 
-  addText(shape: fabric.Object, canvas: fabric.Canvas): fabric.IText{
+  addText(shape: fabric.Object, canvas: fabric.Canvas, renderer: Renderer2): fabric.IText{
     const text = new fabric.IText('Double click to edit', {
       fill: '#333',
       fontSize: 15,
@@ -85,8 +86,8 @@ export class ShapeService {
       left: 0,
       selectable: false,
     });
-    this.groupService.createGroup(shape, text, canvas, 100, 100, []);
-    text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas); });
+    this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer);
+    text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas, renderer); });
   }
 
 }

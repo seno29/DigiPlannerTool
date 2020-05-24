@@ -27,11 +27,11 @@ export class UserBoardComponent implements OnInit {
     this.canvas = this.shapeService.initCanvas(this.renderer);
   }
 
-  addEllipse(){ this.shapeService.addEllipse(this.canvas); }
+  addEllipse(){ this.shapeService.addEllipse(this.canvas, this.renderer); }
 
-  addRectangle() { this.shapeService.addRectangle(this.canvas); }
+  addRectangle() { this.shapeService.addRectangle(this.canvas, this.renderer); }
 
-  addImage(){ this.shapeService.addImage(this.canvas, ''); }
+  addImage(){ this.shapeService.addImage(this.canvas, '', this.renderer); }
 
   clear() {
     if (confirm('Do you want to clear')) {
@@ -55,6 +55,6 @@ export class UserBoardComponent implements OnInit {
 
   changeColor(color: string){
     this.canvas.selectedColor = color;
-    this.groupService.changeColor(this.canvas, color);
+    this.groupService.changeColor(this.canvas, color, this.renderer);
   }
 }

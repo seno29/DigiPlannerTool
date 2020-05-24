@@ -2,29 +2,30 @@
 
     <div class="button-row">
 
+     
+
       <div class="title">User UI</div>
   
       <div class="button-row-right"  >
 
-        <button mat-flat-button class= "button-effect" (click)="addRectangle()" color="primary" [disabled]="canvas.connect" [disabled]="canvas.delete" >
+        <button mat-flat-button class= "blueButton" (click)="addRectangle()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-
-        <button mat-flat-button class= "button-effect" (click)="addEllipse()" color="primary" [disabled]="canvas.connect" [disabled]="canvas.delete">
+        <button mat-flat-button class="blueButton" (click)="addEllipse()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
-
-        <button mat-flat-button class= "button-effect" (click)="addImage()" color="primary" [disabled]="canvas.connect" [disabled]="canvas.delete">
+        <button mat-flat-button class="blueButton" (click)="addImage()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
           <mat-icon>stars</mat-icon>
           Image
         </button>
-
-        <button mat-flat-button class= "button-effect" (click)="connect()" color="primary" [disabled]="canvas.delete">
+        <button class="redButton" mat-flat-button (click)="connect()" color = "warn" [disabled] = "canvas.deleteMode">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>
+        
+       
       </div>
   
     </div>
@@ -38,31 +39,43 @@
     <div class="button-row">
   
         <div class="button-row-left" *ngFor = "let color of colors;">
-          <button mat-mini-fab class={{color}} style="box-shadow: none;" (click)="selectedColor = color">
+          <button mat-mini-fab class={{color}} style="box-shadow: none; border: 1px solid black;" (click)="selectedColor = color">
             <mat-icon *ngIf="selectedColor == color" [style.color]="'black'">done</mat-icon>
           </button>
         </div>
   
         <div class="button-row-right">
-          <button mat-flat-button class="red" (click)="clear()" [disabled]="canvas.delete" >
-            <mat-icon>delete</mat-icon>
+          <button class="redButton" mat-mini-fab style="background-color: orange"  (click)="doUndo()" [disabled] = "canvas.deleteMode">
+            <mat-icon>undo</mat-icon>
+          </button>
+  
+  
+           
+            <button class="redButton" mat-mini-fab style="background-color: orange"  (click)="doRedo()" [disabled] = "canvas.deleteMode">
+              <mat-icon>redo</mat-icon>
+              </button>
+              
+          <button class= "redButton" mat-flat-button color = "warn"  (click)="clear()" [disabled] = "canvas.deleteMode" >
+            <mat-icon> layers_clear </mat-icon>
             Clear
           </button>
-          <button mat-flat-button class="red" (click)="delete()" >
-            <mat-icon>delete</mat-icon>
-            {{canvas.deleteButtonText}}
-          </button>
 
-          <div class="button-row-right" >
-            
+          <button class="redButton" mat-flat-button color = "warn" (click)="delete()" [disabled] = "canvas.connect">
+            <mat-icon>delete</mat-icon>
+            {{canvas.deleteText}}
+          </button>
           
-          <button mat-flat-button class="orange">
+
+          <button mat-flat-button style="background-color: orange">
             <mat-icon>cloud_download</mat-icon>
             Export
           </button>
         </div>
+
   
     </div>
+
+    <p class = "mat-h2" *ngIf = "canvas.connect"> Note: Double click on any two cards to connect. </p>
+    <p class = "mat-h2" *ngIf = "canvas.deleteMode"> Note: Double click on any one card to delete. </p>
   
-</div>
 </div>

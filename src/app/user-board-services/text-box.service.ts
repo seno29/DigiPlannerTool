@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { fabric } from 'fabric';
+import { ScalingService } from './scaling.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,19 +9,20 @@ export class TextBoxService {
 
   editingGroupCoord;
   editingGroupConnections;
-  groupList=[];
-  constructor() { }
+
+  constructor(private scalingService: ScalingService) { }
 
   addText(shape, canvas): fabric.IText{
-    const text = new fabric.IText('Tap', {
+    const text = new fabric.IText('Double click to edit', {
       fill: '#333',
-      fontSize: 20,
+      fontSize: 15,
       originX: 'center',
       originY: 'center',
       textAlign: 'center',
       fontFamily: 'Segoe UI',
       top: 0,
       left: 0,
+      selectable: false,
     });
      
     // Event listener on Itext
@@ -35,100 +37,35 @@ export class TextBoxService {
     
   }
 
-  doubleClickEvent(obj, handler){
-    return () => {
-      if (obj.clicked) { handler(obj); }
-      else {
-          obj.clicked = true;
-          setTimeout(() => {
-              obj.clicked = false;
-          }, 500);
-      }
-  };
+  makeLine(coords){
+    return new fabric.Line(coords, {
+      stroke: 'black',
+      strokeWidth: 2,
+      opacity: 0.6,
+      selectable: false,
+      preserveObjectStacking: true,
+  });
   }
-  makeGroup(shape, text, x,y):fabric.Group{
-    const group = new fabric.Group([shape, text], {
+
+  createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>){
+     this.scalingService.scaleShapes(shape, text.getBoundingRect());
+     const group = new fabric.Group([shape, text], {
       left: x,
       top: y,
+      connections,
+      isEditable: true,
     });
-    return group;
-  }
-  unGroup(group, canvas){
-    this.editingGroupCoord = group.getPointByOrigin(0, 0);
-    this.editingGroupConnections = group.connections;
-    const items = group._objects;
-    group._restoreObjectsState();
-    canvas.remove(group);
-    canvas.shapesPresent.pop();
-    for (const item of items) {
-        canvas.add(item);
-    }
-    canvas.renderAll();
-  }
-
-  deleteGroup(group, canvas){
-    for (const connection of group.connections){
-      for (let j = 0 ; j < connection.connectedGroup.connections.length; j++){
-        const groupC = connection.connectedGroup.connections;
-        if (groupC[j].connectedGroup === group){
-          groupC.splice(j, 1);
-        }
-      }
-      canvas.remove(connection.line);
-    }
-    canvas.delete = false;
-    canvas.deleteButtonText = 'Delete';
-
-    
-    canvas.remove(group);
-    canvas.renderAll();
-   
-  }
-    /*if(canvas.delete){
-      var activeObject = canvas.getActiveObject(),
-      activeGroup = canvas.getActiveGroup();
-      if (activeObject) {
-         
-              canvas.remove(activeObject);
-          
-      }
-      else if (activeGroup) {
-          
-              var objectsInGroup = activeGroup.getObjects();
-              canvas.discardActiveGroup();
-              objectsInGroup.forEach(function(object) {
-              canvas.remove(object);
-              });*/
-         
-      
-      
-        
-     
-     
-     
-   
-
-  createGroup(shape, text, canvas, x, y, connections: Array<{name: string, line: fabric.Line}>){
-    this.setDimen(shape, text.getBoundingRect());
-    shape.selectable = false;
-    text.selectable = false;
-    const group = new fabric.Group([shape, text], {
-      left: x,
-      top: y,
-    });
-    group.connections = connections;
-    // Event Listener for double click on group
     group.on('mousedown', this.doubleClickEvent(group, () => {
       if (canvas.connect){
         canvas.selectedElements.push(group);
         if (canvas.selectedElements.length === 2){ this.drawLineTwoPoints(canvas); }
       }
-      else if (canvas.delete){
-          this.deleteGroup(group,canvas);
-        
+      else if (canvas.deleteMode){
+        this.delete(canvas, group);
       }
+     
       else{
-      
+        group.isEditable = false;
         this.unGroup(group, canvas);
         canvas.setActiveObject(text);
         text.enterEditing();
@@ -143,32 +80,49 @@ export class TextBoxService {
       }
     });
     canvas.add(group);
-    canvas.shapesPresent.push(group);
-    
+    canvas.undoArray.push(group);
     return group;
   }
 
+  // Assigning double click handler to groups
+  doubleClickEvent(obj, handler){
+    return () => {
+      if (obj.clicked) { handler(obj); }
+      else {
+          obj.clicked = true;
+          setTimeout(() => {
+              obj.clicked = false;
+          }, 500);
+      }
+    };
+  }
 
-  setDimen(shape, textBoundingRect){
-    if (shape.height < textBoundingRect.height){
-      shape.height = textBoundingRect.height + 20;
+  unGroup(group, canvas){
+    this.editingGroupCoord = group.getPointByOrigin(0, 0);
+    this.editingGroupConnections = group.connections;
+    const items = group._objects;
+    group._restoreObjectsState();
+    canvas.remove(group);
+    canvas.undoArray.pop();
+    for (const item of items) {
+        canvas.add(item);
     }
-    if (shape.width < textBoundingRect.width){
-      shape.width = textBoundingRect.width + 20;
-    }
+    canvas.renderAll();
   }
 
   drawLineTwoPoints(canvas) {
-    const from = canvas.selectedElements[0].getCenterPoint(0, 0);
-    const to = canvas.selectedElements[1].getCenterPoint(0, 0);
-    const line = this.makeLine([from.x, from.y, to.x, to.y]);
+    const group1 = canvas.selectedElements[0];
+    const group2 = canvas.selectedElements[1];
+    const line = this.makeLine([group1.getCenterPoint().x, group1.getCenterPoint().y,
+                                group2.getCenterPoint().x, group2.getCenterPoint().y]);
     canvas.add(line);
     canvas.sendToBack(line);
-    canvas.selectedElements[0].connections.push({name: 'p1', line});
-    canvas.selectedElements[1].connections.push({name: 'p2', line});
+    group1.connections.push({name: 'p1', line, connectedGroup: group2});
+    group2.connections.push({name: 'p2', line, connectedGroup: group1});
+    
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
-    console.log('Line :' + line + '\nGroup1: ' + canvas.selectedElements[0] + '\nGroup2:' + canvas.selectedElements[1]);
+   
   }
 
   moveLines(group){
@@ -189,12 +143,37 @@ export class TextBoxService {
     }
   }
 
-  makeLine(coords){
-    return new fabric.Line(coords, {
-      stroke: 'black',
-      strokeWidth: 2,
-      opacity: 0.7,
-      selectable: false,
-  });
+  delete(canvas, group){
+    for (const connection of group.connections){
+         for (let i = 0 ; i < connection.connectedGroup.connections.length; i++){
+        const otherGroupConnections = connection.connectedGroup.connections;
+        if (otherGroupConnections[i].connectedGroup === group){
+          otherGroupConnections.splice(i, 1);
+        }
+      }
+      canvas.remove(connection.line);
+    }
+    canvas.remove(group);
+    canvas.renderAll();
+    canvas.deleteMode = false;
+    canvas.deleteText = 'Delete';
   }
+
+  /*undo(canvas ,group){
+    for (const connection of group.connections){
+      // console.log(connection);
+      // tslint:disable-next-line: prefer-for-of
+      for (let i = 0 ; i < connection.connectedGroup.connections.length; i++){
+        const otherGroupConnections = connection.connectedGroup.connections;
+        if (otherGroupConnections[i].connectedGroup === group){
+          otherGroupConnections.splice(i, 1);
+        }
+      }
+      canvas.remove(connection.line);
+    }
+    canvas.remove(group);
+    canvas.renderAll();
+    //canvas.deleteMode = false;
+    
+  }*/
 }

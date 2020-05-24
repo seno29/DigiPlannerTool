@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
+
 import { ShapeService } from '../user-board-services/shape.service';
 import { ScalingService } from '../user-board-services/scaling.service';
 import { element } from 'protractor';
 import { TextBoxService } from '../user-board-services/text-box.service';
 import { VirtualTimeScheduler } from 'rxjs';
+
 
 @Component({
   selector: 'app-user-board',
@@ -14,42 +16,25 @@ import { VirtualTimeScheduler } from 'rxjs';
 
 export class UserBoardComponent implements OnInit {
   shapesList: Array<fabric.Group> = [];
-  colors = ['red', 'blue', 'green', 'yellow', 'orange'];
+  colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
+  background = 'white';
   selectedColor: string;
   canvas: fabric.Canvas;
-  shapesArray;
   canvasAspectRatio = 16 / 9;
+ 
 
-  constructor(private shapeService: ShapeService, private scaleService: ScalingService, private textService:TextBoxService) {
-    this.selectedColor = 'red';
-    this.shapesArray = [];
-   
-
+  constructor(private shapeService: ShapeService, private scalingService: ScalingService) {
+    this.selectedColor = 'cornsilk';
+    
   }
 
   ngOnInit(): void {
-    fabric.Object.prototype.transparentCorners = false;
-    this.canvas = new fabric.Canvas('canvas-container', {
-      hoverCursor: 'pointer',
-      selection: true,
-    
-    });
-    this.scaleCanvas();
-
-    this.canvas.selectedElements = [];
-    this.canvas.connect = false;
-    this.canvas.connectButtonText = 'Connect';
-    this.canvas.shapesPresent=[];
-    this.canvas.delete =false;
-    this.canvas.deleteButtonText='Delete';
-    this.canvas.element= fabric.Group;
+    this.canvas = this.shapeService.initCanvas();
+ 
   }
 
   scaleCanvas(){
-    const width = window.innerWidth * 0.7 - 10;
-    const height = width / this.canvasAspectRatio;
-    this.canvas.setHeight(height);
-    this.canvas.setWidth(width);
+    this.scalingService.scaleBoard(this.canvas, 16 / 9);
   }
 
   addEllipse(){
@@ -60,12 +45,10 @@ export class UserBoardComponent implements OnInit {
 
   addRectangle() {
     this.shapeService.addRectangle(this.canvas, this.selectedColor);
-   
   }
 
   addImage(){
-    this.shapeService.addImage(this.canvas);
-    
+    this.shapeService.addImage(this.canvas, '');
   }
 
   clear() {
@@ -73,11 +56,25 @@ export class UserBoardComponent implements OnInit {
       this.canvas.clear();
       this.scaleCanvas();
       
-      this.shapesArray=[];
+      
     }
   }
 
-  delete(){
+ 
+  doUndo(){
+   this.canvas.undoMode=true;
+    var data = this.canvas.undoArray[this.canvas.undoArray.length-1];
+    this.canvas.redoArray.push(this.canvas.undoArray.pop());
+    this.canvas.remove(data);
+
+  }
+
+  doRedo(){
+    var data=this.canvas.redoArray[this.canvas.redoArray.length-1];
+    this.canvas.undoArray.push(this.canvas.redoArray.pop());
+    this.canvas.add(data);
+  }
+  /*delete(){
     if (this.canvas.delete){
       this.canvas.delete = false;
       this.canvas.deleteButtonText = 'Delete';
@@ -89,7 +86,7 @@ export class UserBoardComponent implements OnInit {
       this.canvas.delete = true;
       this.canvas.deleteButtonText = 'Select';
     }
-  }
+  }*/
   
   connect(){
     if (this.canvas.connect){
@@ -101,7 +98,31 @@ export class UserBoardComponent implements OnInit {
         this.canvas.selectedElements.pop();
       }
       this.canvas.connect = true;
-      this.canvas.connectButtonText = 'Stop';
+      this.canvas.connectButtonText = 'Exit Connection Mode';
     }
   }
+
+  delete(){
+    if (this.canvas.deleteMode){
+      this.canvas.deleteMode = false;
+      this.canvas.deleteText = 'Delete';
+    }
+    else{
+      this.canvas.deleteMode = true;
+      this.canvas.deleteText = 'Exit Delete Mode';
+    }
+  }
+
+ /* window.load( ()=> {
+    (this.bt1).click(()=> {
+       (this.bt2).show();
+    });
+    (this.bt2).click(()=>{
+       (this.bt2).hide();
+    });
+    (this.bt3).click(()=>{
+        (this.bt2).hide();
+    });
+});*/
+
 }

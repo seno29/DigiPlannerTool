@@ -15,7 +15,16 @@
     margin: 0 auto;
 }
 
-
+.input-element {
+    border: 1px solid black;
+    background: none;
+    padding: 0;
+    outline: none;
+    font: inherit;
+    text-align: start;
+    height: 30px;
+    width: 100%;
+  }
 .button-effect:hover{
     background-color:#0080FF;
     color:white;
@@ -41,28 +50,97 @@
 .button-row-right button{
     margin-left: 8px;
 }
-
-.red{
-    background-color: red;
+.blueButton:hover{
+    background-color: #0080FF;
 }
 
-.green{
-    background-color: green;
+.redButton:hover{
+    background-color: rgb(255,128,0);
 }
 
-.blue{
-    background-color: blue;
+.cornsilk{
+    background-color: cornsilk;
 }
 
-.orange{
-    background-color: orange;
-    
+.aquamarine{
+    background-color: aquamarine;
 }
 
-.yellow{
-    background-color: yellow;
+.cyan{
+    background-color: cyan;
+}
+
+.thistle{
+    background-color: thistle;
+}
+
+.salmon{
+    background-color: salmon;
 }
 
 .white{
     background-color: whitesmoke;
+}
+
+.mat-h2{
+    text-align: center;
+    margin: 20px auto;
+    color: salmon;
+}
+
+.hover_bkgr_fricc{
+    background:rgba(0,0,0,.4);
+    cursor:pointer;
+    display:none;
+    height:100%;
+    position:fixed;
+    text-align:center;
+    top:0;
+    width:100%;
+    z-index:10000;
+}
+.hover_bkgr_fricc .helper{
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+.hover_bkgr_fricc > div {
+    background-color: #fff;
+    box-shadow: 10px 10px 60px #555;
+    display: inline-block;
+    height: auto;
+    max-width: 551px;
+    min-height: 100px;
+    vertical-align: middle;
+    width: 60%;
+    position: relative;
+    border-radius: 8px;
+    padding: 15px 5%;
+}
+.popupCloseButton {
+    background-color: #fff;
+    border: 3px solid #999;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-weight: bold;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 25px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+.popupCloseButton:hover {
+    background-color: #ccc;
+}
+.trigger_popup_fricc {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 20px;
+    display: inline-block;
+    font-weight: bold;
 }

@@ -7,19 +7,19 @@
   
       <div class="button-row-right"  >
 
-        <button mat-flat-button  (click)="addRectangle()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button  (click)="addRectangle()" color="accent" [disabled]="canvas.connect">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button  (click)="addEllipse()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button  (click)="addEllipse()" color="accent" [disabled]="canvas.connect">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
-        <button mat-flat-button  (click)="addImage()" color="primary" [disabled]="canvas.connect">
+        <button mat-flat-button  (click)="addImage()" color="accent" [disabled]="canvas.connect">
           <mat-icon>stars</mat-icon>
           Image
         </button>
-        <button  mat-flat-button (click)="connect()" color = "primary">
+        <button  mat-flat-button (click)="connect()" color = "accent">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>

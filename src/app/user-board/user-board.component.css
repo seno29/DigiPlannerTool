@@ -10,6 +10,7 @@
     border-radius: 10px;
     
 }
+
 .button-col{
     display: inline-block;
     margin: auto 10px 0 10px;
@@ -20,17 +21,6 @@
     box-shadow: none;
     display: block;
 }
-
-.input-element {
-    border: 1px solid black;
-    background: none;
-    padding: 0;
-    outline: none;
-    font: inherit;
-    text-align: start;
-    height: 30px;
-    width: 100%;
-  }
 
 .button-row{
     width: 1067px;
@@ -54,20 +44,13 @@
     margin-left: 8px;
 }
 
-.mat-primary{
-    background-color: #004f9d;
-}
-.mat-primary:hover{
-    background-color: #0080FF;
-}
+.mat-flat-button:hover {
+    background-color: #3F51B5;
+  }
 
-.mat-warn{
-background-color: #eb0013 ;
+.mat-fab:hover{
+    background-color: darkred;
 }
-.mat-warn:hover{
-    background-color:#fd5307;
-}
-
 
 .mat-mini-fab:hover{
     opacity: 0.6;
@@ -101,10 +84,4 @@ background-color: #eb0013 ;
 
 .white{
     background-color: whitesmoke;
-}
-
-.mat-h2{
-    text-align: center;
-    margin: 20px auto;
-    color: salmon;
 }

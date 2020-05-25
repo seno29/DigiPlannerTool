@@ -14,7 +14,8 @@ export class ScalingService {
     let resize = false;
     const height = shape.height * shape.scaleY;
     const width = shape.width * shape.scaleX;
-
+    
+    
     if (height < textBoundingRect.height  ){
       if (shape instanceof fabric.Image){
         const scale = (textBoundingRect.height + 80) / 512;
@@ -27,13 +28,15 @@ export class ScalingService {
       resize = true;
     }
     if (width < textBoundingRect.width){
+     
       if (shape instanceof fabric.Image){
         const scale = (textBoundingRect.width + 80) / 512;
         shape.scaleY = scale;
         shape.scaleX = scale;
       }
       else{
-        shape.width = textBoundingRect.width + 20;
+        shape.width = textBoundingRect.width+ 20;
+               
       }
       resize = true;
     }

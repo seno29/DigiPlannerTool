@@ -8,19 +8,19 @@
   
       <div class="button-row-right"  >
 
-        <button mat-flat-button class= "blueButton" (click)="addRectangle()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button mat-flat-button  (click)="addRectangle()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button class="blueButton" (click)="addEllipse()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button mat-flat-button  (click)="addEllipse()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
-        <button mat-flat-button class="blueButton" (click)="addImage()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button mat-flat-button  (click)="addImage()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
           <mat-icon>stars</mat-icon>
           Image
         </button>
-        <button class="redButton" mat-flat-button (click)="connect()" color = "warn" [disabled] = "canvas.deleteMode">
+        <button  mat-flat-button (click)="connect()" color = "primary" [disabled] = "canvas.deleteMode">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>
@@ -31,7 +31,7 @@
 
       <div class="button-col">
         <div *ngFor = "let color of colors;">
-        <button mat-mini-fab class={{color}} style="border: 1px solid black;" (click)="changeColor(color)">
+        <button mat-mini-fab class={{color}} style="border: 1px groove #181818;" (click)="changeColor(color)">
           <mat-icon *ngIf="canvas.selectedColor == color" [style.color]="'black'">done</mat-icon>
         </button>
         </div>
@@ -40,11 +40,11 @@
         <canvas id="canvas"></canvas>
         
         <div class="button-col">
-          <button class="redButton but-col-right" mat-fab color = "warn" (click)="clear()">
+          <button mat-fab class="redButton but-col-right"  color = "warn" (click)="clear()" [disabled]="canvas.connect" >
             <mat-icon>layers_clear</mat-icon>
           </button>
           
-          <button class="redButton but-col-right" mat-fab color = "warn">
+          <button mat-fab  class="redButton but-col-right"  color = "warn">
             <mat-icon>cloud_download</mat-icon>
           </button>
         </div>

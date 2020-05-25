@@ -31,10 +31,7 @@
     height: 30px;
     width: 100%;
   }
-.button-effect:hover{
-    background-color:#0080FF;
-    color:white;
-}
+
 .button-row{
     width: 1067px;
     margin: 10px auto;
@@ -56,24 +53,24 @@
 .button-row-right button{
     margin-left: 8px;
 }
-.blueButton:hover{
+
+.mat-primary{
+    background-color: #004f9d;
+}
+.mat-primary:hover{
     background-color: #0080FF;
 }
 
-.redButton:hover{
-    background-color: rgb(255,128,0);
+.mat-warn{
+background-color: #eb0013 ;
+}
+.mat-warn:hover{
+    background-color:#fd5307;
 }
 
-.blueButton:hover{
-    background-color: #0080FF;
-}
-
-.redButton:hover{
-    background-color: rgb(255,128,0);
-}
 
 .mat-mini-fab:hover{
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .mat-h2{
@@ -90,8 +87,8 @@
     background-color: aquamarine;
 }
 
-.cyan{
-    background-color: cyan;
+.CornflowerBlue{
+    background-color: CornflowerBlue;
 }
 
 .thistle{

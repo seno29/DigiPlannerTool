@@ -20,7 +20,7 @@ export class UserBoardComponent implements OnInit {
   constructor(private shapeService: ShapeService, private renderer: Renderer2, private groupService: GroupService) {
     this.selectedColor = 'cornsilk';
     this.background = 'white';
-    this.colors = ['cornsilk', 'cyan', 'aquamarine', 'thistle', 'salmon'];
+    this.colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon'];
   }
 
   ngOnInit(): void {

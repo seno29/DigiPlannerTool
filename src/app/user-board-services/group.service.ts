@@ -145,7 +145,10 @@ export class GroupService {
       }
     });
 
-    group.on('rotating', (e) => { document.getElementById('deleteBtn')?.remove(); });
+    group.on('rotating', (e) => { document.getElementById('deleteBtn')?.remove();
+    const shape = group._objects[0];
+   
+    this.scalingService.scaleShapes(shape, text.getBoundingRect()); });
 
     group.on('removed', (e) => { document.getElementById('deleteBtn')?.remove(); });
 

@@ -9,7 +9,21 @@ import { fabric } from 'fabric';
 export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
 
+<<<<<<< HEAD
   colors = ['thistle', 'cyan', 'aquamarine', 'cornsilk', 'salmon','pink','red','blue','lime'];
+=======
+  colors = [
+    'red',
+    'blue',
+    'green',
+    'yellow',
+    'orange',
+    'pink',
+    'violet',
+    'magenta',
+    'lime'
+  ];
+>>>>>>> 9936da64800ba07460c0d9bfbd998817e492efba
   aspectRatio = 16 / 9;
   height;
   width;
@@ -23,11 +37,39 @@ export class AdminBoardComponent implements OnInit {
       isDrawingMode: false,
     });
 
+<<<<<<< HEAD
     // this.width = window.innerWidth * 0.7;
     // this.height = this.width / this.aspectRatio;
     this.canvas.setHeight(650);
     this.canvas.setWidth(1190);
     this.selectedColor = 'thistle';
+=======
+    this.width = window.innerWidth *0.965;
+    this.height = window.innerHeight * 0.8;
+    this.canvas.setHeight(this.height);
+    this.canvas.setWidth(this.width);
+    this.selectedColor = 'red';
+>>>>>>> 9936da64800ba07460c0d9bfbd998817e492efba
+  }
+
+  increaseHeight(){
+    this.height = this.height + 50;
+    this.canvas.setHeight(this.height);
+  }
+
+  decreaseHeight(){
+    this.height = this.height - 50;
+    this.canvas.setHeight(this.height);
+  }
+
+  increaseWidth(){
+    this.width = this.width + 50;
+    this.canvas.setWidth(this.width);
+  }
+
+  decreaseWidth(){
+    this.width = this.width - 50;
+    this.canvas.setWidth(this.width);
   }
 
   togglePen() {
@@ -68,7 +110,15 @@ export class AdminBoardComponent implements OnInit {
   reset() {
     if (confirm('Are you sure you want to reset canvas?')) {
       this.canvas.clear();
+<<<<<<< HEAD
       this.canvas.isDrawingMode = false;
+=======
+      this.canvas.isDrawingMode=false;
+      this.width = window.innerWidth *0.98;
+      this.height = window.innerHeight * 0.8;
+      this.canvas.setHeight(this.height);
+      this.canvas.setWidth(this.width);
+>>>>>>> 9936da64800ba07460c0d9bfbd998817e492efba
     }
   }
 

@@ -14,8 +14,7 @@ export class ScalingService {
     let resize = false;
     const height = shape.height * shape.scaleY;
     const width = shape.width * shape.scaleX;
-    resize = this.compareTextShape(shape, height, textBoundingRect.height);
-    resize = this.compareTextShape(shape, width, textBoundingRect.width);
+    resize = this.compareTextShape(shape, height, textBoundingRect.height) || this.compareTextShape(shape, width, textBoundingRect.width);
 
     if (shape instanceof fabric.Ellipse && resize){
       if (shape.width < textBoundingRect.width ){

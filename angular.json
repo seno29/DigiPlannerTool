@@ -24,9 +24,8 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css",
-              "src/theme.scss"
+              "src/theme.scss",
+              "src/styles.css"
             ],
             "scripts": []
           },
@@ -90,7 +89,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/theme.scss",
               "src/styles.css"
             ],
             "scripts": []
@@ -124,8 +123,5 @@
       }
     }
   },
-  "defaultProject": "digi-planner",
-  "cli": {
-    "analytics": false
-  }
+  "defaultProject": "digi-planner"
 }

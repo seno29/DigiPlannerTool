@@ -1,0 +1,40 @@
+.image_illus{
+    width:100%;
+    height:auto;
+    max-width: 500px;
+    float: left;
+    margin-top:10%;
+    margin-left: 12%;
+}
+
+.card{
+    width: 300px;
+    border: 2px solid #0080FF;
+    color:rgb(0, 75, 150);
+    font-size: 18px;
+}
+.card:hover{
+    background-color: #0080FF;
+    color:white;
+}
+.loginForm{
+    text-align: center;
+}
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+    padding:20px;
+}
+
+.signInBtn{
+    border:2px solid #0080FF;
+}
+
+.signInBtn:hover{
+    background-color: #0080FF;
+    color:white;
+}
+
+.gIcon{
+    padding:5px;
+    float:left;
+}

@@ -1,0 +1,39 @@
+.card {
+    width: 200px;
+    height: 100px;
+    padding: 15px;
+    border-radius:5px;
+    color: rgb(0, 75, 150);
+    border: 2px solid rgb(35, 145, 255);
+    box-shadow: 10px 10px 15px lightgrey;
+    margin:20px 0px 0px 20px;
+    float:left;
+  }
+
+.card:hover{
+    color:white;
+    cursor: pointer;
+    background-color: rgb(35, 145, 255);
+    box-shadow: 10px 10px 15px grey;
+}
+.container{
+    height: 80px;
+}
+.title{
+    margin:20px;
+    color: rgb(0, 75, 150);
+}
+.btitle{
+    font-size: 16px;
+    margin-bottom: 0px;
+}
+.roomCode,.date{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 12px;
+}
+
+.viewBtn{
+    float: right;
+    margin-bottom: 5px;
+}

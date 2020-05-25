@@ -1,35 +1,35 @@
-<div class="userUI">
+<div style="text-align: center;">
 
   <div class="button-row">
 
     <div class="title">Admin UI</div>
 
     <div class="button-row-right">
-      <button mat-flat-button title="Pen" (click)="togglePen()" color="primary" >
+      <button mat-flat-button title="Pen" (click)="togglePen()" color="primary">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-flat-button title="Box" (click)="box()" color="primary" >
+      <button mat-flat-button title="Box" (click)="box()" color="primary">
         <mat-icon>crop_3_2</mat-icon>
       </button>
-      <button mat-flat-button title="Circle" (click)="circle()" color="primary" >
+      <button mat-flat-button title="Circle" (click)="circle()" color="primary">
         <mat-icon>brightness_1</mat-icon>
       </button>
-      <button mat-flat-button title="Triangle" (click)="triangle()" color="primary" >
+      <button mat-flat-button title="Triangle" (click)="triangle()" color="primary">
         <mat-icon>change_history</mat-icon>
       </button>
-      <button mat-flat-button title="Cloud Shape" (click)="cloud()" color="primary" >
+      <button mat-flat-button title="Cloud Shape" (click)="cloud()" color="primary">
         <mat-icon>cloud_queue</mat-icon>
       </button>
-      <button mat-flat-button title="Dialog Box" (click)="dialog()" color="primary" >
+      <button mat-flat-button title="Dialog Box" (click)="dialog()" color="primary">
         <mat-icon>chat_bubble_outline</mat-icon>
       </button>
-      <button mat-flat-button title="TextBox" (click)="textBox()" color="primary" >
+      <button mat-flat-button title="TextBox" (click)="textBox()" color="primary">
         <mat-icon>text_rotation_none</mat-icon>
       </button>
-      <button mat-flat-button title="Reset" (click)="reset()" color="warn" >
+      <button mat-flat-button title="Reset" (click)="reset()" color="warn">
         <mat-icon>settings_backup_restore</mat-icon>
       </button>
-      <button mat-flat-button title="Delete" (click)="deleteObjects()" color="warn" >
+      <button mat-flat-button title="Delete" (click)="deleteObjects()" color="warn">
         <mat-icon>delete_forever</mat-icon>
       </button>
 
@@ -37,26 +37,25 @@
 
   </div>
 
-  <div id="canvas">
-    <canvas id="canvas-container"></canvas>
-  </div>
+  <div style="display: inline-flex;">
 
-  <div class="button-row">
-
-      <div class="button-row-left" *ngFor = "let color of colors;">
-        <button mat-mini-fab class={{color}} style="box-shadow: none;" (click)="selectedColor = color">
+    <div class="button-col">
+      <div *ngFor="let color of colors;">
+        <button mat-mini-fab title={{color}} class={{color}} style="border: 1px solid black;" (click)="selectedColor = color">
           <mat-icon *ngIf="selectedColor == color" [style.color]="'black'">done</mat-icon>
         </button>
       </div>
+    </div>
 
-      <div class="button-row-right">
-        <button mat-flat-button title="Export Canvas" class="orange">
-          <mat-icon>backup</mat-icon>
-          Export
-        </button>
-      </div>
+    <canvas id="canvas"></canvas>
 
+    <div class="button-col">
+
+
+      <button class="redButton" title="Export Canvas" mat-fab (click)="exportJsonAdmin()" color="warn">
+        <mat-icon>backup</mat-icon>
+      </button>
+    </div>
   </div>
 
 </div>
-

@@ -9,101 +9,90 @@ import { fabric } from 'fabric';
 export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
 
-  colors = [
-    'red',
-    'blue',
-    'green',
-    'yellow',
-    'orange',
-    'brown',
-    'pink',
-    'violet',
-    'Blueviolet',
-    'magenta',
-    'lime'
-  ];
+  colors = ['thistle', 'cyan', 'aquamarine', 'cornsilk', 'salmon','pink','red','blue','lime'];
   aspectRatio = 16 / 9;
   height;
   width;
   selectedColor: string;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {
-    this.canvas = new fabric.Canvas('canvas-container', {
+    this.canvas = new fabric.Canvas('canvas', {
       backgroundColor: 'white',
       isDrawingMode: false,
     });
 
-    this.width = window.innerWidth * 0.7;
-    this.height = this.width / this.aspectRatio;
-    this.canvas.setHeight(this.height);
-    this.canvas.setWidth(this.width);
-    this.selectedColor = 'red';
+    // this.width = window.innerWidth * 0.7;
+    // this.height = this.width / this.aspectRatio;
+    this.canvas.setHeight(650);
+    this.canvas.setWidth(1190);
+    this.selectedColor = 'thistle';
   }
 
   togglePen() {
     this.canvas.isDrawingMode = !this.canvas.isDrawingMode;
   }
 
-  dialog(){
-    fabric.Image.fromURL('../assets/images/dialog.jpg', (img)=> {
-      const scale = 150/img.width;
+  dialog() {
+    fabric.Image.fromURL('../assets/images/dialog.jpg', (img) => {
+      const scale = 150 / img.width;
       img.set({
-           transparentCorners: false,
-           top:10,
-           left:10,
-           scaleX: scale,
-          scaleY: scale,
-         });
-         this.canvas.add(img);
-       });
-       this.canvas.isDrawingMode=false;
+        transparentCorners: false,
+        top: 10,
+        left: 10,
+        scaleX: scale,
+        scaleY: scale,
+        opacity : 0.7
+      });
+      this.canvas.add(img);
+    });
+    this.canvas.isDrawingMode = false;
   }
 
-  cloud(){
-    fabric.Image.fromURL('../assets/images/cloud.png', (img)=> {
-      const scale = 150/img.width;
+  cloud() {
+    fabric.Image.fromURL('../assets/images/cloud.png', (img) => {
+      const scale = 150 / img.width;
       img.set({
-           top:10,
-           left:10,
-           scaleX: scale,
-          scaleY: scale
-         });
-         this.canvas.add(img);
-       });
-       this.canvas.isDrawingMode=false;
+        top: 10,
+        left: 10,
+        scaleX: scale,
+        scaleY: scale,
+        opacity : 0.7
+      });
+      this.canvas.add(img);
+    });
+    this.canvas.isDrawingMode = false;
   }
 
   reset() {
     if (confirm('Are you sure you want to reset canvas?')) {
       this.canvas.clear();
-      this.canvas.isDrawingMode=false;
+      this.canvas.isDrawingMode = false;
     }
   }
 
   circle() {
-    this.canvas.isDrawingMode=false;
+    this.canvas.isDrawingMode = false;
     this.canvas.add(
       new fabric.Circle({
         radius: 50,
         fill: this.selectedColor,
         left: 10,
         top: 10,
-        opacity: 0.8,
+        opacity: 0.7,
       })
     );
   }
 
   box() {
-    this.canvas.isDrawingMode=false;
+    this.canvas.isDrawingMode = false;
     this.canvas.add(
       new fabric.Rect({
         width: 100,
         height: 100,
         fill: this.selectedColor,
-        opacity: 0.8,
+        opacity: 0.7,
         left: 10,
         top: 10,
       })
@@ -111,7 +100,7 @@ export class AdminBoardComponent implements OnInit {
   }
 
   triangle() {
-    this.canvas.isDrawingMode=false;
+    this.canvas.isDrawingMode = false;
     this.canvas.add(
       new fabric.Triangle({
         width: 80,
@@ -119,12 +108,13 @@ export class AdminBoardComponent implements OnInit {
         fill: this.selectedColor,
         left: 10,
         top: 10,
+        opacity : 0.7
       })
     );
   }
 
   textBox() {
-    this.canvas.isDrawingMode=false;
+    this.canvas.isDrawingMode = false;
     this.canvas.add(
       new fabric.Textbox('MyText', {
         width: 150,
@@ -134,12 +124,13 @@ export class AdminBoardComponent implements OnInit {
         fontSize: 20,
         fontFamily: 'Quicksand',
         textAlign: 'center',
+        opacity : 0.7
       })
     );
   }
 
   deleteObjects() {
-    this.canvas.isDrawingMode=false;
+    this.canvas.isDrawingMode = false;
     var activeObject = this.canvas.getActiveObjects();
     console.log(activeObject.length);
     if (activeObject) {
@@ -150,5 +141,10 @@ export class AdminBoardComponent implements OnInit {
       }
       this.canvas.discardActiveObject();
     }
+  }
+
+  exportJsonAdmin(){
+    const url = this.canvas.toDataURL();
+    console.log(url);
   }
 }

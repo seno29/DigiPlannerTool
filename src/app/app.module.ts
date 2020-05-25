@@ -12,7 +12,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-//import {MDCTextField} from '@material/textfield';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -27,8 +27,8 @@ import {MatInputModule} from '@angular/material/input';
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
-   MatInputModule
-    //MDCTextField
+    MatInputModule,
+    HttpClientModule
   ],
   providers: [ShapeService],
   bootstrap: [AppComponent]

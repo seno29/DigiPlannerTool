@@ -1,16 +1,16 @@
 import { Injectable, Optional, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
-import { ScalingService } from './scaling.service';
 import { GroupService } from './group.service';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShapeService {
 
-  constructor(private groupService: GroupService) { }
+  constructor(private groupService: GroupService, private http: HttpClient) { }
 
-  initCanvas(renderer){
+  initCanvas(backURL: string){
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
@@ -22,8 +22,21 @@ export class ShapeService {
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
     canvas.selectedColor = 'cornsilk';
+    const imageURL = backURL || '../assets/back.txt';
+    const imageEle = new Image();
+    this.http.get(imageURL).subscribe(data => {
+      imageEle.src = data as string;
+      imageEle.onload = () => {
+        const image = new fabric.Image(imageEle, {
+          width: canvas.width,
+          height: canvas.height,
+          opacity: 0.4,
+        });
+        canvas.setBackgroundImage(image);
+        canvas.renderAll();
+      };
+    });
     return canvas;
-    
   }
 
   addEllipse(canvas: fabric.Canvas, renderer: Renderer2){
@@ -62,9 +75,8 @@ export class ShapeService {
 
     const imageEle = new Image();
     imageEle.src = imgURL;
-    let image;
-    imageEle.onload = (img) => {
-      image = new fabric.Image(imageEle, {
+    imageEle.onload = () => {
+      const image = new fabric.Image(imageEle, {
           originX: 'center',
           originY: 'center',
           scaleX: .30,

@@ -6,19 +6,19 @@
   
       <div class="button-row-right"  >
 
-        <button mat-flat-button  (click)="addRectangle()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button mat-flat-button  (click)="addRectangle()" color="primary" [disabled]="canvas.connect">
             <mat-icon>add_box</mat-icon>
             Rectangle
         </button>
-        <button mat-flat-button  (click)="addEllipse()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button mat-flat-button  (click)="addEllipse()" color="primary" [disabled]="canvas.connect">
             <mat-icon>add_circle</mat-icon>
             Ellipse
         </button>
-        <button mat-flat-button  (click)="addImage()" color="primary" [disabled]="canvas.connect || canvas.deleteMode">
+        <button mat-flat-button  (click)="addImage()" color="primary" [disabled]="canvas.connect">
           <mat-icon>stars</mat-icon>
           Image
         </button>
-        <button  mat-flat-button (click)="connect()" color = "primary" [disabled] = "canvas.deleteMode">
+        <button  mat-flat-button (click)="connect()" color = "primary">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>
@@ -30,7 +30,7 @@
 
       <div class="button-col">
         <div *ngFor = "let color of colors;">
-        <button mat-mini-fab class={{color}} style="border: 1px groove #181818;" (click)="changeColor(color)">
+        <button mat-mini-fab class={{color}} style="border: 1px solid darkslategray;" (click)="changeColor(color)">
           <mat-icon *ngIf="canvas.selectedColor == color" [style.color]="'black'">done</mat-icon>
         </button>
         </div>

@@ -2,8 +2,6 @@
 
     <div class="button-row">
 
-     
-
       <div class="title">User UI</div>
   
       <div class="button-row-right"  >
@@ -25,6 +23,7 @@
           {{canvas.connectButtonText}}
         </button>
       </div>
+
     </div>
   
     <div id="canvas-div" style="display: inline-flex;">
@@ -37,7 +36,7 @@
         </div>
       </div>
     
-        <canvas id="canvas"></canvas>
+      <canvas id="canvas"></canvas>
         
         <div class="button-col">
           <button mat-fab class="redButton but-col-right"  color = "warn" (click)="clear()" [disabled]="canvas.connect" >

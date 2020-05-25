@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { ScalingService } from './scaling.service';
 
@@ -21,7 +21,8 @@ export class GroupService {
   }
 
   createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas,
-              x: number, y: number, connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>){
+              x: number, y: number,
+              connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>, renderer: Renderer2){
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
       left: x,
@@ -30,7 +31,7 @@ export class GroupService {
       isEditable: true,
     });
     group.setControlsVisibility(HideControls);
-    this.addEventListeners(canvas, group, text);
+    this.addEventListeners(canvas, group, text, renderer);
     canvas.add(group);
     canvas.setActiveObject(group);
   }
@@ -58,11 +59,11 @@ export class GroupService {
     canvas.renderAll();
   }
 
-  regroup(shape: fabric.Object, text: fabric.IText, canvas: fabric.Canvas){
+  regroup(shape: fabric.Object, text: fabric.IText, canvas: fabric.Canvas, renderer: Renderer2){
     canvas.remove(shape);
     canvas.remove(text);
     const groupCoord = this.selectedGroup.getPointByOrigin(0, 0);
-    this.createGroup(shape, text, canvas, groupCoord.x, groupCoord.y, this.selectedGroup.connections);
+    this.createGroup(shape, text, canvas, groupCoord.x, groupCoord.y, this.selectedGroup.connections, renderer);
   }
 
   drawLineTwoPoints(canvas: fabric.Canvas) {
@@ -113,11 +114,11 @@ export class GroupService {
     canvas.renderAll();
   }
 
-  addDeleteBtn(x: number, y: number, canvas: fabric.Canvas){
+  addDeleteBtn(x: number, y: number, canvas: fabric.Canvas, renderer: Renderer2){
     document.getElementById('deleteBtn')?.remove();
     const btnLeft = x - 10;
     const btnTop = y - 10;
-    const delteBtn = canvas.renderer.createElement('img');
+    const delteBtn = renderer.createElement('img');
     delteBtn.id = 'deleteBtn';
     delteBtn.src = '../assets/icons8-delete.svg';
     delteBtn.style = `position:absolute;
@@ -126,14 +127,14 @@ export class GroupService {
     cursor:pointer;
     width:20px;
     height:20px;`;
-    canvas.renderer.appendChild(document.getElementsByClassName('canvas-container')[0], delteBtn);
+    renderer.appendChild(document.getElementsByClassName('canvas-container')[0], delteBtn);
     document.getElementById('deleteBtn').addEventListener('click', (event) => {this.delete(canvas); });
   }
 
-  addEventListeners(canvas: fabric.Canvas, group: fabric.Group, text: fabric.IText){
-    group.on('selected', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas); });
+  addEventListeners(canvas: fabric.Canvas, group: fabric.Group, text: fabric.IText, renderer: Renderer2){
+    group.on('selected', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas, renderer); });
 
-    group.on('modified', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas); });
+    group.on('modified', (e) => { this.addDeleteBtn(group.oCoords.tr.x, group.oCoords.tr.y, canvas, renderer); });
 
     group.on('scaling', (e) => { document.getElementById('deleteBtn')?.remove(); });
 
@@ -171,14 +172,14 @@ export class GroupService {
     });
   }
 
-  changeColor(canvas: fabric.Canvas, color: string){
+  changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2){
     const group = canvas.getActiveObject();
     if (group){
       const shape = group._objects[0];
       const text = group._objects[1];
       this.unGroup(group, canvas);
       shape.fill = color;
-      this.regroup(shape, text, canvas);
+      this.regroup(shape, text, canvas, renderer);
     }
   }
 }

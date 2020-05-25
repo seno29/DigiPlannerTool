@@ -123,8 +123,5 @@
       }
     }
   },
-  "defaultProject": "digi-planner",
-  "cli": {
-    "analytics": false
-  }
+  "defaultProject": "digi-planner"
 }

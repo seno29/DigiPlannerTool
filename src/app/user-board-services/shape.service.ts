@@ -22,6 +22,7 @@ export class ShapeService {
     canvas.selectedColor = 'cornsilk';
     canvas.renderer = renderer;
     return canvas;
+    
   }
 
   addEllipse(canvas: fabric.Canvas){

@@ -3,10 +3,8 @@
   font-weight: bold;
   float: left;
   margin-top: 1%;
-  margin-bottom: 1%;
 }
 
-<<<<<<< HEAD
 #canvas{
   border: 2px solid black;
   border-radius: 10px;
@@ -15,21 +13,6 @@
 .button-col{
   display: inline-block;
   margin: auto 10px 0 10px;
-=======
-.title1{
-  font-size: xx-large;
-  font-weight: bold;
-  float: right;
-  margin-top: 1%;
-  margin-bottom: 1%;
-}
-
-#canvas{
-  margin-left: 5px;
-  margin-right: 5px;
-  overflow: scroll;
-  height: 600px;
->>>>>>> 9936da64800ba07460c0d9bfbd998817e492efba
 }
 
 .button-col button{
@@ -48,20 +31,11 @@
   height: 30px;
   width: 100%;
 }
-.button-effect:hover{
-  background-color:#0080FF;
-  color:white;
-}
+
 .button-row{
-<<<<<<< HEAD
   width: 1067px;
   margin: 10px auto;
-=======
-  /* width: 70%; */
-  margin: 5px auto;
->>>>>>> 9936da64800ba07460c0d9bfbd998817e492efba
   contain: content;
-
 }
 
 .button-row-left{
@@ -69,7 +43,6 @@
 }
 
 .button-row-right{
-  margin-top: 3px;
   float: right;
 }
 
@@ -80,32 +53,24 @@
 .button-row-right button{
   margin-left: 8px;
 }
-<<<<<<< HEAD
-.blueButton:hover{
+
+.mat-primary{
+  background-color: #004f9d;
+}
+.mat-primary:hover{
   background-color: #0080FF;
 }
 
-.redButton:hover{
-  background-color: rgb(255,128,0);
-=======
-.example-spacer {
-  flex: 1;
+.mat-warn{
+background-color: #eb0013 ;
 }
-.red{
-  background-color: red;
->>>>>>> 9936da64800ba07460c0d9bfbd998817e492efba
+.mat-warn:hover{
+  background-color:#fd5307;
 }
 
-.blueButton:hover{
-  background-color: #0080FF;
-}
-
-.redButton:hover{
-  background-color: rgb(255,128,0);
-}
 
 .mat-mini-fab:hover{
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .mat-h2{
@@ -122,36 +87,12 @@
   background-color: aquamarine;
 }
 
-.cyan{
-  background-color: cyan;
+.CornflowerBlue{
+  background-color: CornflowerBlue;
 }
 
 .thistle{
   background-color: thistle;
-}
-
-.pink{
-  background-color: pink;
-}
-<<<<<<< HEAD
-
-.red{
-  background-color: red;
-}
-
-.blue{
-  background-color: blue;
-=======
-.violet{
-  background-color: violet;
-}
-.magenta{
-  background-color: magenta;
->>>>>>> 9936da64800ba07460c0d9bfbd998817e492efba
-}
-
-.lime{
-  background-color: lime;
 }
 
 .salmon{
@@ -162,10 +103,24 @@
   background-color: whitesmoke;
 }
 
+.red{
+  background-color: red;
+}
+
+.blue{
+  background-color: blue;
+}
+
+.lime{
+  background-color: lime;
+}
+
+.pink{
+  background-color: pink;
+}
+
 .mat-h2{
   text-align: center;
   margin: 20px auto;
   color: salmon;
 }
-
-

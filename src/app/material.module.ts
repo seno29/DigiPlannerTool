@@ -11,11 +11,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
- exports: [
+ exports:[
     MatToolbarModule,
     MatButtonModule,
     MatRadioModule,
@@ -27,9 +26,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatIconModule,
+    MatIconModule
  ]
 })
 
-export class MatModule{ }
-
+export class MatModule{}

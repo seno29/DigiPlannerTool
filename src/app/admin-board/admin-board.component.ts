@@ -132,7 +132,6 @@ export class AdminBoardComponent implements OnInit {
   deleteObjects() {
     this.canvas.isDrawingMode = false;
     var activeObject = this.canvas.getActiveObjects();
-    console.log(activeObject.length);
     if (activeObject) {
       if (confirm('Are you sure to delete selection?')) {
         activeObject.forEach((object) => {
@@ -145,6 +144,5 @@ export class AdminBoardComponent implements OnInit {
 
   exportJsonAdmin(){
     const url = this.canvas.toDataURL();
-    console.log(url);
   }
 }

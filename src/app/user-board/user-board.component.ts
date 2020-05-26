@@ -1,9 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
+import { ActivatedRoute } from '@angular/router';
 
 import { ShapeService } from '../user-board-services/shape.service';
-import { GroupService } from '../user-board-services/group.service';
-
 
 @Component({
   selector: 'app-user-board',
@@ -14,13 +13,17 @@ import { GroupService } from '../user-board-services/group.service';
 export class UserBoardComponent implements OnInit {
   colors: Array<string>;
   canvas: fabric.Canvas;
+  boardID: string;
+  boardTitle: string;
 
-  constructor(private shapeService: ShapeService, private renderer: Renderer2, private groupService: GroupService) {
+  constructor(private shapeService: ShapeService, private renderer: Renderer2, private route: ActivatedRoute) {
     this.colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon'];
   }
 
   ngOnInit(): void {
-    this.canvas = this.shapeService.initCanvas('UserUI', '');
+    this.boardID = this.route.snapshot.queryParamMap.get('roomCode');
+    this.boardTitle = this.getTitleFromDatabase(this.boardID) || 'UserUI';
+    this.canvas = this.shapeService.initCanvas('');
   }
 
   addEllipse(){ this.shapeService.addEllipse(this.canvas, this.renderer); }
@@ -52,6 +55,10 @@ export class UserBoardComponent implements OnInit {
 
   changeColor(color: string){
     this.canvas.selectedColor = color;
-    this.groupService.changeColor(this.canvas, color, this.renderer);
+    this.shapeService.changeColor(this.canvas, color, this.renderer);
+  }
+
+  getTitleFromDatabase(roomCode: string){
+    return '';
   }
 }

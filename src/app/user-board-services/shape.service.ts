@@ -10,7 +10,7 @@ export class ShapeService {
 
   constructor(private groupService: GroupService, private http: HttpClient) { }
 
-  initCanvas(boardTitle: string, backURL: string){
+  initCanvas(backURL: string){
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
@@ -22,7 +22,6 @@ export class ShapeService {
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
     canvas.selectedColor = 'cornsilk';
-    canvas.boardTitle = boardTitle;
     const imageURL = backURL || '../assets/back.txt';
     const imageEle = new Image();
     this.http.get(imageURL).subscribe(data => {
@@ -102,6 +101,17 @@ export class ShapeService {
     });
     this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer);
     text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas, renderer); });
+  }
+
+  changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2){
+    const group = canvas.getActiveObject();
+    if (group){
+      const shape = group._objects[0];
+      const text = group._objects[1];
+      this.groupService.unGroup(group, canvas);
+      shape.fill = color;
+      this.groupService.regroup(shape, text, canvas, renderer);
+    }
   }
 
 }

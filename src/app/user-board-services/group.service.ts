@@ -168,17 +168,6 @@ export class GroupService {
       if (!canvas.getActiveObject()){ document.getElementById('deleteBtn')?.remove(); }
     });
   }
-
-  changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2){
-    const group = canvas.getActiveObject();
-    if (group){
-      const shape = group._objects[0];
-      const text = group._objects[1];
-      this.unGroup(group, canvas);
-      shape.fill = color;
-      this.regroup(shape, text, canvas, renderer);
-    }
-  }
 }
 
 const HideControls = {

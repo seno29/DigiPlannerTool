@@ -10,7 +10,7 @@ export class ShapeService {
 
   constructor(private groupService: GroupService, private http: HttpClient) { }
 
-  initCanvas(backURL: string){
+  initCanvas(boardTitle: string, backURL: string){
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
@@ -22,6 +22,7 @@ export class ShapeService {
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
     canvas.selectedColor = 'cornsilk';
+    canvas.boardTitle = boardTitle;
     const imageURL = backURL || '../assets/back.txt';
     const imageEle = new Image();
     this.http.get(imageURL).subscribe(data => {

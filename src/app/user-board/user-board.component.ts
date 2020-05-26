@@ -20,7 +20,7 @@ export class UserBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.canvas = this.shapeService.initCanvas('');
+    this.canvas = this.shapeService.initCanvas('UserUI', '');
   }
 
   addEllipse(){ this.shapeService.addEllipse(this.canvas, this.renderer); }

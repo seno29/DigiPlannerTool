@@ -123,6 +123,7 @@ export class ShapeService {
 export class MockShapeService{
   initCanvas(url: string){
     const canvas = {
+      selectedColor: 'cornsilk',
       connect: false,
       connectButtonText: 'Connect',
       selectedElements: [],
@@ -130,5 +131,9 @@ export class MockShapeService{
       clear: () => { canvas._objects = [];},
     };
     return canvas;
+  }
+
+  changeColor(canvas, color, renderer){
+    canvas.selectedColor = color;
   }
 }

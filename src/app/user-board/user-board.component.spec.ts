@@ -51,6 +51,7 @@ describe('UserBoardComponent', () => {
     expect(component.boardTitle).toBeTruthy();
     expect(canvas.connect).toBeFalse();
     expect(canvas.connectButtonText).toEqual('Connect');
+    expect(canvas.selectedColor).toEqual('cornsilk');
   });
 
   it(`connectButton should set connectMode and empty canvas.selectedElements`, () => {
@@ -69,5 +70,14 @@ describe('UserBoardComponent', () => {
     const titleEle = de.nativeElement;
     titleEle.click();
     expect(canvas._objects.length).toEqual(0);
+  });
+
+  it(`colorButton should change color`, () => {
+    const canvas = component.canvas;
+    expect(canvas.selectedColor).toEqual('cornsilk');
+    const de = fixture.debugElement.query(By.css('.salmon'));
+    const titleEle = de.nativeElement;
+    titleEle.click();
+    expect(canvas.selectedColor).toEqual('salmon');
   });
 });

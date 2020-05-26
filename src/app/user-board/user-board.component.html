@@ -19,7 +19,7 @@
           <mat-icon>stars</mat-icon>
           Image
         </button>
-        <button  mat-flat-button (click)="connect()" color = "accent">
+        <button class="connectButton"  mat-flat-button (click)="connect()" color = "accent">
           <mat-icon>timeline</mat-icon>
           {{canvas.connectButtonText}}
         </button>
@@ -40,7 +40,7 @@
       <canvas id="canvas"></canvas>
         
         <div class="button-col">
-          <button mat-fab class="redButton but-col-right"  color = "warn" (click)="clear()" [disabled]="canvas.connect" >
+          <button mat-fab class="clearButton redButton but-col-right"  color = "warn" (click)="clear()" [disabled]="canvas.connect" >
             <mat-icon>layers_clear</mat-icon>
           </button>
           

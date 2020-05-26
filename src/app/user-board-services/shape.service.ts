@@ -19,9 +19,14 @@ export class ShapeService {
     canvas.setHeight(650);
     canvas.setWidth(1200 - 10);
     canvas.selectedElements = [];
+    canvas.selectedColor = 'cornsilk';
+    this.setBackground(canvas, backURL);
+    return canvas;
+  }
+
+  setBackground(canvas: fabric.Canvas, backURL: string){
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
-    canvas.selectedColor = 'cornsilk';
     const imageURL = backURL || '../assets/back.txt';
     const imageEle = new Image();
     this.http.get(imageURL).subscribe(data => {
@@ -36,7 +41,6 @@ export class ShapeService {
         canvas.renderAll();
       };
     });
-    return canvas;
   }
 
   addEllipse(canvas: fabric.Canvas, renderer: Renderer2){
@@ -104,6 +108,7 @@ export class ShapeService {
   }
 
   changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2){
+    canvas.selectedColor = color;
     const group = canvas.getActiveObject();
     if (group){
       const shape = group._objects[0];
@@ -113,5 +118,17 @@ export class ShapeService {
       this.groupService.regroup(shape, text, canvas, renderer);
     }
   }
+}
 
+export class MockShapeService{
+  initCanvas(url: string){
+    const canvas = {
+      connect: false,
+      connectButtonText: 'Connect',
+      selectedElements: [],
+      _objects: [1, 2],
+      clear: () => { canvas._objects = [];},
+    };
+    return canvas;
+  }
 }

@@ -1,6 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
+
 
 import { UserBoardComponent } from './user-board.component';
+import { MockShapeService, ShapeService } from '../user-board-services/shape.service';
+import { DebugElement } from '@angular/core';
 
 describe('UserBoardComponent', () => {
   let component: UserBoardComponent;
@@ -8,18 +15,59 @@ describe('UserBoardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserBoardComponent ]
+      declarations: [ UserBoardComponent ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatIconTestingModule
+      ],
+      providers: [
+        {provide: ShapeService, useClass: MockShapeService}
+      ]
     })
-    .compileComponents();
+    .compileComponents().then( () => {
+      fixture = TestBed.createComponent(UserBoardComponent);
+      component = fixture.componentInstance;
+      component.ngOnInit();
+      fixture.detectChanges();
+    });
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(UserBoardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it(`should have title set to 'UserUI' if database return falsy value`, () => {
+    const de = fixture.debugElement.query(By.css('.title'));
+    const titleEle = de.nativeElement;
+    component.getTitleFromDatabase(component.boardID) ?
+      expect(titleEle.textContent).toBeTruthy() :
+      expect(titleEle.textContent).toEqual('UserUI');
+  });
+
+  it(`should correctly initialize`, () => {
+    const canvas = component.canvas;
+    expect(component.boardID).toBeTruthy();
+    expect(component.boardTitle).toBeTruthy();
+    expect(canvas.connect).toBeFalse();
+    expect(canvas.connectButtonText).toEqual('Connect');
+  });
+
+  it(`connectButton should set connectMode and empty canvas.selectedElements`, () => {
+    const canvas = component.canvas;
+    const de = fixture.debugElement.query(By.css('.connectButton'));
+    const titleEle = de.nativeElement;
+    titleEle.click();
+    expect(canvas.connectButtonText).toEqual('Exit Connection Mode');
+    expect(canvas.connect).toBeTrue();
+    expect(canvas.selectedElements).toEqual([]);
+  });
+
+  it(`clearButton should clear canvas leaving no objects on it`, () => {
+    const canvas = component.canvas;
+    const de = fixture.debugElement.query(By.css('.clearButton'));
+    const titleEle = de.nativeElement;
+    titleEle.click();
+    expect(canvas._objects.length).toEqual(0);
   });
 });

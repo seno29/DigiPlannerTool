@@ -21,8 +21,8 @@ export class UserBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.boardID = this.route.snapshot.queryParamMap.get('roomCode');
-    this.boardTitle = this.getTitleFromDatabase(this.boardID) || 'UserUI';
+    this.boardID = this.route.snapshot.queryParamMap.get('roomCode') || 'unknown';
+    this.boardTitle = this.getTitleFromDatabase(this.boardID);
     this.canvas = this.shapeService.initCanvas('');
   }
 
@@ -35,7 +35,8 @@ export class UserBoardComponent implements OnInit {
   clear() {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
-      this.ngOnInit();
+      this.shapeService.setBackground(this.canvas, '');
+      document.getElementById('deleteBtn')?.remove();
     }
   }
 
@@ -54,11 +55,14 @@ export class UserBoardComponent implements OnInit {
   }
 
   changeColor(color: string){
-    this.canvas.selectedColor = color;
     this.shapeService.changeColor(this.canvas, color, this.renderer);
   }
 
   getTitleFromDatabase(roomCode: string){
-    return '';
+    let title: string;
+    (roomCode === 'unknown') ?
+      title = 'UserUI' :
+      title = 'Databse Fetch';
+    return title;
   }
 }

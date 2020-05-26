@@ -21,7 +21,7 @@ export class UserBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.boardID = this.route.snapshot.queryParamMap.get('roomCode') || 'unknown';
+    this.boardID = this.route.snapshot.queryParamMap.get('roomCode') || '';
     this.boardTitle = this.getTitleFromDatabase(this.boardID);
     this.canvas = this.shapeService.initCanvas('');
   }
@@ -59,10 +59,7 @@ export class UserBoardComponent implements OnInit {
   }
 
   getTitleFromDatabase(roomCode: string){
-    let title: string;
-    (roomCode === 'unknown') ?
-      title = 'UserUI' :
-      title = 'Databse Fetch';
+    const title = roomCode ? 'Database Fetch' : 'UserUI';
     return title;
   }
 }

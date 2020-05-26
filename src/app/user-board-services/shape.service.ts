@@ -43,7 +43,7 @@ export class ShapeService {
     });
   }
 
-  getBackground(backURL): Observable<string>{
+  getBackground(backURL: string): Observable<string>{
     const imageURL = backURL || '../assets/back.txt';
     return this.http.get(imageURL) as Observable<string>;
   }
@@ -137,7 +137,7 @@ export class MockShapeService{
     return canvas;
   }
 
-  changeColor(canvas, color, renderer){
+  changeColor(canvas, color){
     canvas.selectedColor = color;
   }
 }

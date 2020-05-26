@@ -22,4 +22,11 @@ describe('AdminBoardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it(`should have a title 'adminboard' `, async(() => {
+    fixture = TestBed.createComponent(AdminBoardComponent);
+    component = fixture.debugElement.componentInstance;
+    expect(component.title).toEqual('adminboard');
+  }));
+
 });

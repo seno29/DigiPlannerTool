@@ -8,7 +8,7 @@ import { fabric } from 'fabric';
 })
 export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
-
+  title = 'adminboard';
 
   colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon','pink','red','blue','lime'];
 

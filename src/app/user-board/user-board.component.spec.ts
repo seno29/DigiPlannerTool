@@ -7,7 +7,6 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 import { UserBoardComponent } from './user-board.component';
 import { MockShapeService, ShapeService } from '../user-board-services/shape.service';
-import { DebugElement } from '@angular/core';
 
 describe('UserBoardComponent', () => {
   let component: UserBoardComponent;
@@ -21,9 +20,7 @@ describe('UserBoardComponent', () => {
         RouterTestingModule,
         MatIconTestingModule
       ],
-      providers: [
-        {provide: ShapeService, useClass: MockShapeService}
-      ]
+      providers: [ {provide: ShapeService, useClass: MockShapeService}],
     })
     .compileComponents().then( () => {
       fixture = TestBed.createComponent(UserBoardComponent);

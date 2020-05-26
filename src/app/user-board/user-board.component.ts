@@ -35,7 +35,7 @@ export class UserBoardComponent implements OnInit {
   clear() {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
-      this.shapeService.setBackground(this.canvas, '');
+      // this.shapeService.setBackground(this.canvas, '');
       document.getElementById('deleteBtn')?.remove();
     }
   }

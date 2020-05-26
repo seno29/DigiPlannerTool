@@ -2,6 +2,7 @@ import { Injectable, Optional, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { GroupService } from './group.service';
 import {HttpClient} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +28,8 @@ export class ShapeService {
   setBackground(canvas: fabric.Canvas, backURL: string){
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
-    const imageURL = backURL || '../assets/back.txt';
     const imageEle = new Image();
-    this.http.get(imageURL).subscribe(data => {
+    this.getBackground('').subscribe(data => {
       imageEle.src = data as string;
       imageEle.onload = () => {
         const image = new fabric.Image(imageEle, {
@@ -41,6 +41,11 @@ export class ShapeService {
         canvas.renderAll();
       };
     });
+  }
+
+  getBackground(backURL): Observable<string>{
+    const imageURL = backURL || '../assets/back.txt';
+    return this.http.get(imageURL) as Observable<string>;
   }
 
   addEllipse(canvas: fabric.Canvas, renderer: Renderer2){
@@ -76,7 +81,6 @@ export class ShapeService {
 
   addImage(canvas: fabric.Canvas, imageURL: string, renderer: Renderer2){
     const imgURL = imageURL || '../assets/stars-black-48dp.svg';
-
     const imageEle = new Image();
     imageEle.src = imgURL;
     imageEle.onload = () => {
@@ -128,7 +132,7 @@ export class MockShapeService{
       connectButtonText: 'Connect',
       selectedElements: [],
       _objects: [1, 2],
-      clear: () => { canvas._objects = [];},
+      clear: () => { canvas._objects = []; },
     };
     return canvas;
   }

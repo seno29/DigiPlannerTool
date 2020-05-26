@@ -170,10 +170,6 @@ export class GroupService {
   }
 }
 
-export class MockGroupService{
-  
-}
-
 const HideControls = {
   tl: true,
   tr: false,

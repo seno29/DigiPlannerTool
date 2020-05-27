@@ -9,12 +9,11 @@ import { fabric } from 'fabric';
 export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
   title = 'adminboard';
+  convertedCanvas;
 
   colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon','pink','red','blue','lime'];
 
-  height;
-  width;
-  selectedColor: string;
+  selectedColor: string ;
 
   constructor() {}
 
@@ -129,6 +128,10 @@ export class AdminBoardComponent implements OnInit {
     );
   }
 
+  changeColor(color){
+    this.selectedColor=color;
+  }
+
   deleteObjects() {
     this.canvas.isDrawingMode = false;
     var activeObject = this.canvas.getActiveObjects();
@@ -143,6 +146,6 @@ export class AdminBoardComponent implements OnInit {
   }
 
   exportJsonAdmin(){
-    const url = this.canvas.toDataURL();
+    this.convertedCanvas = this.canvas.toDataURL();
   }
 }

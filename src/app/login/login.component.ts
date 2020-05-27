@@ -29,11 +29,8 @@ export class LoginComponent implements OnInit {
       if(this.currentUser){
         this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
           if(result){
-            if(result.toString() === '1'){
-              this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
-            }else{
-              this.router.navigate(['/home'],{queryParams: {userType: 'user'}});
-            }
+            this.userType = result.toString() === '1' ? 'admin' : 'user';
+            this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
           }
         },
         (err)=>{console.log('cannot get data from database');}

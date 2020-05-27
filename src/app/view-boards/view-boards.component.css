@@ -1,6 +1,6 @@
 .card {
     width: 200px;
-    height: 100px;
+    height: 80px;
     padding: 15px;
     border-radius:5px;
     color: rgb(0, 75, 150);
@@ -17,7 +17,7 @@
     box-shadow: 10px 10px 15px grey;
 }
 .container{
-    height: 80px;
+    height: 60px;
 }
 .title{
     margin:20px;
@@ -28,12 +28,19 @@
     margin-bottom: 0px;
 }
 .roomCode,.date{
-    margin-top: 0px;
-    margin-bottom: 0px;
     font-size: 12px;
 }
 
 .viewBtn{
     float: right;
     margin-bottom: 5px;
+}
+
+a{
+    text-decoration: none;
+    color:rgb(0, 75, 150);
+}
+
+a:hover{
+    color:white;
 }

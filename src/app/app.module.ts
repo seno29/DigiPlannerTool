@@ -16,6 +16,7 @@ import { HomeComponent } from './home/home.component';
 import { JoinRoomDialogComponent } from './join-room-dialog/join-room-dialog.component';
 import { ViewBoardsComponent } from './view-boards/view-boards.component';
 import { CreateBoardDialogComponent } from './create-board-dialog/create-board-dialog.component';
+import { HttpClientModule } from '@angular/common/http';
 
 let config = new AuthServiceConfig([
   {
@@ -45,6 +46,7 @@ export function provideConfig() {
     BrowserAnimationsModule,
     MatModule,
     AppRoutingModule,
+    HttpClientModule
   ],
   entryComponents:[
     JoinRoomDialogComponent,

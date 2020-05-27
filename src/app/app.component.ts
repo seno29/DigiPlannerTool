@@ -29,11 +29,19 @@ export class AppComponent implements OnInit{
 
   goToHome(){
     if(this.currentUser){
-      if(this.userService.isAdmin(this.currentUser.email)){
-        this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
-      }else if(this.userService.isUser(this.currentUser.email)){
-        this.router.navigate(['/home'],{queryParams:{userType: 'user'}});
-      }
+      this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
+        if(result){
+          if(result.toString() === '1'){
+            this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
+          }else{
+            this.router.navigate(['/home'],{queryParams: {userType: 'user'}});
+          }
+        }else{
+          console.log('Error in database!');
+        }
+      },
+      (err)=>{console.log('cannot get data from database');}
+      );
     }else{
       console.log('not logged in');
       this.router.navigate(['/login']);

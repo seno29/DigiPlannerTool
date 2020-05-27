@@ -1,14 +1,15 @@
 <h2 mat-dialog-title>Enter Board details:</h2>
 <mat-form-field>
     <mat-label>Enter board title:</mat-label>
-    <input matInput [(ngModel)]="data.boardTitle">
+    <input matInput [(ngModel)]="data.boardTitle" (input)="validateTitle(data.boardTitle)" required>
   </mat-form-field>
   <br>
 <mat-form-field>
     <mat-label>Enter room code:</mat-label>
-    <input matInput [(ngModel)]="data.roomCode">
-  </mat-form-field>
+    <input matInput [(ngModel)]="data.roomCode" (input)="validateRoomCode(data.roomCode)" required>
+</mat-form-field>
+<p *ngIf="isexist" class="warning">roomcode already exist</p>
 <mat-dialog-actions>
     <button mat-button (click)="onCancel()" >Cancel</button>
-    <button mat-button  [mat-dialog-close]="data" >Create</button>
+    <button mat-button  [mat-dialog-close]="data" [disabled]="isexist || emptyRoomCode || emptyBoardtitle">Create</button>
 </mat-dialog-actions>

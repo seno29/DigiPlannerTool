@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -16,7 +15,6 @@ describe('UserBoardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ UserBoardComponent ],
       imports: [
-        HttpClientTestingModule,
         RouterTestingModule,
         MatIconTestingModule
       ],
@@ -34,18 +32,9 @@ describe('UserBoardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it(`should have title set to 'UserUI' if database return falsy value`, () => {
-    const de = fixture.debugElement.query(By.css('.title'));
-    const titleEle = de.nativeElement;
-    component.getTitleFromDatabase(component.boardID) ?
-      expect(titleEle.textContent).toBeTruthy() :
-      expect(titleEle.textContent).toEqual('UserUI');
-  });
-
   it(`should correctly initialize`, () => {
     const canvas = component.canvas;
     expect(component.boardID).toBeTruthy();
-    expect(component.boardTitle).toBeTruthy();
     expect(canvas.connect).toBeFalse();
     expect(canvas.connectButtonText).toEqual('Connect');
     expect(canvas.selectedColor).toEqual('cornsilk');

@@ -1,17 +1,19 @@
-import { Injectable, Optional, Renderer2 } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { GroupService } from './group.service';
-import {HttpClient} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { UserDatabaseService } from './user-database.service';
+import { ConstantsService } from './constants.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShapeService {
 
-  constructor(private groupService: GroupService, private http: HttpClient) { }
+  private image: fabric.Image;
 
-  initCanvas(backURL: string){
+  constructor(private groupService: GroupService, private userDatabaseService: UserDatabaseService, private constants: ConstantsService) { }
+
+  initCanvas(roomCode){
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
@@ -20,32 +22,31 @@ export class ShapeService {
     canvas.setHeight(650);
     canvas.setWidth(1200 - 10);
     canvas.selectedElements = [];
-    canvas.selectedColor = 'cornsilk';
-    this.setBackground(canvas, backURL);
+    canvas.selectedColor = this.constants.colors[0];
+    this.getTitleFromDatabase(roomCode, canvas);
     return canvas;
   }
 
-  setBackground(canvas: fabric.Canvas, backURL: string){
+  setBackground(canvas: fabric.Canvas, base64: string){
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
-    const imageEle = new Image();
-    this.getBackground('').subscribe(data => {
-      imageEle.src = data as string;
+    if (this.image){
+      canvas.setBackgroundImage(this.image);
+      canvas.renderAll();
+    }
+    else{
+      const imageEle = new Image();
+      imageEle.src = base64;
       imageEle.onload = () => {
-        const image = new fabric.Image(imageEle, {
+        this.image = new fabric.Image(imageEle, {
           width: canvas.width,
           height: canvas.height,
           opacity: 0.4,
         });
-        canvas.setBackgroundImage(image);
+        canvas.setBackgroundImage(this.image);
         canvas.renderAll();
-      };
-    });
-  }
-
-  getBackground(backURL: string): Observable<string>{
-    const imageURL = backURL || '../assets/back.txt';
-    return this.http.get(imageURL) as Observable<string>;
+    };
+    }
   }
 
   addEllipse(canvas: fabric.Canvas, renderer: Renderer2){
@@ -80,7 +81,7 @@ export class ShapeService {
   }
 
   addImage(canvas: fabric.Canvas, imageURL: string, renderer: Renderer2){
-    const imgURL = imageURL || '../assets/stars-black-48dp.svg';
+    const imgURL = imageURL || this.constants.starIconURL;
     const imageEle = new Image();
     imageEle.src = imgURL;
     imageEle.onload = () => {
@@ -121,6 +122,20 @@ export class ShapeService {
       shape.fill = color;
       this.groupService.regroup(shape, text, canvas, renderer);
     }
+  }
+
+  getTitleFromDatabase(roomCode: string, canvas: fabric.Canvas){
+    (roomCode === 'unknown') ?
+      canvas.boardTitle = 'UserUI' :
+      this.userDatabaseService.getRoomData(roomCode).subscribe(
+        roomData => {
+          canvas.boardTitle = roomData.room_title;
+          canvas.loadFromJSON(roomData.canvas_json, () => {
+            canvas.renderAll();
+          });
+          this.setBackground(canvas, roomData.base64);
+        },
+        error => { canvas.boardTitle = 'UserUI'; this.setBackground(canvas, this.constants.userBackURL); });
   }
 }
 

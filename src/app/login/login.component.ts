@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
       this.currentUser = user;
       if(this.currentUser){
         this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
-          if(result){
+          if(result != undefined){
             this.userType = result.toString() === '1' ? 'admin' : 'user';
             this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
           }
@@ -45,19 +45,21 @@ export class LoginComponent implements OnInit {
   }
 
   signIn():void{
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user)=>{
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
       if(user){
-        this.userService.getUserType(user.email).subscribe((result)=>{
-          if(result && result.toString() === '1' && this.userType === 'admin' ){
-            this.showSnackBar('Login Successful','cancel');
-            this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
-          }else if(result && result.toString()==='0' && this.userType === 'user' ){
-            this.showSnackBar('Login Successful','cancel');
-            this.router.navigate(['/home'],{queryParams: {userType: 'user'}});
-          }else{
-              this.showSnackBar(result.toString(),'cancel');
-              this.signOut();
+        this.userService.getUserType(user.email).subscribe((result) => {
+          if(result != undefined){
+            if(result.toString() === '1' && this.userType === 'admin' ) {
+              this.showSnackBar('Login Successful','cancel');
+              this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
+            } else if(result.toString()==='0' && this.userType === 'user' ) {
+              this.showSnackBar('Login Successful','cancel');
+              this.router.navigate(['/home'],{queryParams: {userType: 'user'}});
+            } else {
+                this.showSnackBar(result.toString(),'cancel');
+                this.signOut();
             } 
+          }
         },
         (err)=>{console.log('cannot get data from database');}
         ); 

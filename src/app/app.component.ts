@@ -30,7 +30,7 @@ export class AppComponent implements OnInit{
   goToHome(){
     if(this.currentUser){
       this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
-        if(result){
+        if(result != undefined){
           this.userType = result.toString() === '1' ? 'admin' : 'user';
           this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
         }else{

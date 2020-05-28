@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
-import {AdminBoardService} from '../admin-board services/admin-board.service';
+import { AdminBoardService } from '../admin-board services/admin-board.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,14 +13,27 @@ export class AdminBoardComponent implements OnInit {
   title = 'adminboard';
   convertedCanvas;
 
-  colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon','pink','red','blue','lime'];
+  colors = [
+    'cornsilk',
+    'CornflowerBlue',
+    'aquamarine',
+    'thistle',
+    'salmon',
+    'pink',
+    'red',
+    'blue',
+    'lime',
+  ];
 
-  selectedColor: string ;
+  selectedColor: string;
   roomCode: string;
   boardTitle: string;
   jsonString: string = '';
 
-  constructor(private route:ActivatedRoute,private adminBoardService:AdminBoardService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private adminBoardService: AdminBoardService
+  ) {}
 
   ngOnInit(): void {
     this.canvas = new fabric.Canvas('canvas', {
@@ -32,15 +45,22 @@ export class AdminBoardComponent implements OnInit {
     this.canvas.setWidth(1190);
     this.selectedColor = 'cornsilk';
 
-    this.route.queryParams.subscribe(params => {
-      this.roomCode=params['roomCode'];
-      this.boardTitle=params['boardTitle'];
+    this.route.queryParams.subscribe((params) => {
+      this.roomCode = params['roomCode'];
+      this.boardTitle = params['boardTitle'];
     });
+
+    //AdminSocketService can be used here for multiple admins
   }
 
-  exportJsonAdmin(){
+  exportJsonAdmin() {
     this.convertedCanvas = this.canvas.toDataURL();
-    this.adminBoardService.sendingData(this.convertedCanvas,this.jsonString,this.roomCode,this.boardTitle);
+    this.adminBoardService.sendingData(
+      this.convertedCanvas,
+      this.jsonString,
+      this.roomCode,
+      this.boardTitle
+    );
   }
 
   togglePen() {
@@ -56,7 +76,7 @@ export class AdminBoardComponent implements OnInit {
         left: 10,
         scaleX: scale,
         scaleY: scale,
-        opacity : 0.7
+        opacity: 0.7,
       });
       this.canvas.add(img);
     });
@@ -71,7 +91,7 @@ export class AdminBoardComponent implements OnInit {
         left: 10,
         scaleX: scale,
         scaleY: scale,
-        opacity : 0.7
+        opacity: 0.7,
       });
       this.canvas.add(img);
     });
@@ -121,7 +141,7 @@ export class AdminBoardComponent implements OnInit {
         fill: this.selectedColor,
         left: 10,
         top: 10,
-        opacity : 0.7
+        opacity: 0.7,
       })
     );
   }
@@ -137,13 +157,13 @@ export class AdminBoardComponent implements OnInit {
         fontSize: 20,
         fontFamily: 'Quicksand',
         textAlign: 'center',
-        opacity : 0.7
+        opacity: 0.7,
       })
     );
   }
 
-  changeColor(color){
-    this.selectedColor=color;
+  changeColor(color) {
+    this.selectedColor = color;
   }
 
   deleteObjects() {

@@ -22,7 +22,6 @@ export class UserSocketService {
 
     canvas.on('object:moving', (options) => {
       console.log('moving');
-      // document.getElementById('deleteBtn')?.remove();
       this.socketService.sendCanvas(this.getAll(canvas), roomId);
     });
 
@@ -37,38 +36,38 @@ export class UserSocketService {
     this.socket.on('canvas', (h: object) => {
       console.log('Canvas Received');
       document.getElementById('deleteBtn')?.remove();
-      canvas.loadFromJSON(
-        h,
-        canvas.renderAll.bind(canvas)
-      );
+      canvas.loadFromJSON(h, canvas.renderAll.bind(canvas));
       let gp = new Map();
       gp.clear();
       let p = canvas.getObjects();
-      for (const obj of p){
-        if(obj.type === "group"){
-          this.groupService.addEventListeners(canvas, obj, obj._objects[1], renderer);
+      for (const obj of p) {
+        if (obj.type === 'group') {
+          this.groupService.addEventListeners(
+            canvas,
+            obj,
+            obj._objects[1],
+            renderer
+          );
           gp.set(obj.id, obj);
-        }
-        else{
+        } else {
           canvas.remove(obj);
         }
       }
 
       let f = canvas.getObjects();
-      for(const obj1 of f){
-        if(obj1.type === "group"){
+      for (const obj1 of f) {
+        if (obj1.type === 'group') {
           canvas.selectedElements.push(gp.get(obj1.id));
           let dummy = JSON.parse(JSON.stringify(obj1.connections));
           let len = obj1.connections.length;
           obj1.connections.splice(0, len);
-          for(let l = 0 ;l < len; l++){
-            if(dummy[l].name === "p1"){
+          for (let l = 0; l < len; l++) {
+            if (dummy[l].name === 'p1') {
               let r = gp.get(dummy[l].i);
               canvas.selectedElements.push(r);
               let y = r.connections.length;
-              for(let w = 0; w < y; w++)
-              {
-                if(r.connections[w].i === obj1.id){
+              for (let w = 0; w < y; w++) {
+                if (r.connections[w].i === obj1.id) {
                   r.connections.splice(w, 1);
                   w++;
                 }
@@ -119,32 +118,34 @@ export class UserSocketService {
       document.getElementById('deleteBtn')?.remove();
 
       var dummy = new fabric.Canvas();
-      dummy.loadFromJSON(
-        h ,dummy.renderAll.bind(dummy)
-      );
-      console.log("Regrouped");
+      dummy.loadFromJSON(h, dummy.renderAll.bind(dummy));
+      console.log('Regrouped');
       var gr = this.groupService.selectedGroup;
       var shape = gr._objects[0];
       canvas.remove(gr._objects[1]);
       var text;
       let i = 0;
-      for (const obj of dummy._objects){
-        if(obj.id === gr.id)
-        {
+      for (const obj of dummy._objects) {
+        if (obj.id === gr.id) {
           text = obj;
           break;
         }
         i++;
       }
       this.groupService.regroup(shape, text, canvas, renderer);
-      console.log(canvas);    
+      console.log(canvas);
     });
 
     canvas.on('text:editing:exited', (options) => {
-      console.log("hELLO tEXT"); 
+      console.log('hELLO tEXT');
       let gr = this.groupService.selectedGroup;
       this.socketService.regr(canvas.toJSON(['id']));
-      this.groupService.regroup(gr._objects[0], gr._objects[1], canvas, renderer);
+      this.groupService.regroup(
+        gr._objects[0],
+        gr._objects[1],
+        canvas,
+        renderer
+      );
     });
 
     this.socket.on('clearCanvas', (can) => {
@@ -179,20 +180,19 @@ export class UserSocketService {
       this.groupService.delete(canvas, gr);
     });
 
-    this.socket.on("drawingLines", (h: any) => {
+    this.socket.on('drawingLines', (h: any) => {
       // console.log(h.f);
       // console.log(h.s);
-      for (const obj of canvas._objects){
-        if(h.f === obj.id||h.s === obj.id){
+      for (const obj of canvas._objects) {
+        if (h.f === obj.id || h.s === obj.id) {
           canvas.selectedElements.push(obj);
         }
       }
       this.groupService.drawLineTwoPoints(canvas);
       canvas.selectedElements.splice(0, 2);
       console.log(canvas);
-      console.log("drawing");
+      console.log('drawing');
     });
-
   }
   getAll(canvas) {
     var the = canvas.toJSON([

@@ -158,5 +158,4 @@ export class AdminBoardComponent implements OnInit {
       this.canvas.discardActiveObject();
     }
   }
-
 }

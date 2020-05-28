@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit{
   title:string = 'digi-planner';
   currentUser:SocialUser;
-
+  userType:string;
   constructor(private authService:AuthService,private userService:UserService,private router:Router){
 
   }
@@ -29,11 +29,16 @@ export class AppComponent implements OnInit{
 
   goToHome(){
     if(this.currentUser){
-      if(this.userService.isAdmin(this.currentUser.email)){
-        this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
-      }else if(this.userService.isUser(this.currentUser.email)){
-        this.router.navigate(['/home'],{queryParams:{userType: 'user'}});
-      }
+      this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
+        if(result != undefined){
+          this.userType = result.toString() === '1' ? 'admin' : 'user';
+          this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
+        }else{
+          console.log('Error in database!');
+        }
+      },
+      (err)=>{console.log('cannot get data from database');}
+      );
     }else{
       console.log('not logged in');
       this.router.navigate(['/login']);

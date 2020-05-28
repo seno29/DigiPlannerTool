@@ -26,10 +26,15 @@ export class LoginComponent implements OnInit {
     console.log(this.userType);
     this.authService.authState.subscribe((user)=>{
       this.currentUser = user;
-      if(this.currentUser && this.userService.isAdmin(this.currentUser.email)){
-        this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
-      }else if(this.currentUser && this.userService.isUser(this.currentUser.email)){
-        this.router.navigate(['/home'],{queryParams:{userType: 'user'}});
+      if(this.currentUser){
+        this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
+          if(result != undefined){
+            this.userType = result.toString() === '1' ? 'admin' : 'user';
+            this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
+          }
+        },
+        (err)=>{console.log('cannot get data from database');}
+        );
       }
     }); 
   }
@@ -40,15 +45,24 @@ export class LoginComponent implements OnInit {
   }
 
   signIn():void{
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user)=>{
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
       if(user){
-        if(this.isValid(user)){
-          this.showSnackBar('Login Successful','cancel');
-          this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
-        }else{
-          this.showSnackBar('invalid User Type','Try again!');
-          this.signOut();
-        }  
+        this.userService.getUserType(user.email).subscribe((result) => {
+          if(result != undefined){
+            if(result.toString() === '1' && this.userType === 'admin' ) {
+              this.showSnackBar('Login Successful','cancel');
+              this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
+            } else if(result.toString()==='0' && this.userType === 'user' ) {
+              this.showSnackBar('Login Successful','cancel');
+              this.router.navigate(['/home'],{queryParams: {userType: 'user'}});
+            } else {
+                this.showSnackBar(result.toString(),'cancel');
+                this.signOut();
+            } 
+          }
+        },
+        (err)=>{console.log('cannot get data from database');}
+        ); 
       }
     }).catch(error => {
       console.log(error);
@@ -60,13 +74,6 @@ export class LoginComponent implements OnInit {
     this.authService.signOut();
   }
 
-  isValid(user:SocialUser):boolean{
-    if((this.userType === 'admin' && this.userService.isAdmin(user.email)) 
-    || (this.userType === 'user' && this.userService.isUser(user.email))){
-      return true;
-    }
-    return false;
-  }
 
   showSnackBar(message:string,action:string):void{
     this.snackBar.open(message,action,{

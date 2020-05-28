@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
+import { HttpClient} from '@angular/common/http';
+import { URI } from './constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  adminList:string[] = ['dikshagupta2012@gmail.com','svj456@gmail.com','vedantmathe@gmail.com'];
-  userList:string[] = ['harshita234@gmail.com','johnDoe@gmail.com'];
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
-  isAdmin(email:string):boolean {
-    return !!this.adminList.find(adminId=>adminId === email);
-  }
-  isUser(email:string):boolean {
-    return !!this.userList.find(userId=>userId === email);
+  getUserType(email:string){
+    return this.http.get(`${URI}/users/${email}`);
   }
 }

@@ -109,7 +109,7 @@ export class ShapeService {
       selectable: false,
     });
     this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer);
-    text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas, renderer); });
+    //text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas, renderer); });
   }
 
   changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2){

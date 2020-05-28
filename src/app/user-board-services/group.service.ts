@@ -2,14 +2,15 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { ScalingService } from './scaling.service';
 import { ConstantsService } from './constants.service';
+import { SocketService } from '../socket-services/socket.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
   selectedGroup: fabric.Group;
-
-  constructor(private scalingService: ScalingService, private constants: ConstantsService) { }
+  givingId ;
+  constructor(private scalingService: ScalingService, private constants: ConstantsService, private scoketService: SocketService) { this.givingId = 0; }
 
   makeLine(coords: fabric.Point){
     return new fabric.Line(coords, {
@@ -23,7 +24,7 @@ export class GroupService {
 
   createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas,
               x: number, y: number,
-              connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group}>, renderer: Renderer2){
+              connections: Array<{name: string, line: fabric.Line, connectedWith: fabric.Group, i: any}>, renderer: Renderer2){
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
       left: x,
@@ -31,6 +32,10 @@ export class GroupService {
       connections,
       isEditable: true,
     });
+    group.id = this.givingId;
+    text.id = this.givingId;
+    group.type = "group";
+    this.givingId += 1;
     group.setControlsVisibility(this.constants.HideControls);
     this.addEventListeners(canvas, group, text, renderer);
     canvas.add(group);
@@ -154,14 +159,26 @@ export class GroupService {
     group.on('mousedown', this.doubleClickEvent(group, () => {
       if (canvas.connect){
         canvas.selectedElements.push(group);
-        if (canvas.selectedElements.length === 2){ this.drawLineTwoPoints(canvas); }
+        if (canvas.selectedElements.length === 2){ 
+          this.drawLineTwoPoints(canvas); 
+          this.scoketService.drawLines({
+            f: canvas.selectedElements[0].id,
+            s: canvas.selectedElements[1].id
+          });
+          canvas.selectedElements.pop();
+          canvas.selectedElements.pop();
+        }
       }
       else{
         group.isEditable = false;
+        this.scoketService.somethingModified(group.id);
         this.unGroup(group, canvas);
-        canvas.setActiveObject(text);
-        text.enterEditing();
-        text.selectAll();
+        var text1 = group._objects[1]; 
+        text1.lockMovementX = false;
+        text1.lockMovementY = false;
+        canvas.setActiveObject(text1);
+        text1.enterEditing();
+        text1.selectAll();
       }
     }));
 

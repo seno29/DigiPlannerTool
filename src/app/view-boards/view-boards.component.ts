@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SocialUser, AuthService } from 'angularx-social-login';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-view-boards',
@@ -7,13 +9,21 @@ import { Router } from '@angular/router';
   styleUrls: ['./view-boards.component.css']
 })
 export class ViewBoardsComponent implements OnInit {
-
-  constructor(private router:Router) { }
+  currentUser:SocialUser;
+  boards:any;
+  constructor(private router:Router,
+    private authService:AuthService,
+    private boardService:BoardService) { }
 
   ngOnInit(): void {
-  }
-
-  viewBoard(roomCode:string):void{
-    this.router.navigate(['/userboard'],{queryParams:{roomCode:roomCode}});
+    this.authService.authState.subscribe((user) => {
+      this.currentUser = user;
+      if(!this.currentUser){
+        this.router.navigate(['/login']);
+      }
+    });
+    this.boardService.viewBoard(this.currentUser.email).subscribe((boardsData) => {
+      this.boards=boardsData;
+    });
   }
 }

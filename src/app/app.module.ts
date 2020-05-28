@@ -8,7 +8,6 @@ import { UserBoardComponent } from './user-board/user-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {ShapeService } from './user-board-services/shape.service';
-import {HttpClientModule} from '@angular/common/http';
 import { MatModule } from './material.module';
 
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';

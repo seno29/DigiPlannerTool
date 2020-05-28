@@ -25,6 +25,12 @@ io.on("connection", socket =>{
         console.log("Hello");
         socket.broadcast.emit('modifiedObject', c);
     });
+    socket.on("regrouping", (c) =>{
+        socket.broadcast.emit('regrouping', c);
+    });
+    socket.on("drawingLines", (c) =>{
+        socket.broadcast.emit('drawingLines', c);
+    });
 });
 
 

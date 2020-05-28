@@ -21,7 +21,14 @@ export class SocketService implements OnInit {
   }
 
   somethingModified(can: any){
-    console.log("li");
     this.socket.emit("modifiedObject", can);
+  }
+
+  regr(can: any){
+    this.socket.emit("regrouping", can);
+  }
+
+  drawLines(can: any){
+    this.socket.emit("drawingLines", can);
   }
 }

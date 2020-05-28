@@ -15,9 +15,14 @@ import {MatButtonModule} from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SocketIoModule, SocketIoConfig, Socket } from 'ngx-socket-io';
 import { SocketService } from './services/socket.service';
-
+import { ShapeService } from './user-board-services/shape.service';
+import { Routes, RouterModule } from '@angular/router';
 const config: SocketIoConfig = { url : "http://localhost:3000", options: {}};
 
+const routes: Routes = [
+  {path: "user", component: UserBoardComponent},
+  {path: "admin", component: AdminBoardComponent}
+]
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,9 +39,10 @@ const config: SocketIoConfig = { url : "http://localhost:3000", options: {}};
     FormsModule,
     MatInputModule,
     MatIconModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    RouterModule.forRoot(routes)
   ],
-  providers: [ SocketService ],
+  providers: [ SocketService, ShapeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -66,6 +66,7 @@ export class AdminBoardComponent implements OnInit {
       console.log("Hi");
       console.log(this.canvas.__eventListeners);
       this.ser.somethingModified(this.canvas);
+      // console.log(this.canvas.item(options.));
     });
 
     this.ser.socket.on("modifiedObject", (h: object) =>{
@@ -95,7 +96,7 @@ export class AdminBoardComponent implements OnInit {
       delete this.canvas.__eventListeners["object:added"];
       console.log(this.canvas.__eventListeners);
       console.log(JSON.stringify(this.canvas));
-      this.ser.somethingAdded(this.canvas); 
+      // this.ser.somethingAdded(this.canvas); 
     });
   }
 

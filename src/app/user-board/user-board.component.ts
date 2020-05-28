@@ -29,7 +29,7 @@ export class UserBoardComponent implements OnInit {
   addImage(){ this.shapeService.addImage(this.canvas, '', this.renderer); }
 
   clear() {
-    if (confirm('Do you want to clear')) {
+    if (confirm('Do you want to clear?')) {
       this.canvas.clear();
       this.shapeService.setBackground(this.canvas, 'assets');
       document.getElementById('deleteBtn')?.remove();

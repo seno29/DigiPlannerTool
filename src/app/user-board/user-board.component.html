@@ -1,1 +1,54 @@
-<h3>Board appear here..</h3>
+<div style="text-align: center;">
+
+    <div class="button-row">
+
+      <div class="title">{{boardTitle}}</div>
+  
+      <div class="button-row-right"  >
+
+        <button mat-flat-button  (click)="addRectangle()" color="accent" [disabled]="canvas.connect">
+            <mat-icon>add_box</mat-icon>
+            Rectangle
+        </button>
+        <button mat-flat-button  (click)="addEllipse()" color="accent" [disabled]="canvas.connect">
+            <mat-icon>add_circle</mat-icon>
+            Ellipse
+        </button>
+        <button mat-flat-button  (click)="addImage()" color="accent" [disabled]="canvas.connect">
+          <mat-icon>stars</mat-icon>
+          Image
+        </button>
+        <button class="connectButton"  mat-flat-button (click)="connect()" color = "accent">
+          <mat-icon>timeline</mat-icon>
+          {{canvas.connectButtonText}}
+        </button>
+      </div>
+
+    </div>
+  
+    <div id="canvas-div" style="display: inline-flex;">
+
+      <div class="button-col">
+        <div *ngFor = "let color of colors;">
+        <button mat-mini-fab class={{color}} style="border: 1px solid darkslategray;" (click)="changeColor(color)">
+          <mat-icon *ngIf="canvas.selectedColor == color" [style.color]="'black'">done</mat-icon>
+        </button>
+        </div>
+      </div>
+    
+      <canvas id="canvas"></canvas>
+        
+        <div class="button-col">
+          <button mat-fab class="clearButton redButton but-col-right"  color = "warn" (click)="clear()" [disabled]="canvas.connect" >
+            <mat-icon>layers_clear</mat-icon>
+          </button>
+          
+          <button mat-fab  class="redButton but-col-right"  color = "warn">
+            <mat-icon>cloud_download</mat-icon>
+          </button>
+        </div>
+    </div>
+
+    <p class = "mat-h2 noteEle" *ngIf = "canvas.connect"> Note: Double click on any two cards to connect.{{canvas.selectedElements.length}} selected </p>
+  
+</div>

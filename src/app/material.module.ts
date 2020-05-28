@@ -10,11 +10,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
- exports:[
+ exports: [
     MatToolbarModule,
     MatButtonModule,
     MatRadioModule,
@@ -25,8 +26,10 @@ import { FormsModule } from '@angular/forms';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    MatIconModule,
  ]
 })
 
-export class MatModule{}
+export class MatModule{ }
+

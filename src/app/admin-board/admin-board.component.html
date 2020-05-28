@@ -2,7 +2,7 @@
 
   <div class="button-row">
 
-    <div class="title">Admin UI</div>
+    <div class="title">{{boardTitle}}</div>
 
     <div class="button-row-right">
       <button mat-flat-button title="Pen" (click)="togglePen()" color="primary">
@@ -26,12 +26,6 @@
       <button mat-flat-button title="TextBox" (click)="textBox()" color="primary">
         <mat-icon>text_rotation_none</mat-icon>
       </button>
-      <button mat-flat-button title="Reset" class="clearButton" (click)="reset()" color="warn">
-        <mat-icon>settings_backup_restore</mat-icon>
-      </button>
-      <button mat-flat-button title="Delete" (click)="deleteObjects()" color="warn">
-        <mat-icon>delete_forever</mat-icon>
-      </button>
 
     </div>
 
@@ -50,8 +44,12 @@
     <canvas id="canvas"></canvas>
 
     <div class="button-col">
-
-
+      <button mat-fab title="Reset" class="clearButton" (click)="reset()" color="warn">
+        <mat-icon>settings_backup_restore</mat-icon>
+      </button>
+      <button mat-fab title="Delete" (click)="deleteObjects()" color="warn">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
       <button class="convertCanvas" title="Export Canvas" mat-fab (click)="exportJsonAdmin()" color="warn">
         <mat-icon>backup</mat-icon>
       </button>

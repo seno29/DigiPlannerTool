@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
+import {AdminBoardService} from '../admin-board services/admin-board.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin-board',
@@ -8,14 +10,17 @@ import { fabric } from 'fabric';
 })
 export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
+  title = 'adminboard';
+  convertedCanvas;
 
-  colors = ['thistle', 'cyan', 'aquamarine', 'cornsilk', 'salmon','pink','red','blue','lime'];
-  aspectRatio = 16 / 9;
-  height;
-  width;
-  selectedColor: string;
+  colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon','pink','red','blue','lime'];
 
-  constructor() {}
+  selectedColor: string ;
+  roomCode: string;
+  boardTitle: string;
+  jsonString: string = '';
+
+  constructor(private route:ActivatedRoute,private adminBoardService:AdminBoardService) {}
 
   ngOnInit(): void {
     this.canvas = new fabric.Canvas('canvas', {
@@ -25,9 +30,18 @@ export class AdminBoardComponent implements OnInit {
 
     this.canvas.setHeight(650);
     this.canvas.setWidth(1190);
-    this.selectedColor = 'thistle';
+    this.selectedColor = 'cornsilk';
+
+    this.route.queryParams.subscribe(params => {
+      this.roomCode=params['roomCode'];
+      this.boardTitle=params['boardTitle'];
+    });
   }
 
+  exportJsonAdmin(){
+    this.convertedCanvas = this.canvas.toDataURL();
+    this.adminBoardService.sendingData(this.convertedCanvas,this.jsonString,this.roomCode,this.boardTitle);
+  }
 
   togglePen() {
     this.canvas.isDrawingMode = !this.canvas.isDrawingMode;
@@ -128,6 +142,10 @@ export class AdminBoardComponent implements OnInit {
     );
   }
 
+  changeColor(color){
+    this.selectedColor=color;
+  }
+
   deleteObjects() {
     this.canvas.isDrawingMode = false;
     var activeObject = this.canvas.getActiveObjects();
@@ -141,7 +159,4 @@ export class AdminBoardComponent implements OnInit {
     }
   }
 
-  exportJsonAdmin(){
-    const url = this.canvas.toDataURL();
-  }
 }

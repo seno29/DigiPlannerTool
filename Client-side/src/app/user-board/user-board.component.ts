@@ -49,8 +49,8 @@ export class UserBoardComponent implements OnInit {
       // console.log(JSON.parse(this.canvas));
       let gp = new Map();
       gp.clear();
-      let ind = 0;
-      for (const obj of this.canvas._objects){
+      let p = this.canvas.getObjects();
+      for (const obj of p){
         if(obj.type === "group"){
           this.groupService.addEventListeners(this.canvas, obj, obj._objects[1], this.renderer);
           gp.set(obj.id, obj);
@@ -62,32 +62,28 @@ export class UserBoardComponent implements OnInit {
           // this.canvas.add(lineMap.get(obj.id));
           // this.canvas.sendToBack(obj);
           // this.canvas.renderAll();
-          this.canvas._objects.splice(ind, 1);
+          this.canvas.remove(obj);
         }
-        ind++;
       }
-      //remaining part work to be done
-      console.log("done");
-      console.log(this.canvas);
-      let f = this.canvas._objects;
-      let k = this.canvas._objects.length;
-      console.log(k);
-      for(let j = 0; j < k; j++){
-        if(f[j].type === "group"){
-          this.canvas.selectedElements.push(f[j]);
-          let dummy = JSON.parse(JSON.stringify(f[j].connections));
-          let len = f[j].connections.length;
-          f[j].connections.splice(0, len);
+      let f = this.canvas.getObjects();
+      // let k = this.canvas._objects.length;
+      // console.log(k);
+      for(const obj1 of f){
+        if(obj1.type === "group"){
+          this.canvas.selectedElements.push(gp.get(obj1.id));
+          let dummy = JSON.parse(JSON.stringify(obj1.connections));
+          let len = obj1.connections.length;
+          obj1.connections.splice(0, len);
           for(let l = 0 ;l < len; l++){
-            console.log(dummy);
             if(dummy[l].name === "p1"){
               let r = gp.get(dummy[l].i);
               this.canvas.selectedElements.push(r);
               let y = r.connections.length;
               for(let w = 0; w < y; w++)
               {
-                if(r.connections[w].i === f[j].id){
+                if(r.connections[w].i === obj1.id){
                   r.connections.splice(w, 1);
+                  w++;
                 }
               }
               this.groupService.drawLineTwoPoints(this.canvas);
@@ -97,6 +93,7 @@ export class UserBoardComponent implements OnInit {
           this.canvas.selectedElements.pop();
         }
       }
+      console.log(this.canvas);
       this.canvas.renderAll();
       // for(const obj of this.canvas._objects){
       //   if(obj.type === "group"){

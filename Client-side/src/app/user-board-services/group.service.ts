@@ -77,6 +77,8 @@ export class GroupService {
   drawLineTwoPoints(canvas: fabric.Canvas) {
     const group1 = canvas.selectedElements[0];
     const group2 = canvas.selectedElements[1];
+    console.log(group1);
+    console.log(group2);
     const line = this.makeLine([group1.getCenterPoint().x, group1.getCenterPoint().y,
                                 group2.getCenterPoint().x, group2.getCenterPoint().y]);
     canvas.add(line);
@@ -168,6 +170,8 @@ export class GroupService {
           this.drawLineTwoPoints(canvas); 
           this.ser.drawLines({f: canvas.selectedElements[0].id,
                               s: canvas.selectedElements[1].id});
+          canvas.selectedElements.pop();
+          canvas.selectedElements.pop();
         }
       }
       else{

@@ -1,7 +1,6 @@
 import { Injectable, Optional, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { GroupService } from './group.service';
-import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,9 +8,9 @@ import { Observable } from 'rxjs';
 })
 export class ShapeService {
 
-  constructor(private groupService: GroupService, private http: HttpClient) { }
+  constructor(private groupService: GroupService) { }
 
-  initCanvas(backURL: string){
+  initCanvas( userDatabaseService ){
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
@@ -21,16 +20,17 @@ export class ShapeService {
     canvas.setWidth(1200 - 10);
     canvas.selectedElements = [];
     canvas.selectedColor = 'cornsilk';
-    this.setBackground(canvas, backURL);
+    this.setBackground(canvas, userDatabaseService);
     return canvas;
   }
 
-  setBackground(canvas: fabric.Canvas, backURL: string){
+  setBackground(canvas: fabric.Canvas, userDatabaseService){
     canvas.connect = false;
     canvas.connectButtonText = 'Connect';
     const imageEle = new Image();
-    this.getBackground('').subscribe(data => {
-      imageEle.src = data as string;
+    userDatabaseService.roomData.subscribe(data => {
+      const dataURL = data['base64'];
+      imageEle.src = dataURL as string;
       imageEle.onload = () => {
         const image = new fabric.Image(imageEle, {
           width: canvas.width,
@@ -41,11 +41,6 @@ export class ShapeService {
         canvas.renderAll();
       };
     });
-  }
-
-  getBackground(backURL: string): Observable<string>{
-    const imageURL = backURL || '../assets/back.txt';
-    return this.http.get(imageURL) as Observable<string>;
   }
 
   addEllipse(canvas: fabric.Canvas, renderer: Renderer2){

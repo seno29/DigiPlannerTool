@@ -1,9 +1,9 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { ActivatedRoute } from '@angular/router';
-
+import { UserDatabaseService} from '../user-database.service';
 import { ShapeService } from '../user-board-services/shape.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-user-board',
   templateUrl: './user-board.component.html',
@@ -13,17 +13,20 @@ import { ShapeService } from '../user-board-services/shape.service';
 export class UserBoardComponent implements OnInit {
   colors: Array<string>;
   canvas: fabric.Canvas;
-  boardID: string;
+  roomCode: string;
   boardTitle: string;
-
-  constructor(private shapeService: ShapeService, private renderer: Renderer2, private route: ActivatedRoute) {
+  constructor(private shapeService: ShapeService, private renderer: Renderer2, private route: ActivatedRoute, private userDatabaseService: UserDatabaseService, private router: Router) {
     this.colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon'];
   }
 
   ngOnInit(): void {
-    this.boardID = this.route.snapshot.queryParamMap.get('roomCode') || 'unknown';
-    this.boardTitle = this.getTitleFromDatabase(this.boardID);
-    this.canvas = this.shapeService.initCanvas('');
+    this.route.queryParams.subscribe(params => {
+      this.roomCode = params['room_code'];
+    });
+    this.userDatabaseService.getRoomData( this.roomCode).subscribe( roomData => {
+      this.boardTitle = roomData['room_title'];
+       });
+    this.canvas = this.shapeService.initCanvas(this.userDatabaseService);
   }
 
   addEllipse(){ this.shapeService.addEllipse(this.canvas, this.renderer); }
@@ -35,7 +38,7 @@ export class UserBoardComponent implements OnInit {
   clear() {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
-      this.shapeService.setBackground(this.canvas, '');
+      this.shapeService.setBackground(this.canvas, this.userDatabaseService);
       document.getElementById('deleteBtn')?.remove();
     }
   }
@@ -58,7 +61,4 @@ export class UserBoardComponent implements OnInit {
     this.shapeService.changeColor(this.canvas, color, this.renderer);
   }
 
-  getTitleFromDatabase(roomCode: string){
-    return (roomCode === 'unknown') ? 'UserUI' : 'Database Fetch';
-  }
 }

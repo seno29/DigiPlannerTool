@@ -22,9 +22,9 @@ describe('ShapeService', () => {
     expect(shapeService).toBeTruthy();
   });
 
-  it(`getBackground() should get the base64 image`, () => {
-    shapeService.getBackground('').subscribe( (res) => {
-      expect(res).toContain('data:image');
-    });
+  it(`getTitleFromDatabase should have title set to 'UserUI' if database return falsy value`, () => {
+    const canvas = {boardTitle: ''};
+    shapeService.getTitleFromDatabase('unknown', canvas);
+    expect(canvas.boardTitle).toBeTruthy();
   });
 });

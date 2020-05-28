@@ -1,9 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { ActivatedRoute } from '@angular/router';
-import { UserDatabaseService} from '../user-database.service';
 import { ShapeService } from '../user-board-services/shape.service';
-import { Router } from '@angular/router';
+import { ConstantsService } from '../user-board-services/constants.service';
 @Component({
   selector: 'app-user-board',
   templateUrl: './user-board.component.html',
@@ -11,22 +10,16 @@ import { Router } from '@angular/router';
 })
 
 export class UserBoardComponent implements OnInit {
-  colors: Array<string>;
   canvas: fabric.Canvas;
-  roomCode: string;
+  boardID: string;
   boardTitle: string;
-  constructor(private shapeService: ShapeService, private renderer: Renderer2, private route: ActivatedRoute, private userDatabaseService: UserDatabaseService, private router: Router) {
-    this.colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon'];
+  constructor(private shapeService: ShapeService, private renderer: Renderer2,
+              private route: ActivatedRoute, public constants: ConstantsService) {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.roomCode = params['room_code'];
-    });
-    this.userDatabaseService.getRoomData( this.roomCode).subscribe( roomData => {
-      this.boardTitle = roomData['room_title'];
-       });
-    this.canvas = this.shapeService.initCanvas(this.userDatabaseService);
+    this.boardID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
+    this.canvas = this.shapeService.initCanvas(this.boardID);
   }
 
   addEllipse(){ this.shapeService.addEllipse(this.canvas, this.renderer); }
@@ -38,7 +31,7 @@ export class UserBoardComponent implements OnInit {
   clear() {
     if (confirm('Do you want to clear')) {
       this.canvas.clear();
-      this.shapeService.setBackground(this.canvas, this.userDatabaseService);
+      this.shapeService.setBackground(this.canvas, 'assets');
       document.getElementById('deleteBtn')?.remove();
     }
   }
@@ -46,19 +39,18 @@ export class UserBoardComponent implements OnInit {
   connect(){
     if (this.canvas.connect){
       this.canvas.connect = false;
-      this.canvas.connectButtonText = 'Connect';
+      this.canvas.connectButtonText = this.constants.disconnectText;
     }
     else{
       while (this.canvas.selectedElements.length > 0 ){
         this.canvas.selectedElements.pop();
       }
       this.canvas.connect = true;
-      this.canvas.connectButtonText = 'Exit Connection Mode';
+      this.canvas.connectButtonText = this.constants.disconnectText;
     }
   }
 
   changeColor(color: string){
     this.shapeService.changeColor(this.canvas, color, this.renderer);
   }
-
 }

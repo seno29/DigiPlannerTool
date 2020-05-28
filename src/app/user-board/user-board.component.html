@@ -2,7 +2,7 @@
 
     <div class="button-row">
 
-      <div class="title">{{boardTitle}}</div>
+      <div class="title">{{canvas.boardTitle}}</div>
   
       <div class="button-row-right"  >
 
@@ -29,7 +29,7 @@
     <div id="canvas-div" style="display: inline-flex;">
 
       <div class="button-col">
-        <div *ngFor = "let color of colors;">
+        <div *ngFor = "let color of constants.colors;">
         <button mat-mini-fab class={{color}} style="border: 1px solid darkslategray;" (click)="changeColor(color)">
           <mat-icon *ngIf="canvas.selectedColor == color" [style.color]="'black'">done</mat-icon>
         </button>

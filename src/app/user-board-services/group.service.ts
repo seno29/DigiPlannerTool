@@ -1,6 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { fabric } from 'fabric';
 import { ScalingService } from './scaling.service';
+import { ConstantsService } from './constants.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { ScalingService } from './scaling.service';
 export class GroupService {
   selectedGroup: fabric.Group;
 
-  constructor(private scalingService: ScalingService) { }
+  constructor(private scalingService: ScalingService, private constants: ConstantsService) { }
 
   makeLine(coords: fabric.Point){
     return new fabric.Line(coords, {
@@ -30,7 +31,7 @@ export class GroupService {
       connections,
       isEditable: true,
     });
-    group.setControlsVisibility(HideControls);
+    group.setControlsVisibility(this.constants.HideControls);
     this.addEventListeners(canvas, group, text, renderer);
     canvas.add(group);
     canvas.setActiveObject(group);
@@ -77,7 +78,7 @@ export class GroupService {
     group2.connections.push({name: 'p2', line, connectedGroup: group1});
 
     canvas.connect = false;
-    canvas.connectButtonText = 'Connect';
+    canvas.connectButtonText = this.constants.connectText;
   }
 
   moveLines(group: fabric.Group){
@@ -169,15 +170,3 @@ export class GroupService {
     });
   }
 }
-
-const HideControls = {
-  tl: true,
-  tr: false,
-  bl: true,
-  br: true,
-  ml: true,
-  mt: true,
-  mr: true,
-  mb: true,
-  mtr: true
-};

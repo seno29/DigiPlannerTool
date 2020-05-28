@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ShapeService } from '../user-board-services/shape.service';
 
+
 @Component({
   selector: 'app-user-board',
   templateUrl: './user-board.component.html',
@@ -15,6 +16,7 @@ export class UserBoardComponent implements OnInit {
   canvas: fabric.Canvas;
   boardID: string;
   boardTitle: string;
+
 
   constructor(private shapeService: ShapeService, private renderer: Renderer2, private route: ActivatedRoute) {
     this.colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon'];

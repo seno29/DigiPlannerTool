@@ -19,11 +19,14 @@ import { HomeComponent } from './home/home.component';
 import { JoinRoomDialogComponent } from './join-room-dialog/join-room-dialog.component';
 import { ViewBoardsComponent } from './view-boards/view-boards.component';
 import { CreateBoardDialogComponent } from './create-board-dialog/create-board-dialog.component';
+import { HttpClientModule } from '@angular/common/http';
+
+import { clientId } from './constants';
 
 const config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('610664320073-4ik734pbbflijv056jr130n5k6e7ia8q.apps.googleusercontent.com')
+    provider: new GoogleLoginProvider(clientId)
   },
 ]);
 
@@ -50,6 +53,7 @@ export function provideConfig() {
     BrowserAnimationsModule,
     MatModule,
     AppRoutingModule,
+    HttpClientModule
   ],
   entryComponents: [
     JoinRoomDialogComponent,

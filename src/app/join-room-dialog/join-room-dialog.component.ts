@@ -26,6 +26,7 @@ export class JoinRoomDialogComponent implements OnInit {
   validateRoomCode(roomcode:string){
     if(roomcode){
       this.boardService.isExist(roomcode).subscribe((result) => {
+        console.log(result);
         this.isexist = result;
         this.emptyRoomCode = false;
       });

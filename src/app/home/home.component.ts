@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService,SocialUser } from 'angularx-social-login';
 import { BoardService } from '../board.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-home',
@@ -23,24 +24,27 @@ export class HomeComponent implements OnInit {
       private snackBar:MatSnackBar,
       private router:Router,
       private authService:AuthService,
-      private boardService:BoardService) {
+      private boardService:BoardService,
+      private userService:UserService) {
     this.inH = window.innerHeight*0.9;
    }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if(params['userType'] === 'admin'){
-        this.isAdmin=true;
-      }
-      if(params['userType'] === 'user'){
-        this.isUser=true;
-      }
-    });
-
     this.authService.authState.subscribe((user) => {
       this.currentUser = user;
       if(!this.currentUser){
         this.router.navigate(['/login']);
+      } else {
+        this.userService.getUserType(this.currentUser.email).subscribe((result) => {
+          if(result != undefined) {
+            let userType = result.toString() === '1' ? 'admin' : 'user';
+            console.log(userType);
+            this.isAdmin = userType === 'admin' ? true : false;
+            this.isUser = userType === 'user' ? true : false;
+          }
+        },
+        (err)=>{console.log('cannot get data from database');}
+        );
       }
     });
   }

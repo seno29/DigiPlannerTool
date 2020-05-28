@@ -40,7 +40,7 @@ export class AdminBoardComponent implements OnInit {
 
   exportJsonAdmin(){
     this.convertedCanvas = this.canvas.toDataURL();
-    this.adminBoardService.sendingData(this.convertedCanvas,this.jsonString,this.roomCode,this.boardTitle);
+    this.adminBoardService.sendingData(this.convertedCanvas,this.roomCode);
   }
 
   togglePen() {

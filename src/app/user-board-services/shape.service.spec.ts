@@ -25,6 +25,6 @@ describe('ShapeService', () => {
   it(`getTitleFromDatabase should have title set to 'UserUI' if database return falsy value`, () => {
     const canvas = {boardTitle: ''};
     shapeService.getTitleFromDatabase('unknown', canvas);
-    expect(canvas.boardTitle).toBeTruthy();
+    expect(canvas.boardTitle).toEqual('UserUI');
   });
 });

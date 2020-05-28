@@ -31,4 +31,8 @@ export class SocketService implements OnInit {
   drawLines(can: any){
     this.socket.emit("drawingLines", can);
   }
+
+  deleteGroup(can: any){
+    this.socket.emit("deleteGroups", can);
+  }
 }

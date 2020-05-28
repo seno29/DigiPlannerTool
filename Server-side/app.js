@@ -31,6 +31,9 @@ io.on("connection", socket =>{
     socket.on("drawingLines", (c) =>{
         socket.broadcast.emit('drawingLines', c);
     });
+    socket.on("deleteEdges", (c) => {
+        socket.broadcast.emit("deleteEdges", c);
+    });
 });
 
 

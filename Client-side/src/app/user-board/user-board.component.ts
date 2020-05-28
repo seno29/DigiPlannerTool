@@ -65,6 +65,8 @@ export class UserBoardComponent implements OnInit {
           this.canvas.remove(obj);
         }
       }
+
+      
       let f = this.canvas.getObjects();
       // let k = this.canvas._objects.length;
       // console.log(k);
@@ -198,6 +200,10 @@ export class UserBoardComponent implements OnInit {
       this.canvas.selectedElements.splice(0, 2);
       console.log(this.canvas);
       console.log("drawing");
+    });
+
+    this.ser.socket.on("deleteEdges", (h: any) => {
+      
     });
   }
 

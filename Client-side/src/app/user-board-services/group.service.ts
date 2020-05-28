@@ -111,6 +111,7 @@ export class GroupService {
 
   delete(canvas: fabric.Canvas){
     const group = canvas.getActiveObject();
+    this.ser.deleteGroup(group.id);
     for (const connection of group.connections){
       // tslint:disable-next-line: forin
       for (const index in connection.connectedGroup.connections){

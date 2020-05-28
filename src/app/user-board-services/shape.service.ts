@@ -128,7 +128,13 @@ export class ShapeService {
     (roomCode === 'unknown') ?
       canvas.boardTitle = 'UserUI' :
       this.userDatabaseService.getRoomData(roomCode).subscribe(
-        roomData => { canvas.boardTitle = roomData.room_title; this.setBackground(canvas, roomData.base64); },
+        roomData => {
+          canvas.boardTitle = roomData.room_title;
+          canvas.loadFromJSON(roomData.canvas_json, () => {
+            canvas.renderAll();
+          });
+          this.setBackground(canvas, roomData.base64);
+        },
         error => { canvas.boardTitle = 'UserUI'; this.setBackground(canvas, this.constants.userBackURL); });
   }
 }

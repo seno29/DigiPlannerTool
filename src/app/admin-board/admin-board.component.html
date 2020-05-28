@@ -8,7 +8,7 @@
       <button mat-flat-button title="Pen" (click)="togglePen()" color="primary">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-flat-button title="Box" (click)="box()" color="primary">
+      <button mat-flat-button title="Box" class="addShape" (click)="box()" color="primary">
         <mat-icon>crop_3_2</mat-icon>
       </button>
       <button mat-flat-button title="Circle" (click)="circle()" color="primary">
@@ -26,7 +26,7 @@
       <button mat-flat-button title="TextBox" (click)="textBox()" color="primary">
         <mat-icon>text_rotation_none</mat-icon>
       </button>
-      <button mat-flat-button title="Reset" (click)="reset()" color="warn">
+      <button mat-flat-button title="Reset" class="clearButton" (click)="reset()" color="warn">
         <mat-icon>settings_backup_restore</mat-icon>
       </button>
       <button mat-flat-button title="Delete" (click)="deleteObjects()" color="warn">
@@ -41,7 +41,7 @@
 
     <div class="button-col">
       <div *ngFor="let color of colors;">
-        <button mat-mini-fab title={{color}} class={{color}} style="border: 1px solid black;" (click)="selectedColor = color">
+        <button mat-mini-fab title={{color}} class={{color}} style="border: 1px solid black;" (click)="changeColor(color)">
           <mat-icon *ngIf="selectedColor == color" [style.color]="'black'">done</mat-icon>
         </button>
       </div>
@@ -52,7 +52,7 @@
     <div class="button-col">
 
 
-      <button class="redButton" title="Export Canvas" mat-fab (click)="exportJsonAdmin()" color="warn">
+      <button class="convertCanvas" title="Export Canvas" mat-fab (click)="exportJsonAdmin()" color="warn">
         <mat-icon>backup</mat-icon>
       </button>
     </div>

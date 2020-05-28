@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
-  adminList:string[] = ['dikshagupta2012@gmail.com','svj456@gmail.com','vickychandra123@gmail.com'];
+  adminList:string[] = ['dikshagupta2012@gmail.com','svj456@gmail.com','vedantmathe@gmail.com'];
   userList:string[] = ['harshita234@gmail.com','johnDoe@gmail.com'];
   constructor() { }
 

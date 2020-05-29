@@ -18,7 +18,8 @@ export class ShapeService {
     private socketService: SocketService
   ) {}
 
-  initCanvas(roomCode) {
+  initCanvas(roomCode){
+    this.image = null;
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',

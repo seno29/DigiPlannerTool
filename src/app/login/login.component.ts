@@ -22,41 +22,34 @@ export class LoginComponent implements OnInit {
       this.inH = window.innerHeight*0.9;
   }
 
-  ngOnInit(): void {
+  ngOnInit():void {
     console.log(this.userType);
     this.authService.authState.subscribe((user)=>{
       this.currentUser = user;
       if(this.currentUser){
-        this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
-          if(result != undefined){
-            this.userType = result.toString() === '1' ? 'admin' : 'user';
-            this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
-          }
-        },
-        (err)=>{console.log('cannot get data from database');}
-        );
+        this.router.navigate(['/home']);
       }
     }); 
   }
 
-  onChange(event):void{   
+  onChange(event):void {   
     this.userType=event.value;
     console.log(this.userType);
   }
 
-  signIn():void{
+  signIn():void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
       if(user){
         this.userService.getUserType(user.email).subscribe((result) => {
           if(result != undefined){
             if(result.toString() === '1' && this.userType === 'admin' ) {
-              this.showSnackBar('Login Successful','cancel');
-              this.router.navigate(['/home'],{queryParams: {userType: 'admin'}});
+                this.showSnackBar('Login Successful','cancel');
+                this.router.navigate(['/home']);
             } else if(result.toString()==='0' && this.userType === 'user' ) {
-              this.showSnackBar('Login Successful','cancel');
-              this.router.navigate(['/home'],{queryParams: {userType: 'user'}});
+                this.showSnackBar('Login Successful','cancel');
+                this.router.navigate(['/home']);
             } else {
-                this.showSnackBar(result.toString(),'cancel');
+                this.showSnackBar('invalid user or usertype!','cancel');
                 this.signOut();
             } 
           }
@@ -70,12 +63,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  signOut():void{
+  signOut():void {
     this.authService.signOut();
   }
 
-
-  showSnackBar(message:string,action:string):void{
+  showSnackBar(message:string,action:string):void {
     this.snackBar.open(message,action,{
       duration:3000,
     });

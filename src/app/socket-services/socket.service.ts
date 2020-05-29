@@ -2,47 +2,48 @@ import { Injectable, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { fabric } from 'fabric';
 
-@Injectable({ providedIn: 'root' })
-export class SocketService{
+// @Injectable({ providedIn: 'root' })
+export class SocketService {
   constructor(public socket: Socket) { }
 
-  sendCanvas(canvas: fabric.Canvas, id?: string) {
+
+  sendCanvas(canvas: fabric.Canvas, id?: String) {
     this.socket.emit('canvas', [canvas, id]);
     //http save canvas
   }
 
-  somethingAdded(shape: string, color: string, id?: string) {
+  somethingAdded(shape: String, color: String, id?: String) {
     this.socket.emit('addedObject', [shape, color, id]);
     //http save canvas
   }
 
-  somethingModified(canvas: fabric.Canvas, id?: string) {
+  somethingModified(canvas: fabric.Canvas, id?: String) {
     console.log('modified');
     this.socket.emit('modifiedObject', [canvas, id]);
     //http save canvas
   }
 
-  clearCanvas(canvas: fabric.Canvas, id?: string) {
+  clearCanvas(canvas: fabric.Canvas, id?: String) {
     this.socket.emit('clearCanvas', [canvas, id]);
     //http save canvas
   }
 
-  colorChange(data, color: string, id?: string) {
+  colorChange(data, color: String, id?: String) {
     this.socket.emit('colorChange', [data, color, id]);
     //http save canvas
   }
 
-  joinRoom(id: string) {
+  joinRoom(id: String) {
     this.socket.emit('joinRoom', id);
     //http save canvas
   }
 
-  deleteGroup(data, id?: string) {
+  deleteGroup(data, id?: String) {
     this.socket.emit('deleteGroup', [data, id]);
     //http save canvas
   }
 
-  regr(canvas: fabric.Canvas, id?: string) {
+  regr(canvas: fabric.Canvas, id?: String) {
     this.socket.emit('regrouping', [canvas, id]);
     //http save canvas
   }

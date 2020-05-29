@@ -15,7 +15,7 @@ export class UserSocketService {
     private groupService: GroupService,
     private shapeService: ShapeService,
     private socketService: SocketService
-  ) {}
+  ) { }
   init(canvas, renderer, roomId) {
     this.roomId = roomId;
     this.socketService.joinRoom(this.roomId);
@@ -180,9 +180,13 @@ export class UserSocketService {
       this.groupService.delete(canvas, gr);
     });
 
-    this.socket.on('drawingLines', (h: any) => {
+    this.socket.on('drawingLines', (data: any) => {
       // console.log(h.f);
       // console.log(h.s);
+      let h = {
+        f: data[0],
+        s: data[1],
+      };
       for (const obj of canvas._objects) {
         if (h.f === obj.id || h.s === obj.id) {
           canvas.selectedElements.push(obj);

@@ -4,9 +4,9 @@ import { fabric } from 'fabric';
 
 // @Injectable({ providedIn: 'root' })
 export class SocketService implements OnInit {
-  constructor(public socket: Socket) {}
+  constructor(public socket: Socket) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   sendCanvas(canvas: fabric.Canvas, id?: String) {
     this.socket.emit('canvas', [canvas, id]);
@@ -50,7 +50,8 @@ export class SocketService implements OnInit {
   }
 
   drawLines(can: any) {
-    this.socket.emit('drawingLines', can);
+    let arr = [can.f, can.s, can.roomId];
+    this.socket.emit('drawingLines', arr);
     //http save canvas
   }
 }

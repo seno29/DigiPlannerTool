@@ -54,8 +54,8 @@ export class UserSocketService {
         }
       }
 
-      let f = canvas.getObjects();
-      for (const obj1 of f) {
+      let objectCopy = canvas.getObjects();
+      for (const obj1 of objectCopy) {
         if (obj1.type === 'group') {
           canvas.selectedElements.push(gp.get(obj1.id));
           let dummy = JSON.parse(JSON.stringify(obj1.connections));
@@ -137,7 +137,6 @@ export class UserSocketService {
     });
 
     canvas.on('text:editing:exited', (options) => {
-      console.log('hELLO tEXT');
       let gr = this.groupService.selectedGroup;
       this.socketService.regr(canvas.toJSON(['id']));
       this.groupService.regroup(

@@ -49,7 +49,7 @@ describe('AdminBoardComponent', () => {
   });
 
   it(`changing color by clicking on color palette`, () => {
-    expect(component.selectedColor).toEqual('cornsilk');
+    expect(component.selectedColor).toEqual('aqua');
     const temp = fixture.debugElement.query(By.css('.lime'));
     const element = temp.nativeElement;
     element.click();

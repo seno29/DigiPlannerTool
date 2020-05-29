@@ -6,10 +6,13 @@ import { LoginComponent } from './login/login.component';
 import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { UserBoardComponent } from './user-board/user-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import {ShapeService } from './user-board-services/shape.service';
+import {HttpClientModule} from '@angular/common/http';
 import { MatModule } from './material.module';
 
-import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
-import { GoogleLoginProvider} from "angularx-social-login";
+import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider} from 'angularx-social-login';
 
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
@@ -20,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { clientId } from './constants';
 
-let config = new AuthServiceConfig([
+const config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider(clientId)
@@ -44,17 +47,20 @@ export function provideConfig() {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
     SocialLoginModule,
     BrowserAnimationsModule,
     MatModule,
     AppRoutingModule,
     HttpClientModule
   ],
-  entryComponents:[
+  entryComponents: [
     JoinRoomDialogComponent,
     CreateBoardDialogComponent
   ],
   providers: [
+    ShapeService,
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig

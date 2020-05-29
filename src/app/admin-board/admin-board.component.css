@@ -54,18 +54,12 @@
   margin-left: 8px;
 }
 
-.mat-primary{
-  background-color: #004f9d;
-}
-.mat-primary:hover{
-  background-color: #0080FF;
+.mat-flat-button:hover {
+  background-color: #3F51B5;
 }
 
-.mat-warn{
-background-color: #eb0013 ;
-}
-.mat-warn:hover{
-  background-color:#fd5307;
+.mat-fab:hover{
+  background-color: darkred;
 }
 
 

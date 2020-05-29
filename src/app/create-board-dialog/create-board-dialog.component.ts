@@ -29,7 +29,7 @@ export class CreateBoardDialogComponent implements OnInit {
     this.emptyBoardtitle = boardtitle ? false : true;
   }
   validateRoomCode(roomcode:string){
-    if(roomcode){
+    if(roomcode && roomcode.length>=4){
       this.boardService.isExist(roomcode).subscribe((result) => {
         this.isexist = result;
         this.emptyRoomCode = false;

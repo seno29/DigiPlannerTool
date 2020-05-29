@@ -16,7 +16,7 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.authService.authState.subscribe((user)=>{
+    this.authService.authState.subscribe((user) => {
       this.currentUser = user;
       this.goToHome();
     }); 
@@ -29,16 +29,7 @@ export class AppComponent implements OnInit{
 
   goToHome(){
     if(this.currentUser){
-      this.userService.getUserType(this.currentUser.email).subscribe((result)=>{
-        if(result != undefined){
-          this.userType = result.toString() === '1' ? 'admin' : 'user';
-          this.router.navigate(['/home'],{queryParams: {userType: this.userType}});
-        }else{
-          console.log('Error in database!');
-        }
-      },
-      (err)=>{console.log('cannot get data from database');}
-      );
+        this.router.navigate(['/home']);      
     }else{
       console.log('not logged in');
       this.router.navigate(['/login']);

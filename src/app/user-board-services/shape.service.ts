@@ -14,6 +14,7 @@ export class ShapeService {
   constructor(private groupService: GroupService, private userDatabaseService: UserDatabaseService, private constants: ConstantsService) { }
 
   initCanvas(roomCode){
+    this.image = null;
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',

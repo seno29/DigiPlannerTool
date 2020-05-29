@@ -5,7 +5,7 @@
   </mat-form-field>
   <br>
 <mat-form-field>
-    <mat-label>Enter room code:</mat-label>
+    <mat-label>Enter room code(Min 4 characters):</mat-label>
     <input matInput [(ngModel)]="data.roomCode" (input)="validateRoomCode(data.roomCode)" required>
 </mat-form-field>
 <p *ngIf="isexist" class="warning">roomcode already exist</p>

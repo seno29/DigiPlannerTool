@@ -78,7 +78,7 @@
 }
 
 .olive{
-  background-color: olive;
+  background-color: #446600;
 }
 
 .orange{
@@ -86,15 +86,21 @@
 }
 
 .CornflowerBlue{
-  background-color: CornflowerBlue;
+  background-color: #1858cd;
 }
 
 .aqua{
   background-color: aqua;
 }
-
+.BlueViolet{
+  background-color: #6918b4;
+}
 .salmon{
   background-color: salmon;
+}
+
+.orange{
+  background-color: darkorange;
 }
 
 .white{

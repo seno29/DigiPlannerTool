@@ -26,7 +26,7 @@ export class AdminBoardService {
       is_published : 'true'
     };
 
-    return this.http.put('http://localhost:4200/drawing/'+this.roomCode,post,{responseType:'text'})
+    return this.http.put('http://localhost:4200/drawing/' + this.roomCode , post , {responseType:'text'})
 
   }
 }

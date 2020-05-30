@@ -26,6 +26,7 @@ export class UserSocketService {
           console.log('groupRecieved');
           if (obj.id === data.id) {
             console.log('groupSet');
+            console.log(obj);
             obj.left = data.left;
             obj.top = data.top;
             obj.scaleX = data.scaleX,

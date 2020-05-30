@@ -87,7 +87,6 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     let link = document.createElement('a');
     link.download = 'board-image.jpg';
     link.href = image;
-    console.log(image);
     link.click();
   }
 

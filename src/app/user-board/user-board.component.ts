@@ -6,6 +6,7 @@ import { ConstantsService } from '../user-board-services/constants.service';
 import { SocketService } from '../socket-services/socket.service';
 import { UserSocketService } from '../socket-services/user-socket.service';
 import { GroupService } from '../user-board-services/group.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-board',
@@ -24,7 +25,8 @@ export class UserBoardComponent implements OnInit {
     public constants: ConstantsService,
     private socketService: SocketService,
     private userSocketService: UserSocketService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -59,12 +61,18 @@ export class UserBoardComponent implements OnInit {
   }
 
   clear() {
-    if (confirm('Do you want to clear?')) {
       this.canvas.clear();
       this.shapeService.setBackground(this.canvas, 'assets');
       this.socketService.clearCanvas(this.canvas, this.roomId);
       document.getElementById('deleteBtn')?.remove();
-    }
+  }
+  showSnackBar(message: string, action: string): void {
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 3000,
+    });
+    snackBarRef.onAction().subscribe(() => {
+      this.clear();
+    });
   }
 
   connect() {
@@ -82,5 +90,20 @@ export class UserBoardComponent implements OnInit {
 
   changeColor(color: string) {
     this.shapeService.changeColor(this.canvas, color, this.renderer);
+  }
+  exportAsImage(canvasContent){
+    if (canvasContent.msToBlob){
+      const blob = canvasContent.msToBlob();
+      window.navigator.msSaveBlob(blob, 'board-image.jpg');
+    }
+    else{
+      const image = canvasContent
+      .toDataURL( 'image/jpg', 1.0)
+      .replace( 'image/jpg', 'image/octet-stream');
+      const link = document.createElement('a');
+      link.download = 'board-image.jpg';
+      link.href = image;
+      link.click();
+    }
   }
 }

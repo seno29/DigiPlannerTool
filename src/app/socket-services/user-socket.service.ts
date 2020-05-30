@@ -14,6 +14,7 @@ export class UserSocketService {
     private shapeService: ShapeService,
     private socketService: SocketService
   ) { }
+
   init(canvas, renderer, roomId) {
     this.roomId = roomId;
     this.socketService.joinRoom(this.roomId);
@@ -22,9 +23,7 @@ export class UserSocketService {
       document.getElementById('deleteBtn')?.remove();
       for (const obj of canvas.getObjects()) {
         if (obj instanceof fabric.Group) {
-          console.log('groupRecieved');
           if (obj.id === data.id) {
-            console.log('groupSet');
             obj.left = data.left;
             obj.top = data.top;
             obj.scaleX = data.scaleX,
@@ -63,11 +62,8 @@ export class UserSocketService {
       }
       const text = gr._objects[1];
       this.groupService.unGroup(gr, canvas);
-      canvas.setActiveObject(text);
       text.lockMovementX = false;
       text.lockMovementY = false;
-      // text.enterEditing();
-      text.selectAll();
     });
 
     this.socketService.socket.on('regrouping', (h: any) => {
@@ -75,7 +71,7 @@ export class UserSocketService {
       console.log('Regrouped');
       const gr = this.groupService.selectedGroup;
       const shape = gr._objects[0];
-      var text = gr._objects[1];
+      const text = gr._objects[1];
       text.set('text', h);
       this.groupService.regroup(shape, text, canvas, renderer);
       console.log(canvas);

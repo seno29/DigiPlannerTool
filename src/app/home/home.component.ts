@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/login']);
       } else {
         this.userService.getUserType(this.currentUser.email).subscribe((result) => {
-          if(result != undefined && result != null) {
+          if(result != undefined) {
             let userType = result.toString() === '1' ? 'admin' : 'user';
             console.log(userType);
             this.isAdmin = userType === 'admin' ? true : false;

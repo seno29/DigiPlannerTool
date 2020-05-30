@@ -75,8 +75,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale,
-        opacity: 1,
+        scaleY: scale
       });
       this.canvas.add(img);
     });
@@ -90,8 +89,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale,
-        opacity: 1,
+        scaleY: scale
       });
       this.canvas.add(img);
     });
@@ -112,8 +110,7 @@ export class AdminBoardComponent implements OnInit {
         radius: 50,
         fill: this.selectedColor,
         left: 10,
-        top: 10,
-        opacity: 1,
+        top: 10
       })
     );
   }
@@ -125,7 +122,6 @@ export class AdminBoardComponent implements OnInit {
         width: 100,
         height: 100,
         fill: this.selectedColor,
-        opacity: 1,
         left: 10,
         top: 10,
       })
@@ -140,8 +136,7 @@ export class AdminBoardComponent implements OnInit {
         height: 80,
         fill: this.selectedColor,
         left: 10,
-        top: 10,
-        opacity: 1,
+        top: 10
       })
     );
   }
@@ -156,8 +151,7 @@ export class AdminBoardComponent implements OnInit {
         stroke: this.selectedColor,
         fontSize: 20,
         fontFamily: 'Verdana',
-        textAlign: 'center',
-        opacity: 1,
+        textAlign: 'center'
       })
     );
   }

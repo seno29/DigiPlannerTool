@@ -1,14 +1,18 @@
 .title{
+    color : #020403;
+    font-family: 'Raleway',sans-serif;
     font-size: xx-large;
     font-weight: bold;
     float: left;
     margin-top: 1%;
+    text-transform: capitalize;
+    letter-spacing: normal;
 }
 
 #canvas{
+    margin-top: 8px;
     border: 2px solid black;
-    border-radius: 10px;
-    
+    border-radius: 10px;    
 }
 
 .button-col{
@@ -62,26 +66,32 @@
     color: salmon;
 }
 
-.cornsilk{
-    background-color: cornsilk;
-}
-
-.aquamarine{
-    background-color: aquamarine;
-}
-
 .CornflowerBlue{
     background-color: CornflowerBlue;
 }
-
-.thistle{
-    background-color: thistle;
+.darkcyan{
+    background-color: darkcyan;
 }
 
+.mediumpurple{
+    background-color: mediumpurple;
+}
 .salmon{
     background-color: salmon;
 }
 
+.coral{
+    background-color: coral;
+}
+.gold{
+    background-color: gold;
+}
+
 .white{
     background-color: whitesmoke;
+}
+
+.redButton{
+  transition: all ease-in-out 0.2s;
+  cursor: pointer;
 }

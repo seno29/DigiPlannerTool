@@ -39,11 +39,11 @@
       <canvas id="canvas"></canvas>
         
         <div class="button-col">
-          <button mat-fab class="clearButton redButton but-col-right"  color = "warn" (click)="clear()" [disabled]="canvas.connect" >
+          <button mat-fab class="clearButton redButton but-col-right" title="Clear Screen" color = "warn" (click)="clear()" [disabled]="canvas.connect" >
             <mat-icon>layers_clear</mat-icon>
           </button>
           
-          <button mat-fab  class="redButton but-col-right"  color = "warn">
+          <button mat-fab  class="redButton but-col-right" title="Export" color = "warn">
             <mat-icon>cloud_download</mat-icon>
           </button>
         </div>

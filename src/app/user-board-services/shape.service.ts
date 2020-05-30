@@ -148,6 +148,7 @@ export class ShapeService {
               canvas.renderAll();
             });
             this.setBackground(canvas, roomData.base64);
+            console.log("Hiiiii");
           },
           (error) => {
             canvas.boardTitle = 'UserUI';

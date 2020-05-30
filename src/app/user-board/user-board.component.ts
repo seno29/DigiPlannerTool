@@ -28,6 +28,7 @@ export class UserBoardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.socketService.socket.connect();
     this.roomId =
       this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
     this.canvas = this.shapeService.initCanvas(this.roomId);
@@ -41,6 +42,7 @@ export class UserBoardComponent implements OnInit {
       this.canvas.selectedColor,
       this.roomId
     );
+    console.log(this.canvas);
   }
 
   addEllipse() {
@@ -82,5 +84,9 @@ export class UserBoardComponent implements OnInit {
 
   changeColor(color: string) {
     this.shapeService.changeColor(this.canvas, color, this.renderer);
+  }
+
+  ngOnDestroy(){
+    this.socketService.socket.disconnect();
   }
 }

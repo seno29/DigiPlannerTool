@@ -118,7 +118,10 @@ export class ShapeService {
       selectable: false,
     });
     this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer);
-    //text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas, renderer); });
+    text.on('editing:exited', () => { 
+      this.socketService.regr(text.text, this.constants.roomID);
+      this.groupService.regroup(shape, text, canvas, renderer); 
+    });
   }
 
   changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2) {
@@ -148,6 +151,7 @@ export class ShapeService {
               canvas.renderAll();
             });
             this.setBackground(canvas, roomData.base64);
+            console.log("Hiiiii");
           },
           (error) => {
             canvas.boardTitle = 'UserUI';

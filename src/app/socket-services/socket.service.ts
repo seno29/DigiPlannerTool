@@ -50,8 +50,8 @@ export class SocketService {
     //http save canvas
   }
 
-  regr(canvas: fabric.Canvas, id: string) {
-    this.socket.emit('regrouping', [canvas, id]);
+  regr(text: any, id: string) {
+    this.socket.emit('regrouping', [text, id]);
     //http save canvas
   }
 

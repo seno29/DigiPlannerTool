@@ -41,6 +41,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.canvas.selectedColor,
       this.constants.roomID
     );
+    console.log(this.canvas);
   }
 
   addEllipse() {

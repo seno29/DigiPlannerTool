@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
 import { GroupService } from '../user-board-services/group.service';
 import { ShapeService } from '../user-board-services/shape.service';
 import { fabric } from 'fabric';
@@ -75,35 +74,42 @@ export class UserSocketService {
     this.socketService.socket.on('regrouping', (h: any) => {
       document.getElementById('deleteBtn')?.remove();
 
-      const dummy = new fabric.Canvas();
-      dummy.loadFromJSON(h, dummy.renderAll.bind(dummy));
+      // const dummy = new fabric.Canvas();
+      // dummy.loadFromJSON(h, dummy.renderAll.bind(dummy));
       console.log('Regrouped');
       const gr = this.groupService.selectedGroup;
       const shape = gr._objects[0];
-      canvas.remove(gr._objects[1]);
-      let text;
-      let i = 0;
-      for (const obj of dummy._objects) {
-        if (obj.id === gr.id) {
-          text = obj;
-          break;
-        }
-        i++;
-      }
+      var text = gr._objects[1];
+      console.log(h);
+      console.log(text);
+      text.set('text', h);
+      console.log(text);
+      // let text;
+      // let i = 0;
+      // for (const obj of canvas._objects) {
+      //   if (obj.id === gr.id) {
+      //     text = obj;
+      //     break;
+      //   }
+      //   i++;
+      // }
       this.groupService.regroup(shape, text, canvas, renderer);
       console.log(canvas);
+      console.log(text);
     });
 
-    canvas.on('text:editing:exited', (options) => {
-      const gr = this.groupService.selectedGroup;
-      this.socketService.regr(canvas.toJSON(['id']), roomId);
-      this.groupService.regroup(
-        gr._objects[0],
-        gr._objects[1],
-        canvas,
-        renderer
-      );
-    });
+    // canvas.on('text:editing:exited', (options) => {
+    //   const gr = this.groupService.selectedGroup;
+    //   console.log(gr.text);
+    //   this.socketService.regr(gr.text, roomId);
+    //   this.groupService.regroup(
+    //     gr._objects[0],
+    //     gr._objects[1],
+    //     canvas,
+    //     renderer
+    //   );
+    //   console.log()
+    // });
 
     this.socketService.socket.on('clearCanvas', (can) => {
       canvas.clear();

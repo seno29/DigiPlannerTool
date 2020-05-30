@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
       if(user){
         this.userService.getUserType(user.email).subscribe((result) => {
-          if(result != undefined){
+          if(result != undefined && result != null){
             if(result.toString() === '1' && this.userType === 'admin' ) {
                 this.showSnackBar('Login Successful','cancel');
                 this.router.navigate(['/home']);
@@ -54,7 +54,11 @@ export class LoginComponent implements OnInit {
             } 
           }
         },
-        (err)=>{console.log('cannot get data from database');}
+        (err)=>{
+          console.log('cannot get data from database'); 
+          this.showSnackBar('user does not exist','cancel');
+          this.signOut();
+        }
         ); 
       }
     }).catch(error => {

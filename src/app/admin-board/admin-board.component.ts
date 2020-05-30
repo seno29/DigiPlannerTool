@@ -14,15 +14,16 @@ export class AdminBoardComponent implements OnInit {
   convertedCanvas;
 
   colors = [
-    'cornsilk',
-    'CornflowerBlue',
-    'aquamarine',
-    'thistle',
+    'aqua',
     'salmon',
-    'pink',
+    'magenta',
     'red',
     'blue',
     'lime',
+    'chocolate',
+    'CornflowerBlue',
+    'orange',
+    'olive'
   ];
 
   selectedColor: string;
@@ -43,7 +44,7 @@ export class AdminBoardComponent implements OnInit {
 
     this.canvas.setHeight(650);
     this.canvas.setWidth(1190);
-    this.selectedColor = 'cornsilk';
+    this.selectedColor = 'aqua';
 
     this.route.queryParams.subscribe((params) => {
       this.roomCode = params['roomCode'];
@@ -150,7 +151,7 @@ export class AdminBoardComponent implements OnInit {
         left: 5,
         stroke: this.selectedColor,
         fontSize: 20,
-        fontFamily: 'Quicksand',
+        fontFamily: 'Verdana',
         textAlign: 'center',
         opacity: 0.7,
       })

@@ -18,7 +18,8 @@ export class ShapeService {
     private socketService: SocketService
   ) {}
 
-  initCanvas(roomCode) {
+  initCanvas(roomCode){
+    this.image = null;
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
@@ -129,7 +130,7 @@ export class ShapeService {
       this.socketService.colorChange(
         group.id,
         color,
-        this.groupService.getRoomId()
+        this.constants.roomID
       );
       this.groupService.unGroup(group, canvas);
       shape.fill = color;

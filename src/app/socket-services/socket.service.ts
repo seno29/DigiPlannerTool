@@ -3,55 +3,62 @@ import { Socket } from 'ngx-socket-io';
 import { fabric } from 'fabric';
 
 @Injectable({ providedIn: 'root' })
-export class SocketService implements OnInit {
+export class SocketService {
   constructor(public socket: Socket) { }
 
-  ngOnInit() { }
-
-  sendCanvas(canvas: fabric.Canvas, id?: String) {
-    this.socket.emit('canvas', [canvas, id]);
-    //http save canvas
+  sendGroup(group: fabric.Group, id: string) {
+    this.socket.emit('groupAltered',
+      [{
+        id: group.id,
+        left: group.left,
+        top: group.top,
+        angle: group.angle,
+        scaleX: group.scaleX,
+        scaleY: group.scaleY
+      },
+        id]);
   }
 
-  somethingAdded(shape: String, color: String, id?: String) {
+  somethingAdded(shape: string, color: string, id: string) {
     this.socket.emit('addedObject', [shape, color, id]);
     //http save canvas
   }
 
-  somethingModified(canvas: fabric.Canvas, id?: String) {
+  somethingModified(canvas: fabric.Canvas, id: string) {
     console.log('modified');
     this.socket.emit('modifiedObject', [canvas, id]);
     //http save canvas
   }
 
-  clearCanvas(canvas: fabric.Canvas, id?: String) {
+  clearCanvas(canvas: fabric.Canvas, id: string) {
     this.socket.emit('clearCanvas', [canvas, id]);
     //http save canvas
   }
 
-  colorChange(data, color: String, id?: String) {
+  colorChange(data, color: string, id: string) {
     this.socket.emit('colorChange', [data, color, id]);
     //http save canvas
   }
 
-  joinRoom(id: String) {
+  joinRoom(id: string) {
     this.socket.emit('joinRoom', id);
     //http save canvas
   }
 
-  deleteGroup(data, id?: String) {
+  deleteGroup(data, id: string) {
     this.socket.emit('deleteGroup', [data, id]);
     //http save canvas
   }
 
-  regr(canvas: fabric.Canvas, id?: String) {
+  regr(canvas: fabric.Canvas, id: string) {
     this.socket.emit('regrouping', [canvas, id]);
     //http save canvas
   }
 
   drawLines(can: any) {
-    let arr = [can.f, can.s, can.roomId];
+    const arr = [can.f, can.s, can.roomId];
     this.socket.emit('drawingLines', arr);
     //http save canvas
   }
 }
+

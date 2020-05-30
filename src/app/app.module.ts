@@ -19,10 +19,10 @@ import { JoinRoomDialogComponent } from './join-room-dialog/join-room-dialog.com
 import { ViewBoardsComponent } from './view-boards/view-boards.component';
 import { CreateBoardDialogComponent } from './create-board-dialog/create-board-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { clientId } from './constants';
 
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 const config = new AuthServiceConfig([
   {
@@ -31,10 +31,7 @@ const config = new AuthServiceConfig([
   },
 ]);
 
-const socketConfig: SocketIoConfig = {
-  url: 'http://localhost:4200',
-  options: {},
-};
+const socketConfig: SocketIoConfig = { url: 'http://localhost:4200', options: {} };
 
 export function provideConfig() {
   return config;
@@ -59,7 +56,8 @@ export function provideConfig() {
     BrowserAnimationsModule,
     MatModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    SocketIoModule.forRoot(socketConfig),
   ],
   entryComponents: [
     JoinRoomDialogComponent,

@@ -5,7 +5,6 @@ import { ShapeService } from '../user-board-services/shape.service';
 import { ConstantsService } from '../user-board-services/constants.service';
 import { SocketService } from '../socket-services/socket.service';
 import { UserSocketService } from '../socket-services/user-socket.service';
-import { GroupService } from '../user-board-services/group.service';
 
 @Component({
   selector: 'app-user-board',
@@ -23,7 +22,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     public constants: ConstantsService,
     private socketService: SocketService,
     private userSocketService: UserSocketService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.socketService.socket.connect();
@@ -32,7 +31,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     this.socketService.socket.disconnect();
   }
 
@@ -80,6 +79,17 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.canvas.connect = true;
       this.canvas.connectButtonText = this.constants.disconnectText;
     }
+  }
+
+  exportAsImage(canvasContent) {
+    let image = canvasContent
+      .toDataURL('image/jpg', 1.0)
+      .replace('image/jpg', 'image/octet-stream');
+    let link = document.createElement('a');
+    link.download = 'board-image.jpg';
+    link.href = image;
+    console.log(image);
+    link.click();
   }
 
   changeColor(color: string) {

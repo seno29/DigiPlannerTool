@@ -20,16 +20,16 @@ export class UserSocketService {
 
     this.socketService.socket.on('groupAltered', (data) => {
       document.getElementById('deleteBtn')?.remove();
-      for (const obj of canvas.getObjects()){
-        if (obj instanceof fabric.Group){
+      for (const obj of canvas.getObjects()) {
+        if (obj instanceof fabric.Group) {
           console.log('groupRecieved');
-          if (obj.id === data.id){
+          if (obj.id === data.id) {
             console.log('groupSet');
             obj.left = data.left;
             obj.top = data.top;
             obj.scaleX = data.scaleX,
-            obj.scaleY = data.scaleY,
-            obj.angle = data.angle || 0;
+              obj.scaleY = data.scaleY,
+              obj.angle = data.angle || 0;
             this.groupService.moveLines(obj);
             obj.setCoords();
             canvas.renderAll();

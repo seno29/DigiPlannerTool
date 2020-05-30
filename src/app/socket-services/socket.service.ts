@@ -6,7 +6,7 @@ import { fabric } from 'fabric';
 export class SocketService {
   constructor(public socket: Socket) { }
 
-  sendGroup(group: fabric.Group, id: string){
+  sendGroup(group: fabric.Group, id: string) {
     this.socket.emit('groupAltered',
       [{
         id: group.id,
@@ -16,7 +16,7 @@ export class SocketService {
         scaleX: group.scaleX,
         scaleY: group.scaleY
       },
-      id]);
+        id]);
   }
 
   somethingAdded(shape: string, color: string, id: string) {

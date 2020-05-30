@@ -9,7 +9,7 @@ export class UserDatabaseService {
   constructor(private http: HttpClient, private constants: ConstantsService) { }
 
   getRoomData(code: string): Observable<RoomData> {
-    return this.http.get(`${this.constants.URI}/drawing/${code}`) as Observable<RoomData>;
+    return this.http.get(`${this.constants.URI}/drawingUserView/${code}`) as Observable<RoomData>;
   }
 }
 

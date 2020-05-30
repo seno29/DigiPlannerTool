@@ -72,43 +72,15 @@ export class UserSocketService {
 
     this.socketService.socket.on('regrouping', (h: any) => {
       document.getElementById('deleteBtn')?.remove();
-
-      // const dummy = new fabric.Canvas();
-      // dummy.loadFromJSON(h, dummy.renderAll.bind(dummy));
       console.log('Regrouped');
       const gr = this.groupService.selectedGroup;
       const shape = gr._objects[0];
       var text = gr._objects[1];
-      console.log(h);
-      console.log(text);
       text.set('text', h);
-      console.log(text);
-      // let text;
-      // let i = 0;
-      // for (const obj of canvas._objects) {
-      //   if (obj.id === gr.id) {
-      //     text = obj;
-      //     break;
-      //   }
-      //   i++;
-      // }
       this.groupService.regroup(shape, text, canvas, renderer);
       console.log(canvas);
       console.log(text);
     });
-
-    // canvas.on('text:editing:exited', (options) => {
-    //   const gr = this.groupService.selectedGroup;
-    //   console.log(gr.text);
-    //   this.socketService.regr(gr.text, roomId);
-    //   this.groupService.regroup(
-    //     gr._objects[0],
-    //     gr._objects[1],
-    //     canvas,
-    //     renderer
-    //   );
-    //   console.log()
-    // });
 
     this.socketService.socket.on('clearCanvas', (can) => {
       canvas.clear();
@@ -117,7 +89,6 @@ export class UserSocketService {
     });
 
     this.socketService.socket.on('colorChange', (data) => {
-      // canvas.selectedColor = data.color;
       let gr;
       for (const ob of canvas._objects) {
         if (ob.id === data[0]) {
@@ -144,8 +115,6 @@ export class UserSocketService {
     });
 
     this.socketService.socket.on('drawingLines', (data: any) => {
-      // console.log(h.f);
-      // console.log(h.s);
       const h = {
         f: data[0],
         s: data[1],

@@ -24,10 +24,8 @@ export class AdminBoardService {
       base64 : this.base64,
     };
 
-    this.http.put('http://localhost:4200/drawing/'+this.roomCode,post,{responseType:'text'})
-          .subscribe(responseData=>{
-              alert(responseData+' No errors Data sent successfully');
-          });
+    return this.http.put('http://localhost:4200/drawing/'+this.roomCode,post,{responseType:'text'})
+
   }
 }
 

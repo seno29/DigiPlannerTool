@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { AdminBoardService } from '../admin-board services/admin-board.service';
 import { ActivatedRoute } from '@angular/router';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-admin-board',
@@ -33,7 +34,8 @@ export class AdminBoardComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private adminBoardService: AdminBoardService
+    private adminBoardService: AdminBoardService,
+    private location:Location
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +58,12 @@ export class AdminBoardComponent implements OnInit {
 
   exportJsonAdmin() {
     this.convertedCanvas = this.canvas.toDataURL();
-    this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode);
+    this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode)
+        .subscribe(responseData=>{
+            alert(responseData+' No errors Data sent successfully');
+        });
+
+    this.location.back();
   }
 
   togglePen() {

@@ -26,7 +26,7 @@ export class UserBoardComponent implements OnInit {
     private socketService: SocketService,
     private userSocketService: UserSocketService,
     private groupService: GroupService,
-    private snackBar:MatSnackBar,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +71,6 @@ export class UserBoardComponent implements OnInit {
       duration: 3000,
     });
     snackBarRef.onAction().subscribe(() => {
-      console.log('triggered');
       this.clear();
     });
   }
@@ -107,5 +106,4 @@ export class UserBoardComponent implements OnInit {
       link.click();
     }
   }
-  
 }

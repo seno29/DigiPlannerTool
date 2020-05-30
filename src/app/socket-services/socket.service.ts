@@ -24,9 +24,9 @@ export class SocketService {
     //http save canvas
   }
 
-  somethingModified(canvas: fabric.Canvas, id: string) {
+  somethingModified(groupId: any, id: string) {
     console.log('modified');
-    this.socket.emit('modifiedObject', [canvas, id]);
+    this.socket.emit('modifiedObject', [groupId, id]);
     //http save canvas
   }
 
@@ -50,8 +50,8 @@ export class SocketService {
     //http save canvas
   }
 
-  regr(canvas: fabric.Canvas, id: string) {
-    this.socket.emit('regrouping', [canvas, id]);
+  regr(text: any, id: string) {
+    this.socket.emit('regrouping', [text, id]);
     //http save canvas
   }
 

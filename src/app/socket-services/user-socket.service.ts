@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
 import { GroupService } from '../user-board-services/group.service';
 import { ShapeService } from '../user-board-services/shape.service';
 import { fabric } from 'fabric';
@@ -11,7 +10,6 @@ import { SocketService } from './socket.service';
 export class UserSocketService {
   roomId;
   constructor(
-    private socket: Socket,
     private groupService: GroupService,
     private shapeService: ShapeService,
     private socketService: SocketService
@@ -20,7 +18,7 @@ export class UserSocketService {
     this.roomId = roomId;
     this.socketService.joinRoom(this.roomId);
 
-    this.socket.on('groupAltered', (data) => {
+    this.socketService.socket.on('groupAltered', (data) => {
       document.getElementById('deleteBtn')?.remove();
       for (const obj of canvas.getObjects()){
         if (obj instanceof fabric.Group){
@@ -40,7 +38,7 @@ export class UserSocketService {
       }
     });
 
-    this.socket.on('addedObject', (data) => {
+    this.socketService.socket.on('addedObject', (data) => {
       console.log('obj added');
       console.log(data);
       if (data[0] === 'rect') {
@@ -52,7 +50,7 @@ export class UserSocketService {
       }
     });
 
-    this.socket.on('modifiedObject', (h) => {
+    this.socketService.socket.on('modifiedObject', (h) => {
       document.getElementById('deleteBtn')?.remove();
 
       console.log('obj modified');
@@ -72,46 +70,53 @@ export class UserSocketService {
       text.selectAll();
     });
 
-    this.socket.on('regrouping', (h: any) => {
+    this.socketService.socket.on('regrouping', (h: any) => {
       document.getElementById('deleteBtn')?.remove();
 
-      const dummy = new fabric.Canvas();
-      dummy.loadFromJSON(h, dummy.renderAll.bind(dummy));
+      // const dummy = new fabric.Canvas();
+      // dummy.loadFromJSON(h, dummy.renderAll.bind(dummy));
       console.log('Regrouped');
       const gr = this.groupService.selectedGroup;
       const shape = gr._objects[0];
-      canvas.remove(gr._objects[1]);
-      let text;
-      let i = 0;
-      for (const obj of dummy._objects) {
-        if (obj.id === gr.id) {
-          text = obj;
-          break;
-        }
-        i++;
-      }
+      var text = gr._objects[1];
+      console.log(h);
+      console.log(text);
+      text.set('text', h);
+      console.log(text);
+      // let text;
+      // let i = 0;
+      // for (const obj of canvas._objects) {
+      //   if (obj.id === gr.id) {
+      //     text = obj;
+      //     break;
+      //   }
+      //   i++;
+      // }
       this.groupService.regroup(shape, text, canvas, renderer);
       console.log(canvas);
+      console.log(text);
     });
 
-    canvas.on('text:editing:exited', (options) => {
-      const gr = this.groupService.selectedGroup;
-      this.socketService.regr(canvas.toJSON(['id']), roomId);
-      this.groupService.regroup(
-        gr._objects[0],
-        gr._objects[1],
-        canvas,
-        renderer
-      );
-    });
+    // canvas.on('text:editing:exited', (options) => {
+    //   const gr = this.groupService.selectedGroup;
+    //   console.log(gr.text);
+    //   this.socketService.regr(gr.text, roomId);
+    //   this.groupService.regroup(
+    //     gr._objects[0],
+    //     gr._objects[1],
+    //     canvas,
+    //     renderer
+    //   );
+    //   console.log()
+    // });
 
-    this.socket.on('clearCanvas', (can) => {
+    this.socketService.socket.on('clearCanvas', (can) => {
       canvas.clear();
       this.shapeService.setBackground(canvas, 'assets');
       document.getElementById('deleteBtn')?.remove();
     });
 
-    this.socket.on('colorChange', (data) => {
+    this.socketService.socket.on('colorChange', (data) => {
       // canvas.selectedColor = data.color;
       let gr;
       for (const ob of canvas._objects) {
@@ -127,7 +132,7 @@ export class UserSocketService {
       this.groupService.regroup(shape, text, canvas, renderer);
     });
 
-    this.socket.on('deleteGroup', (data) => {
+    this.socketService.socket.on('deleteGroup', (data) => {
       let gr;
       for (const ob of canvas._objects) {
         if (ob.id === data) {
@@ -138,7 +143,7 @@ export class UserSocketService {
       this.groupService.delete(canvas, gr);
     });
 
-    this.socket.on('drawingLines', (data: any) => {
+    this.socketService.socket.on('drawingLines', (data: any) => {
       // console.log(h.f);
       // console.log(h.s);
       const h = {

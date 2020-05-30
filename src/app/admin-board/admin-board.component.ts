@@ -56,9 +56,9 @@ export class AdminBoardComponent implements OnInit {
   exportJsonAdmin() {
     this.convertedCanvas = this.canvas.toDataURL();
     this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode)
-        .subscribe(responseData=>{
-            alert(responseData+' No errors Data sent successfully');
-        });
+      .subscribe(responseData=>{
+        alert(responseData+' No errors Data sent successfully');
+      });
 
     this.location.back();
   }

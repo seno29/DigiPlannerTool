@@ -10,6 +10,7 @@ import { BoardService } from '../board.service';
 export class JoinRoomDialogComponent implements OnInit {
   isexist:boolean = true;
   emptyRoomCode:boolean = true;
+  message:string='';
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
     public dialogRef:MatDialogRef<JoinRoomDialogComponent>,
     private boardService:BoardService) {
@@ -27,10 +28,24 @@ export class JoinRoomDialogComponent implements OnInit {
     if(roomcode && roomcode.length>=4){
       this.boardService.isExist(roomcode).subscribe((result) => {
         console.log(result);
-        this.isexist = result;
+        if(result.toString() === 'true'){
+          this.isexist = true;
+        }else if(result.toString() === 'false'){
+          this.isexist = false;
+          this.message = 'room does not exist';
+        }else{
+          this.isexist = false;
+          this.message = 'you cannot join this room yet';
+        }
         this.emptyRoomCode = false;
-      });
+      },
+      (err) => {
+        this.isexist = false;
+        this.message = 'you cannot join this room yet';
+      }  
+      );
     }else{
+      this.isexist = true;
       this.emptyRoomCode=true;
     }
   }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { AdminBoardService } from '../admin-board services/admin-board.service';
 import { ActivatedRoute } from '@angular/router';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-admin-board',

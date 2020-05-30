@@ -5,6 +5,9 @@ import { ShapeService } from '../user-board-services/shape.service';
 import { ConstantsService } from '../user-board-services/constants.service';
 import { SocketService } from '../socket-services/socket.service';
 import { UserSocketService } from '../socket-services/user-socket.service';
+import { AuthService, SocialUser } from 'angularx-social-login';
+import { GroupService } from '../user-board-services/group.service';
+
 
 @Component({
   selector: 'app-user-board',
@@ -17,11 +20,13 @@ export class UserBoardComponent implements OnInit, OnDestroy {
 
   constructor(
     private shapeService: ShapeService,
+    private groupService: GroupService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
     public constants: ConstantsService,
     private socketService: SocketService,
     private userSocketService: UserSocketService,
+    private authService:AuthService
   ) { }
 
   ngOnInit(): void {
@@ -29,6 +34,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
     this.canvas = this.shapeService.initCanvas(this.constants.roomID);
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
+    this.authService.authState.subscribe((user) => {
+      this.groupService.currentUser = user;
+    }); 
   }
 
   ngOnDestroy(): void {

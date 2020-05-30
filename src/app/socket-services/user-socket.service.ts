@@ -3,6 +3,7 @@ import { GroupService } from '../user-board-services/group.service';
 import { ShapeService } from '../user-board-services/shape.service';
 import { fabric } from 'fabric';
 import { SocketService } from './socket.service';
+import { computeMsgId } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +27,9 @@ export class UserSocketService {
           if (obj.id === data.id) {
             obj.left = data.left;
             obj.top = data.top;
-            obj.scaleX = data.scaleX,
-              obj.scaleY = data.scaleY,
-              obj.angle = data.angle || 0;
+            obj.scaleX = data.scaleX;
+            obj.scaleY = data.scaleY;
+            obj.angle = data.angle || 0;
             this.groupService.moveLines(obj);
             obj.setCoords();
             canvas.renderAll();
@@ -49,7 +50,8 @@ export class UserSocketService {
       }
     });
 
-    this.socketService.socket.on('modifiedObject', (h) => {
+    this.socketService.socket.on('modifiedObject', (data) => {
+      let h=data[0];
       document.getElementById('deleteBtn')?.remove();
 
       console.log('obj modified');
@@ -60,7 +62,14 @@ export class UserSocketService {
           break;
         }
       }
+      const shape=gr._objects[0];
       const text = gr._objects[1];
+      text.fill="#7f8c8d";
+      text.fontStyle="italic";
+      shape.set("opacity",0.7);
+      console.log(text);
+      console.log(shape);
+      text.set('text',`${data[1].firstName} is editing this...`);
       this.groupService.unGroup(gr, canvas);
       text.lockMovementX = false;
       text.lockMovementY = false;
@@ -72,7 +81,11 @@ export class UserSocketService {
       const gr = this.groupService.selectedGroup;
       const shape = gr._objects[0];
       const text = gr._objects[1];
-      text.set('text', h);
+      text.fill="#333";
+      text.fontStyle="normal";
+      console.log(h);
+      text.set("text",h);
+      shape.set("opacity",1);
       this.groupService.regroup(shape, text, canvas, renderer);
       console.log(canvas);
       console.log(text);

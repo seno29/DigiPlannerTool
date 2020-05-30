@@ -24,9 +24,9 @@ export class SocketService {
     //http save canvas
   }
 
-  somethingModified(groupId: any, id: string) {
+  somethingModified(groupId: any,currentUser,id: string,) {
     console.log('modified');
-    this.socket.emit('modifiedObject', [groupId, id]);
+    this.socket.emit('modifiedObject', [groupId,currentUser, id]);
     //http save canvas
   }
 

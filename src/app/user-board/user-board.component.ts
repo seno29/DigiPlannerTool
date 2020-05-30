@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
 import { fabric } from 'fabric';
 import { ActivatedRoute } from '@angular/router';
 import { ShapeService } from '../user-board-services/shape.service';
@@ -12,9 +12,8 @@ import { GroupService } from '../user-board-services/group.service';
   templateUrl: './user-board.component.html',
   styleUrls: ['./user-board.component.css'],
 })
-export class UserBoardComponent implements OnInit {
+export class UserBoardComponent implements OnInit, OnDestroy {
   canvas: fabric.Canvas;
-  roomId: string;
   boardTitle: string;
 
   constructor(
@@ -24,23 +23,24 @@ export class UserBoardComponent implements OnInit {
     public constants: ConstantsService,
     private socketService: SocketService,
     private userSocketService: UserSocketService,
-    private groupService: GroupService
   ) {}
 
   ngOnInit(): void {
     this.socketService.socket.connect();
-    this.roomId =
-      this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
-    this.canvas = this.shapeService.initCanvas(this.roomId);
-    this.userSocketService.init(this.canvas, this.renderer, this.roomId);
-    this.groupService.setRoomId(this.roomId);
+    this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
+    this.canvas = this.shapeService.initCanvas(this.constants.roomID);
+    this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
+  }
+
+  ngOnDestroy(): void{
+    this.socketService.socket.disconnect();
   }
 
   addObj(shape) {
     this.socketService.somethingAdded(
       shape,
       this.canvas.selectedColor,
-      this.roomId
+      this.constants.roomID
     );
     console.log(this.canvas);
   }
@@ -64,7 +64,7 @@ export class UserBoardComponent implements OnInit {
     if (confirm('Do you want to clear?')) {
       this.canvas.clear();
       this.shapeService.setBackground(this.canvas, 'assets');
-      this.socketService.clearCanvas(this.canvas, this.roomId);
+      this.socketService.clearCanvas(this.canvas, this.constants.roomID);
       document.getElementById('deleteBtn')?.remove();
     }
   }
@@ -84,9 +84,5 @@ export class UserBoardComponent implements OnInit {
 
   changeColor(color: string) {
     this.shapeService.changeColor(this.canvas, color, this.renderer);
-  }
-
-  ngOnDestroy(){
-    this.socketService.socket.disconnect();
   }
 }

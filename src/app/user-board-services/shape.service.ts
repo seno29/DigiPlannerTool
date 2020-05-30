@@ -130,7 +130,7 @@ export class ShapeService {
       this.socketService.colorChange(
         group.id,
         color,
-        this.groupService.getRoomId()
+        this.constants.roomID
       );
       this.groupService.unGroup(group, canvas);
       shape.fill = color;

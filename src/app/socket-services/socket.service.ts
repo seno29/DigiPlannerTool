@@ -24,9 +24,9 @@ export class SocketService {
     //http save canvas
   }
 
-  somethingModified(canvas: fabric.Canvas, id: string) {
+  somethingModified(groupId: any, id: string) {
     console.log('modified');
-    this.socket.emit('modifiedObject', [canvas, id]);
+    this.socket.emit('modifiedObject', [groupId, id]);
     //http save canvas
   }
 

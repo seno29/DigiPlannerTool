@@ -11,7 +11,6 @@ import { SocketService } from './socket.service';
 export class UserSocketService {
   roomId;
   constructor(
-    private socket: Socket,
     private groupService: GroupService,
     private shapeService: ShapeService,
     private socketService: SocketService
@@ -20,18 +19,18 @@ export class UserSocketService {
     this.roomId = roomId;
     this.socketService.joinRoom(this.roomId);
 
-    this.socket.on('groupAltered', (data) => {
+    this.socketService.socket.on('groupAltered', (data) => {
       document.getElementById('deleteBtn')?.remove();
-      for (const obj of canvas.getObjects()){
-        if (obj instanceof fabric.Group){
+      for (const obj of canvas.getObjects()) {
+        if (obj instanceof fabric.Group) {
           console.log('groupRecieved');
-          if (obj.id === data.id){
+          if (obj.id === data.id) {
             console.log('groupSet');
             obj.left = data.left;
             obj.top = data.top;
             obj.scaleX = data.scaleX,
-            obj.scaleY = data.scaleY,
-            obj.angle = data.angle || 0;
+              obj.scaleY = data.scaleY,
+              obj.angle = data.angle || 0;
             this.groupService.moveLines(obj);
             obj.setCoords();
             canvas.renderAll();
@@ -40,7 +39,7 @@ export class UserSocketService {
       }
     });
 
-    this.socket.on('addedObject', (data) => {
+    this.socketService.socket.on('addedObject', (data) => {
       console.log('obj added');
       console.log(data);
       if (data[0] === 'rect') {
@@ -52,7 +51,7 @@ export class UserSocketService {
       }
     });
 
-    this.socket.on('modifiedObject', (h) => {
+    this.socketService.socket.on('modifiedObject', (h) => {
       document.getElementById('deleteBtn')?.remove();
 
       console.log('obj modified');
@@ -72,7 +71,7 @@ export class UserSocketService {
       text.selectAll();
     });
 
-    this.socket.on('regrouping', (h: any) => {
+    this.socketService.socket.on('regrouping', (h: any) => {
       document.getElementById('deleteBtn')?.remove();
 
       const dummy = new fabric.Canvas();
@@ -105,13 +104,13 @@ export class UserSocketService {
       );
     });
 
-    this.socket.on('clearCanvas', (can) => {
+    this.socketService.socket.on('clearCanvas', (can) => {
       canvas.clear();
       this.shapeService.setBackground(canvas, 'assets');
       document.getElementById('deleteBtn')?.remove();
     });
 
-    this.socket.on('colorChange', (data) => {
+    this.socketService.socket.on('colorChange', (data) => {
       // canvas.selectedColor = data.color;
       let gr;
       for (const ob of canvas._objects) {
@@ -127,7 +126,7 @@ export class UserSocketService {
       this.groupService.regroup(shape, text, canvas, renderer);
     });
 
-    this.socket.on('deleteGroup', (data) => {
+    this.socketService.socket.on('deleteGroup', (data) => {
       let gr;
       for (const ob of canvas._objects) {
         if (ob.id === data) {
@@ -138,7 +137,7 @@ export class UserSocketService {
       this.groupService.delete(canvas, gr);
     });
 
-    this.socket.on('drawingLines', (data: any) => {
+    this.socketService.socket.on('drawingLines', (data: any) => {
       // console.log(h.f);
       // console.log(h.s);
       const h = {

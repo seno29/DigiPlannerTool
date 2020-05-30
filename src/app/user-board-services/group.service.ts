@@ -25,7 +25,8 @@ export class GroupService {
   }
 
   createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas, x: number, y: number,
-    connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>, renderer: Renderer2) {
+    connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>, 
+    renderer: Renderer2, groupID: number) {
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
       left: x,
@@ -33,10 +34,16 @@ export class GroupService {
       connections,
       isEditable: true,
     });
-    group.id = this.givingId;
-    text.id = this.givingId;
+    if (groupID === -1){
+      group.id = this.givingId;
+      text.id = this.givingId;
+      this.givingId += 1;
+    }
+    else{
+      group.id = this.selectedGroup.id;
+      text.id = this.selectedGroup.id;
+    }
     group.type = 'group';
-    this.givingId += 1;
     group.setControlsVisibility(this.constants.HideControls);
     this.addEventListeners(canvas, group, renderer);
     canvas.add(group);
@@ -78,7 +85,8 @@ export class GroupService {
       groupCoord.x,
       groupCoord.y,
       this.selectedGroup.connections,
-      renderer
+      renderer,
+      this.selectedGroup.id
     );
   }
 

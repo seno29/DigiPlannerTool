@@ -25,7 +25,7 @@ export class UserBoardComponent implements OnInit {
     private socketService: SocketService,
     private userSocketService: UserSocketService,
     private groupService: GroupService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.roomId =
@@ -78,6 +78,17 @@ export class UserBoardComponent implements OnInit {
       this.canvas.connect = true;
       this.canvas.connectButtonText = this.constants.disconnectText;
     }
+  }
+
+  exportAsImage(canvasContent) {
+    let image = canvasContent
+      .toDataURL('image/jpg', 1.0)
+      .replace('image/jpg', 'image/octet-stream');
+    let link = document.createElement('a');
+    link.download = 'board-image.jpg';
+    link.href = image;
+    console.log(image);
+    link.click();
   }
 
   changeColor(color: string) {

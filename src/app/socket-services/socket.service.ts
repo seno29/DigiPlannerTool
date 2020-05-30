@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { fabric } from 'fabric';
 
-// @Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: 'root' })
 export class SocketService implements OnInit {
   constructor(public socket: Socket) { }
 

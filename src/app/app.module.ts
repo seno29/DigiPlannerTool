@@ -7,11 +7,11 @@ import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { UserBoardComponent } from './user-board/user-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {ShapeService } from './user-board-services/shape.service';
+import { ShapeService } from './user-board-services/shape.service';
 import { MatModule } from './material.module';
 
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider} from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
 
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
@@ -22,12 +22,19 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { clientId } from './constants';
 
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
 const config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider(clientId)
   },
 ]);
+
+const socketConfig: SocketIoConfig = {
+  url: 'http://localhost:4200',
+  options: {},
+};
 
 export function provideConfig() {
   return config;

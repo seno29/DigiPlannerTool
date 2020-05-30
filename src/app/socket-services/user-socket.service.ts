@@ -14,6 +14,7 @@ export class UserSocketService {
     private shapeService: ShapeService,
     private socketService: SocketService
   ) { }
+
   init(canvas, renderer, roomId) {
     this.roomId = roomId;
     this.socketService.joinRoom(this.roomId);
@@ -22,10 +23,7 @@ export class UserSocketService {
       document.getElementById('deleteBtn')?.remove();
       for (const obj of canvas.getObjects()) {
         if (obj instanceof fabric.Group) {
-          console.log('groupRecieved');
           if (obj.id === data.id) {
-            console.log('groupSet');
-            console.log(obj);
             obj.left = data.left;
             obj.top = data.top;
             obj.scaleX = data.scaleX,
@@ -64,35 +62,17 @@ export class UserSocketService {
       }
       const text = gr._objects[1];
       this.groupService.unGroup(gr, canvas);
-      // canvas.setActiveObject(text);
       text.lockMovementX = false;
       text.lockMovementY = false;
-      // text.enterEditing();
-      // text.selectAll();
     });
 
     this.socketService.socket.on('regrouping', (h: any) => {
       document.getElementById('deleteBtn')?.remove();
-
-      // const dummy = new fabric.Canvas();
-      // dummy.loadFromJSON(h, dummy.renderAll.bind(dummy));
       console.log('Regrouped');
       const gr = this.groupService.selectedGroup;
       const shape = gr._objects[0];
-      var text = gr._objects[1];
-      console.log(h);
-      console.log(text);
+      const text = gr._objects[1];
       text.set('text', h);
-      console.log(text);
-      // let text;
-      // let i = 0;
-      // for (const obj of canvas._objects) {
-      //   if (obj.id === gr.id) {
-      //     text = obj;
-      //     break;
-      //   }
-      //   i++;
-      // }
       this.groupService.regroup(shape, text, canvas, renderer);
       console.log(canvas);
       console.log(text);
@@ -105,7 +85,6 @@ export class UserSocketService {
     });
 
     this.socketService.socket.on('colorChange', (data) => {
-      // canvas.selectedColor = data.color;
       let gr;
       for (const ob of canvas._objects) {
         if (ob.id === data[0]) {
@@ -132,8 +111,6 @@ export class UserSocketService {
     });
 
     this.socketService.socket.on('drawingLines', (data: any) => {
-      // console.log(h.f);
-      // console.log(h.s);
       const h = {
         f: data[0],
         s: data[1],

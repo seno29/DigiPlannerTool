@@ -117,7 +117,7 @@ export class ShapeService {
       left: 0,
       selectable: false,
     });
-    this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer);
+    this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer, -1);
     text.on('editing:exited', () => { 
       this.socketService.regr(text.text, this.constants.roomID);
       this.groupService.regroup(shape, text, canvas, renderer); 

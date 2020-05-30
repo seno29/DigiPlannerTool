@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
       if(user){
         this.userService.getUserType(user.email).subscribe((result) => {
-          if(result != undefined && result != null){
+          if(result != undefined){
             if(result.toString() === '1' && this.userType === 'admin' ) {
                 this.showSnackBar('Login Successful','cancel');
                 this.router.navigate(['/home']);

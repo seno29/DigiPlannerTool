@@ -41,7 +41,6 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.canvas.selectedColor,
       this.constants.roomID
     );
-    console.log(this.canvas);
   }
 
   addEllipse() {
@@ -82,13 +81,20 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   }
 
   exportAsImage(canvasContent) {
-    let image = canvasContent
-      .toDataURL('image/jpg', 1.0)
-      .replace('image/jpg', 'image/octet-stream');
-    let link = document.createElement('a');
-    link.download = 'board-image.jpg';
-    link.href = image;
-    link.click();
+    // for IE, Edge
+    if (canvasContent.msToBlob) {
+      var blob = canvasContent.msToBlob();
+      window.navigator.msSaveBlob(blob, 'board-image.png');
+    } else {
+      //other browsers
+      let image = canvasContent
+        .toDataURL('image/png', 1.0)
+        .replace('image/png', 'image/octet-stream');
+      let link = document.createElement('a');
+      link.download = 'board-image.png';
+      link.href = image;
+      link.click();
+    }
   }
 
   changeColor(color: string) {

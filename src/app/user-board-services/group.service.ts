@@ -10,7 +10,7 @@ import { SocketService } from '../socket-services/socket.service';
 export class GroupService {
   selectedGroup: fabric.Group;
   givingId;
-  constructor( private scalingService: ScalingService, private constants: ConstantsService, private socketService: SocketService){
+  constructor(private scalingService: ScalingService, private constants: ConstantsService, private socketService: SocketService) {
     this.givingId = 0;
   }
 
@@ -24,8 +24,8 @@ export class GroupService {
     });
   }
 
-  createGroup( shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas, x: number, y: number,
-               connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>, renderer: Renderer2) {
+  createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas, x: number, y: number,
+    connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>, renderer: Renderer2) {
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
       left: x,
@@ -40,7 +40,6 @@ export class GroupService {
     group.setControlsVisibility(this.constants.HideControls);
     this.addEventListeners(canvas, group, renderer);
     canvas.add(group);
-    canvas.setActiveObject(group);
   }
 
   doubleClickEvent(obj, handler) {
@@ -67,8 +66,8 @@ export class GroupService {
     canvas.renderAll();
   }
 
-  regroup( shape: fabric.Object, text: fabric.IText,
-           canvas: fabric.Canvas, renderer: Renderer2){
+  regroup(shape: fabric.Object, text: fabric.IText,
+    canvas: fabric.Canvas, renderer: Renderer2) {
     canvas.remove(shape);
     canvas.remove(text);
     const groupCoord = this.selectedGroup.getPointByOrigin(0, 0);
@@ -140,7 +139,7 @@ export class GroupService {
     canvas.renderAll();
   }
 
-  addDeleteBtn( x: number, y: number, canvas: fabric.Canvas, renderer: Renderer2){
+  addDeleteBtn(x: number, y: number, canvas: fabric.Canvas, renderer: Renderer2) {
     document.getElementById('deleteBtn')?.remove();
     const btnLeft = x - 10;
     const btnTop = y - 10;
@@ -153,13 +152,13 @@ export class GroupService {
     cursor:pointer;
     width:20px;
     height:20px;`;
-    renderer.appendChild( document.getElementsByClassName('canvas-container')[0], delteBtn);
+    renderer.appendChild(document.getElementsByClassName('canvas-container')[0], delteBtn);
     document.getElementById('deleteBtn').addEventListener('click', (event) => {
       this.delete(canvas);
     });
   }
 
-  addEventListeners( canvas: fabric.Canvas, group: fabric.Group, renderer: Renderer2) {
+  addEventListeners(canvas: fabric.Canvas, group: fabric.Group, renderer: Renderer2) {
     group.on('selected', (e) => {
       this.addDeleteBtn(
         group.oCoords.tr.x,

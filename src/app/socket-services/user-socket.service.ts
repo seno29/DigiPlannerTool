@@ -47,7 +47,7 @@ export class UserSocketService {
       } else if (data[0] === 'ellipse') {
         this.shapeService.addEllipse(canvas, renderer, data[1]);
       } else {
-        // this.shapeService.addImage(this.canvas, '', this.renderer);
+        this.shapeService.addImage(canvas, '', renderer);
       }
     });
 
@@ -64,11 +64,11 @@ export class UserSocketService {
       }
       const text = gr._objects[1];
       this.groupService.unGroup(gr, canvas);
-      canvas.setActiveObject(text);
+      // canvas.setActiveObject(text);
       text.lockMovementX = false;
       text.lockMovementY = false;
       // text.enterEditing();
-      text.selectAll();
+      // text.selectAll();
     });
 
     this.socketService.socket.on('regrouping', (h: any) => {
@@ -97,19 +97,6 @@ export class UserSocketService {
       console.log(canvas);
       console.log(text);
     });
-
-    // canvas.on('text:editing:exited', (options) => {
-    //   const gr = this.groupService.selectedGroup;
-    //   console.log(gr.text);
-    //   this.socketService.regr(gr.text, roomId);
-    //   this.groupService.regroup(
-    //     gr._objects[0],
-    //     gr._objects[1],
-    //     canvas,
-    //     renderer
-    //   );
-    //   console.log()
-    // });
 
     this.socketService.socket.on('clearCanvas', (can) => {
       canvas.clear();

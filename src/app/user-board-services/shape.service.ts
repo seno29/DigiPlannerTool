@@ -46,7 +46,7 @@ export class ShapeService {
         this.image = new fabric.Image(imageEle, {
           width: canvas.width,
           height: canvas.height,
-          opacity: 0.4,
+          opacity: 0.7,
         });
         canvas.setBackgroundImage(this.image);
         canvas.renderAll();
@@ -54,7 +54,7 @@ export class ShapeService {
     }
   }
 
-  addEllipse(canvas: fabric.Canvas, renderer: Renderer2, color?: String) {
+  addEllipse(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
     const ellipse = new fabric.Ellipse({
       originX: 'center',
       originY: 'center',
@@ -68,7 +68,7 @@ export class ShapeService {
     this.addText(ellipse, canvas, renderer);
   }
 
-  addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: String) {
+  addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
     const rect = new fabric.Rect({
       originX: 'center',
       originY: 'center',
@@ -108,11 +108,12 @@ export class ShapeService {
   ): fabric.IText {
     const text = new fabric.IText('Double click to edit', {
       fill: '#333',
+      charSpacing : 100,
       fontSize: 15,
       originX: 'center',
       originY: 'center',
       textAlign: 'center',
-      fontFamily: 'Segoe UI',
+      fontFamily:  'Trebuchet MS',
       top: 0,
       left: 0,
       selectable: false,

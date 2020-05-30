@@ -7,6 +7,7 @@ import { SocketService } from '../socket-services/socket.service';
 import { UserSocketService } from '../socket-services/user-socket.service';
 import { AuthService, SocialUser } from 'angularx-social-login';
 import { GroupService } from '../user-board-services/group.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -26,8 +27,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     public constants: ConstantsService,
     private socketService: SocketService,
     private userSocketService: UserSocketService,
-    private authService:AuthService
-  ) { }
+    private authService:AuthService,
+    private snackBar: MatSnackBar,
+  ) {}
 
   ngOnInit(): void {
     this.socketService.socket.connect();
@@ -67,12 +69,18 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    if (confirm('Do you want to clear?')) {
       this.canvas.clear();
       this.shapeService.setBackground(this.canvas, 'assets');
       this.socketService.clearCanvas(this.canvas, this.constants.roomID);
       document.getElementById('deleteBtn')?.remove();
-    }
+  }
+  showSnackBar(message: string, action: string): void {
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 3000,
+    });
+    snackBarRef.onAction().subscribe(() => {
+      this.clear();
+    });
   }
 
   connect() {

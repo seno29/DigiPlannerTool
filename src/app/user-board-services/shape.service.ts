@@ -139,6 +139,12 @@ export class ShapeService {
       this.groupService.unGroup(group, canvas);
       shape.fill = color;
       this.groupService.regroup(shape, text, canvas, renderer);
+      for(const obj of canvas._objects) {
+        if(obj.id === text.id) {
+          canvas.setActiveObject(obj);
+          break;
+        }
+      }
     }
   }
 

@@ -69,7 +69,7 @@ export class UserSocketService {
       shape.set("opacity",0.7);
       console.log(text);
       console.log(shape);
-      text.set('text',`${data[1].firstName} is editing this...`);
+      text.set('text',`${data[1].firstName} is editing`);
       this.groupService.unGroup(gr, canvas);
       text.lockMovementX = false;
       text.lockMovementY = false;
@@ -107,8 +107,8 @@ export class UserSocketService {
       }
       const text = gr._objects[1];
       const shape = gr._objects[0];
-      shape.fill = data[1];
       this.groupService.unGroup(gr, canvas);
+      shape.fill = data[1];
       this.groupService.regroup(shape, text, canvas, renderer);
     });
 

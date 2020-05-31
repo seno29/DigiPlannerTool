@@ -6,21 +6,20 @@ import { ConstantsService } from './constants.service';
   providedIn: 'root'
 })
 export class UserDatabaseService {
-  roomCode:string;
 
   constructor(private http: HttpClient, private constants: ConstantsService) { }
 
-  sendingData(canvasJSON: any){
+  sendingCanvas(canvasJSON: any){
     delete canvasJSON.backgroundImage;
-     this.http.put(`http://localhost:4200/drawingUserView/${this.roomCode}`,{canvas_json:JSON.stringify(canvasJSON)},{responseType:'text'})
-           .subscribe(responseData=>{
-              console.log("added");
-           });
+    this.http.put(`http://localhost:4200/drawingUserView/${this.constants.roomID}`,
+      {canvas_json: JSON.stringify(canvasJSON)}, {responseType: 'text'})
+      .subscribe( responseData => {
+        console.log('added');
+    });
    }
 
-  getRoomData(code: string): Observable<RoomData> {
-    this.roomCode=code;
-    return this.http.get(`${this.constants.URI}/drawingUserView/${code}`) as Observable<RoomData>;
+  getRoomData(): Observable<RoomData> {
+    return this.http.get(`${this.constants.URI}/drawingUserView/${this.constants.roomID}`) as Observable<RoomData>;
   }
 }
 

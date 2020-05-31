@@ -27,14 +27,14 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     public constants: ConstantsService,
     private socketService: SocketService,
     private userSocketService: UserSocketService,
-    private authService:AuthService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
     this.socketService.socket.connect();
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
-    this.canvas = this.shapeService.initCanvas(this.constants.roomID);
+    this.canvas = this.shapeService.initCanvas();
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
     this.authService.authState.subscribe((user) => {
       this.groupService.currentUser = user;

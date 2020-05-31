@@ -18,7 +18,7 @@ export class ShapeService {
     private socketService: SocketService
   ) {}
 
-  initCanvas(roomCode){
+  initCanvas(){
     this.image = null;
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
@@ -29,7 +29,7 @@ export class ShapeService {
     canvas.setWidth(1200 - 10);
     canvas.selectedElements = [];
     canvas.selectedColor = this.constants.colors[0];
-    this.getTitleFromDatabase(roomCode, canvas);
+    this.getTitleFromDatabase(canvas);
     return canvas;
   }
 
@@ -119,9 +119,9 @@ export class ShapeService {
       selectable: false,
     });
     this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer, -1);
-    text.on('editing:exited', () => { 
+    text.on('editing:exited', () => {
       this.socketService.regr(text.text, text.id, this.constants.roomID);
-      this.groupService.regroup(shape, text, canvas, renderer); 
+      this.groupService.regroup(shape, text, canvas, renderer);
     });
   }
 
@@ -139,7 +139,7 @@ export class ShapeService {
       this.groupService.unGroup(group, canvas);
       shape.fill = color;
       this.groupService.regroup(shape, text, canvas, renderer);
-      for(const obj of canvas._objects) {
+      for (const obj of canvas._objects) {
         if(obj.id === text.id) {
           canvas.setActiveObject(obj);
           break;
@@ -148,10 +148,10 @@ export class ShapeService {
     }
   }
 
-  getTitleFromDatabase(roomCode: string, canvas: fabric.Canvas) {
-    roomCode === 'unknown'
+  getTitleFromDatabase(canvas: fabric.Canvas) {
+    this.constants.roomID === 'unknown'
       ? (canvas.boardTitle = 'UserUI')
-      : this.userDatabaseService.getRoomData(roomCode).subscribe(
+      : this.userDatabaseService.getRoomData().subscribe(
           (roomData) => {
             canvas.boardTitle = roomData.room_title;
             canvas.loadFromJSON(roomData.canvas_json, () => {

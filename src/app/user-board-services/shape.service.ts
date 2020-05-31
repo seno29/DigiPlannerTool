@@ -154,7 +154,7 @@ export class ShapeService {
       : this.userDatabaseService.getRoomData(roomCode).subscribe(
           (roomData) => {
             canvas.boardTitle = roomData.room_title;
-            canvas.loadFromJSON(JSON.parse(roomData.canvas_json), () => {
+            canvas.loadFromJSON(roomData.canvas_json, () => {
               canvas.renderAll();
             });
             this.setBackground(canvas, roomData.base64);

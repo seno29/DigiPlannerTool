@@ -238,7 +238,7 @@ export class GroupService {
           }
         } else {
           group.isEditable = false;
-          this.socketService.somethingModified(group.id,this.currentUser, this.constants.roomID);
+          this.socketService.somethingModified(group.id, this.currentUser, this.constants.roomID);
           this.unGroup(group, canvas);
           const text1 = group._objects[1];
           text1.lockMovementX = false;

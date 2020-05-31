@@ -3,6 +3,8 @@ import { fabric } from 'fabric';
 import { AdminBoardService } from '../admin-board services/admin-board.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-admin-board',
@@ -32,7 +34,8 @@ export class AdminBoardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private adminBoardService: AdminBoardService,
-    private location:Location
+    private location:Location,
+    private snackBar:MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -57,10 +60,16 @@ export class AdminBoardComponent implements OnInit {
     this.convertedCanvas = this.canvas.toDataURL();
     this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode)
       .subscribe(responseData=>{
-        alert(responseData+' No errors Data sent successfully');
+        this.showSnackBar('Canvas saved successfully ', responseData);
       });
 
     this.location.back();
+  }
+
+  showSnackBar(message:string,action:string):void {
+    this.snackBar.open(message,action,{
+      duration:3000
+    });
   }
 
   togglePen() {

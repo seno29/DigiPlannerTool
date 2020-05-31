@@ -32,18 +32,11 @@ export class ScalingService {
 
   compareTextShape(shape: fabric.Shape, shapeDimen: number, textDimen: number): boolean {
     if (shapeDimen < textDimen) {
-      if (shape instanceof fabric.Image) {
-        const scale = (textDimen + 80) / 512;
-        shape.scaleY = scale;
-        shape.scaleX = scale;
+      if ((shape.height * shape.scaleY) === shapeDimen) {
+        shape.height = textDimen + 20;
       }
       else {
-        if ((shape.height * shape.scaleY) === shapeDimen) {
-          shape.height = textDimen + 20;
-        }
-        else {
-          shape.width = textDimen + 20;
-        }
+        shape.width = textDimen + 20;
       }
       return true;
     }

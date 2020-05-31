@@ -1,12 +1,13 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { fabric } from 'fabric';
+import { UserDatabaseService } from '../user-board-services/user-database.service';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  constructor(public socket: Socket) { }
+  constructor(public socket: Socket, private userDatabase: UserDatabaseService) { }
 
-  sendGroup(group: fabric.Group, id: string) {
+  sendGroup(group: fabric.Group, id: string, canvas: fabric.Canvas) {
     this.socket.emit('groupAltered',
       [{
         id: group.id,
@@ -16,49 +17,43 @@ export class SocketService {
         scaleX: group.scaleX,
         scaleY: group.scaleY
       },
-        id]);
+      id]);
+
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId']));
   }
 
-  somethingAdded(shape: string, color: string, id: string) {
+  somethingAdded(shape: string, color: string, id: string, canvas: fabric.Canvas) {
     this.socket.emit('addedObject', [shape, color, id]);
-    //http save canvas
   }
 
-  somethingModified(groupId: any, currentUser,id: string,) {
+  somethingModified(groupId: any, currentUser, id: string, canvas: fabric.Canvas) {
     console.log('modified');
     this.socket.emit('modifiedObject', [groupId, currentUser, id]);
-    //http save canvas
   }
 
   clearCanvas(canvas: fabric.Canvas, id: string) {
     this.socket.emit('clearCanvas', [canvas, id]);
-    //http save canvas
   }
 
-  colorChange(data, color: string, id: string) {
+  colorChange(data, color: string, id: string, canvas: fabric.Canvas) {
     this.socket.emit('colorChange', [data, color, id]);
-    //http save canvas
   }
 
   joinRoom(id: string) {
     this.socket.emit('joinRoom', id);
-    //http save canvas
   }
 
-  deleteGroup(data, id: string) {
+  deleteGroup(data, id: string, canvas: fabric.Canvas) {
     this.socket.emit('deleteGroup', [data, id]);
-    //http save canvas
   }
 
-  regr(text: any, textId: any, id: string) {
+  regr(text: any, textId: any, id: string, canvas: fabric.Canvas) {
     this.socket.emit('regrouping', [text, textId, id]);
-    //http save canvas
   }
 
-  drawLines(can: any) {
+  drawLines(can: any, canvas: fabric.Canvas) {
     const arr = [can.f, can.s, can.roomId];
     this.socket.emit('drawingLines', arr);
-    //http save canvas
   }
 }
 

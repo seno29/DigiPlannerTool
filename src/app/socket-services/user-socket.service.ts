@@ -46,7 +46,7 @@ export class UserSocketService {
       } else if (data[0] === 'ellipse') {
         this.shapeService.addEllipse(canvas, renderer, data[1]);
       } else {
-        this.shapeService.addImage(canvas, '', renderer);
+        this.shapeService.addTriangle(canvas, renderer, data[1]);
       }
     });
 

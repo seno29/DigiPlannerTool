@@ -51,9 +51,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     this.socketService.somethingAdded(
       shape,
       this.canvas.selectedColor,
-      this.constants.roomID
+      this.constants.roomID,
+      this.canvas
     );
-    this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId']));
   }
 
   addEllipse() {
@@ -66,9 +66,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     this.addObj('rect');
   }
 
-  addImage() {
-    this.shapeService.addImage(this.canvas, '', this.renderer);
-    this.addObj('image');
+  addTriangle() {
+    this.shapeService.addTriangle(this.canvas, this.renderer);
+    this.addObj('triangle');
   }
 
   clear() {
@@ -76,7 +76,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.shapeService.setBackground(this.canvas, 'assets');
       this.socketService.clearCanvas(this.canvas, this.constants.roomID);
       document.getElementById('deleteBtn')?.remove();
+      this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId']));
   }
+
   showSnackBar(message: string, action: string): void {
     const snackBarRef = this.snackBar.open(message, action, {
       duration: 3000,
@@ -89,8 +91,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   connect() {
     if (this.canvas.connect) {
       this.canvas.connect = false;
-      this.canvas.connectButtonText = this.constants.disconnectText;
-    } else {
+      this.canvas.connectButtonText = this.constants.connectText;
+    }
+    else {
       while (this.canvas.selectedElements.length > 0) {
         this.canvas.selectedElements.pop();
       }
@@ -102,14 +105,14 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   exportAsImage(canvasContent) {
     // for IE, Edge
     if (canvasContent.msToBlob) {
-      var blob = canvasContent.msToBlob();
+      const blob = canvasContent.msToBlob();
       window.navigator.msSaveBlob(blob, 'board-image.png');
     } else {
-      //other browsers
-      let image = canvasContent
+      // other browsers
+      const image = canvasContent
         .toDataURL('image/png', 1.0)
         .replace('image/png', 'image/octet-stream');
-      let link = document.createElement('a');
+      const link = document.createElement('a');
       link.download = 'board-image.png';
       link.href = image;
       link.click();

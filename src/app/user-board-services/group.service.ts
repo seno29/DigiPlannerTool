@@ -28,8 +28,8 @@ export class GroupService {
   }
 
   createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas, x: number, y: number,
-    connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>, 
-    renderer: Renderer2, groupID: number) {
+              connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>, 
+              renderer: Renderer2, groupID: number) {
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
       left: x,
@@ -41,6 +41,7 @@ export class GroupService {
       group.id = this.givingId;
       text.id = this.givingId;
       this.givingId += 1;
+      canvas.givingId = this.givingId;
     }
     else{
       group.id = groupID;
@@ -77,11 +78,14 @@ export class GroupService {
   }
 
   regroup(shape: fabric.Object, text: fabric.IText,
-    canvas: fabric.Canvas, renderer: Renderer2) {
+          canvas: fabric.Canvas, renderer: Renderer2) {
+    console.log('regroup');
     let g: fabric.Group;
     let  u = 0;
+    console.log(text.id);
     for(const ob of this.selectedGroup){
       if(ob.id === text.id){
+        console.log('condition satistfied');
         g = ob;
         break;
       }

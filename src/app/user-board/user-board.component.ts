@@ -8,6 +8,7 @@ import { UserSocketService } from '../socket-services/user-socket.service';
 import { AuthService, SocialUser } from 'angularx-social-login';
 import { GroupService } from '../user-board-services/group.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserDatabaseService } from '../user-board-services/user-database.service';
 
 
 @Component({
@@ -29,16 +30,17 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     private userSocketService: UserSocketService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
+    private userDatabase: UserDatabaseService
   ) {}
 
   ngOnInit(): void {
     this.socketService.socket.connect();
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
-    this.canvas = this.shapeService.initCanvas();
+    this.canvas = this.shapeService.initCanvas(this.renderer);
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
     this.authService.authState.subscribe((user) => {
       this.groupService.currentUser = user;
-    }); 
+    });
   }
 
   ngOnDestroy(): void {
@@ -51,6 +53,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.canvas.selectedColor,
       this.constants.roomID
     );
+    this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId']));
   }
 
   addEllipse() {

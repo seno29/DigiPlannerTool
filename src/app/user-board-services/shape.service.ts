@@ -18,7 +18,7 @@ export class ShapeService {
     private socketService: SocketService
   ) {}
 
-  initCanvas(){
+  initCanvas(renderer: Renderer2){
     this.image = null;
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
@@ -29,7 +29,7 @@ export class ShapeService {
     canvas.setWidth(1200 - 10);
     canvas.selectedElements = [];
     canvas.selectedColor = this.constants.colors[0];
-    this.getTitleFromDatabase(canvas);
+    this.getTitleFromDatabase(canvas, renderer);
     return canvas;
   }
 
@@ -65,7 +65,7 @@ export class ShapeService {
       strokeWidth: 0.3,
       selectable: false,
     });
-    this.addText(ellipse, canvas, renderer);
+    this.addText(ellipse, canvas, renderer, 'Double click to edit', -1, 100, 100);
   }
 
   addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
@@ -82,7 +82,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(rect, canvas, renderer);
+    this.addText(rect, canvas, renderer, 'Double click to edit', -1, 100, 100);
   }
 
   addImage(canvas: fabric.Canvas, imageURL: string, renderer: Renderer2) {
@@ -97,16 +97,19 @@ export class ShapeService {
         scaleY: 0.3,
         selectable: false,
       });
-      this.addText(image, canvas, renderer);
+      this.addText(image, canvas, renderer, 'Double click to edit', -1, 100, 100);
     };
   }
 
   addText(
     shape: fabric.Object,
     canvas: fabric.Canvas,
-    renderer: Renderer2
-  ): fabric.IText {
-    const text = new fabric.IText('Double click to edit', {
+    renderer: Renderer2,
+    textVal: string,
+    groupID: number,
+    x: number,
+    y: number) {
+    const text = new fabric.IText(textVal, {
       fill: '#333',
       charSpacing : 100,
       fontSize: 15,
@@ -118,8 +121,13 @@ export class ShapeService {
       left: 0,
       selectable: false,
     });
-    this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer, -1);
+    this.groupService.createGroup(shape, text, canvas, x, y, [], renderer, groupID);
+    this.addTextListener(canvas, shape, text, renderer);
+  }
+
+  addTextListener(canvas, shape, text, renderer){
     text.on('editing:exited', () => {
+      console.log('editing exit');
       this.socketService.regr(text.text, text.id, this.constants.roomID);
       this.groupService.regroup(shape, text, canvas, renderer);
     });
@@ -148,15 +156,13 @@ export class ShapeService {
     }
   }
 
-  getTitleFromDatabase(canvas: fabric.Canvas) {
+  getTitleFromDatabase(canvas: fabric.Canvas, renderer) {
     this.constants.roomID === 'unknown'
       ? (canvas.boardTitle = 'UserUI')
       : this.userDatabaseService.getRoomData().subscribe(
           (roomData) => {
             canvas.boardTitle = roomData.room_title;
-            canvas.loadFromJSON(roomData.canvas_json, () => {
-              canvas.renderAll();
-            });
+            if(roomData.canvas_json) {this.loadCanvas(canvas, JSON.parse(roomData.canvas_json), renderer)};
             this.setBackground(canvas, roomData.base64);
           },
           (error) => {
@@ -164,6 +170,22 @@ export class ShapeService {
             this.setBackground(canvas, this.constants.userBackURL);
           }
         );
+  }
+
+  loadCanvas(canvas: fabric.Canvas, canvasJson, renderer: Renderer2){
+    const newCanvas = new fabric.Canvas();
+    newCanvas.loadFromJSON(canvasJson);
+    console.log(newCanvas.givingId);
+    this.groupService.givingId = newCanvas.givingId;
+    canvas.givingId = newCanvas.givingId;
+    for (const object of newCanvas._objects){
+      if (object.type === 'group'){
+        const shape = object._objects[0];
+        const groupCoord = object.getPointByOrigin(0, 0);
+        this.addText(shape, canvas, renderer, object._objects[1].text, object.id, groupCoord.x, groupCoord.y);
+      }
+    }
+    console.log(canvas);
   }
 }
 

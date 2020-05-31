@@ -8,7 +8,7 @@ import { SocketService } from '../socket-services/socket.service';
   providedIn: 'root',
 })
 export class GroupService {
-  selectedGroup: fabric.Group;
+  selectedGroup: Array<fabric.Group> = [];
   givingId;
   constructor(private scalingService: ScalingService, private constants: ConstantsService, private socketService: SocketService) {
     this.givingId = 0;
@@ -40,8 +40,8 @@ export class GroupService {
       this.givingId += 1;
     }
     else{
-      group.id = this.selectedGroup.id;
-      text.id = this.selectedGroup.id;
+      group.id = groupID;
+      text.id = groupID;
     }
     group.type = 'group';
     group.setControlsVisibility(this.constants.HideControls);
@@ -63,7 +63,7 @@ export class GroupService {
   }
 
   unGroup(group: fabric.Group, canvas: fabric.Canvas) {
-    this.selectedGroup = group;
+    this.selectedGroup.push(group);
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
@@ -75,19 +75,29 @@ export class GroupService {
 
   regroup(shape: fabric.Object, text: fabric.IText,
     canvas: fabric.Canvas, renderer: Renderer2) {
+    let g: fabric.Group;
+    let  u = 0;
+    for(const ob of this.selectedGroup){
+      if(ob.id === text.id){
+        g = ob;
+        break;
+      }
+      u++;
+    }
+    const groupCoord = g.getPointByOrigin(0, 0);
     canvas.remove(shape);
     canvas.remove(text);
-    const groupCoord = this.selectedGroup.getPointByOrigin(0, 0);
     this.createGroup(
       shape,
       text,
       canvas,
       groupCoord.x,
       groupCoord.y,
-      this.selectedGroup.connections,
+      g.connections,
       renderer,
-      this.selectedGroup.id
+      g.id
     );
+    this.selectedGroup.splice(u, 1);
   }
 
   drawLineTwoPoints(canvas: fabric.Canvas) {

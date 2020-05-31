@@ -45,7 +45,7 @@ export class UserSocketService {
       } else if (data[0] === 'ellipse') {
         this.shapeService.addEllipse(canvas, renderer, data[1]);
       } else {
-        this.shapeService.addImage(canvas, '', renderer);
+        // this.shapeService.addImage(this.canvas, '', this.renderer);
       }
     });
 
@@ -69,10 +69,16 @@ export class UserSocketService {
     this.socketService.socket.on('regrouping', (h: any) => {
       document.getElementById('deleteBtn')?.remove();
       console.log('Regrouped');
-      const gr = this.groupService.selectedGroup;
-      const shape = gr._objects[0];
-      const text = gr._objects[1];
-      text.set('text', h);
+      let g: fabric.Group;
+      for(const ob of this.groupService.selectedGroup){
+        if(ob.id === h[1]){
+          g = ob;
+          break;
+        }
+      }
+      const shape = g._objects[0];
+      const text = g._objects[1];
+      text.set('text', h[0]);
       this.groupService.regroup(shape, text, canvas, renderer);
       console.log(canvas);
       console.log(text);

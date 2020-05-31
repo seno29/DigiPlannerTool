@@ -50,8 +50,8 @@ export class SocketService {
     //http save canvas
   }
 
-  regr(text: any, id: string) {
-    this.socket.emit('regrouping', [text, id]);
+  regr(text: any, textId: any, id: string) {
+    this.socket.emit('regrouping', [text, textId, id]);
     //http save canvas
   }
 

@@ -4,13 +4,12 @@
     font-size: xx-large;
     font-weight: bold;
     float: left;
-    margin-top: 1%;
+    margin-top: 0.5%;
     text-transform: capitalize;
     letter-spacing: normal;
 }
 
 #canvas{
-    margin-top: 8px;
     border: 2px solid rgb(0,75,150);
     border-radius: 10px;    
 }
@@ -38,6 +37,7 @@
 
 .button-row-right{
     float: right;
+    margin-bottom: 5px;
 }
 
 .button-row-left button{
@@ -72,21 +72,28 @@
 .darkcyan{
     background-color: darkcyan;
 }
-
-.mediumpurple{
-    background-color: mediumpurple;
-}
 .salmon{
     background-color: salmon;
 }
 
-.coral{
-    background-color: coral;
+.lemonchiffon{
+    background-color: lemonchiffon;
 }
 .gold{
     background-color: gold;
 }
-
+.MediumAquaMarine{
+    background-color: MediumAquaMarine;
+}
+.silver{
+    background-color: silver;
+}
+.palevioletred{
+    background-color: palevioletred;
+}
+.pink{
+    background-color: pink;
+}
 .white{
     background-color: whitesmoke;
 }

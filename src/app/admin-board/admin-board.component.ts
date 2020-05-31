@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
 @Component({
   selector: 'app-admin-board',
   templateUrl: './admin-board.component.html',
@@ -16,15 +15,7 @@ export class AdminBoardComponent implements OnInit {
   title = 'adminboard';
   convertedCanvas;
 
-  colors = [
-    'aqua',
-    'BlueViolet',
-    'orange',
-    'magenta',
-    'red',
-    'blue',
-    'lime',
-  ];
+  colors = ['aqua', 'BlueViolet', 'orange', 'magenta', 'red', 'blue', 'lime'];
 
   selectedColor: string;
   roomCode: string;
@@ -34,9 +25,9 @@ export class AdminBoardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private adminBoardService: AdminBoardService,
-    private location:Location,
-    private snackBar:MatSnackBar,
-  ) { }
+    private location: Location,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.canvas = new fabric.Canvas('canvas', {
@@ -58,17 +49,18 @@ export class AdminBoardComponent implements OnInit {
 
   exportJsonAdmin() {
     this.convertedCanvas = this.canvas.toDataURL();
-    this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode)
-      .subscribe(responseData=>{
+    this.adminBoardService
+      .sendingData(this.convertedCanvas, this.roomCode)
+      .subscribe((responseData) => {
         this.showSnackBar('Canvas saved successfully ', responseData);
       });
 
     this.location.back();
   }
 
-  showSnackBar(message:string,action:string):void {
-    this.snackBar.open(message,action,{
-      duration:3000
+  showSnackBar(message: string, action: string): void {
+    this.snackBar.open(message, action, {
+      duration: 3000,
     });
   }
 
@@ -84,7 +76,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale
+        scaleY: scale,
       });
       this.canvas.add(img);
     });
@@ -98,7 +90,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale
+        scaleY: scale,
       });
       this.canvas.add(img);
     });
@@ -119,7 +111,7 @@ export class AdminBoardComponent implements OnInit {
         radius: 50,
         fill: this.selectedColor,
         left: 10,
-        top: 10
+        top: 10,
       })
     );
   }
@@ -145,7 +137,7 @@ export class AdminBoardComponent implements OnInit {
         height: 80,
         fill: this.selectedColor,
         left: 10,
-        top: 10
+        top: 10,
       })
     );
   }
@@ -160,7 +152,7 @@ export class AdminBoardComponent implements OnInit {
         stroke: this.selectedColor,
         fontSize: 20,
         fontFamily: 'Verdana',
-        textAlign: 'center'
+        textAlign: 'center',
       })
     );
   }

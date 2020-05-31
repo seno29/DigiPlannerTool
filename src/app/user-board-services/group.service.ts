@@ -4,14 +4,17 @@ import { ScalingService } from './scaling.service';
 import { ConstantsService } from './constants.service';
 import { SocketService } from '../socket-services/socket.service';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
   selectedGroup: Array<fabric.Group> = [];
   givingId;
+  currentUser;
   constructor(private scalingService: ScalingService, private constants: ConstantsService, private socketService: SocketService) {
     this.givingId = 0;
+    this.currentUser="Unknown";
   }
 
   makeLine(coords: fabric.Point) {
@@ -34,7 +37,7 @@ export class GroupService {
       connections,
       isEditable: true,
     });
-    if (groupID === -1){
+    if (groupID === -1) {
       group.id = this.givingId;
       text.id = this.givingId;
       this.givingId += 1;
@@ -235,7 +238,7 @@ export class GroupService {
           }
         } else {
           group.isEditable = false;
-          this.socketService.somethingModified(group.id, this.constants.roomID);
+          this.socketService.somethingModified(group.id,this.currentUser, this.constants.roomID);
           this.unGroup(group, canvas);
           const text1 = group._objects[1];
           text1.lockMovementX = false;

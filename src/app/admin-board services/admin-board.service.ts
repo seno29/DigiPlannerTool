@@ -3,6 +3,7 @@ import { HttpClient} from '@angular/common/http';
 
 interface canvasData{
   base64:string;
+  is_published:string
 }
 
 @Injectable({
@@ -22,12 +23,11 @@ export class AdminBoardService {
 
     const post : canvasData={
       base64 : this.base64,
+      is_published : 'true'
     };
 
-    this.http.put('http://localhost:4200/drawing/'+this.roomCode,post,{responseType:'text'})
-          .subscribe(responseData=>{
-              alert(responseData+' No errors Data sent successfully');
-          });
+    return this.http.put('http://localhost:4200/drawing/' + this.roomCode , post , {responseType:'text'})
+
   }
 }
 

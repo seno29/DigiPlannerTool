@@ -39,12 +39,13 @@
     <canvas id="canvas" #canvasContent></canvas>
 
     <div class="button-col">
-      <button mat-fab class="clearButton redButton but-col-right" color="warn" (click)="clear()"
-        [disabled]="canvas.connect">
+      <button mat-fab class="clearButton redButton but-col-right" matTooltip="Clear Screen" matTooltipPosition='after'
+        color="warn" (click)="showSnackBar('Do you want to clear the screen?','OK')" [disabled]="canvas.connect">
         <mat-icon>layers_clear</mat-icon>
       </button>
 
-      <button mat-fab class="redButton but-col-right" color="warn" (click)="exportAsImage(canvasContent)">
+      <button mat-fab class="redButton but-col-right" matTooltip="Export" matTooltipPosition='after' color="warn"
+        (click)="exportAsImage(canvasContent)">
         <mat-icon>cloud_download</mat-icon>
       </button>
     </div>

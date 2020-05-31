@@ -24,7 +24,7 @@ export class ConstantsService {
     this.URI = `http://localhost:${this.PORT}`;
     this.clientId = '610664320073-4ik734pbbflijv056jr130n5k6e7ia8q.apps.googleusercontent.com';
     this.starIconURL = '../assets/stars-black-48dp.svg';
-    this.colors = ['cornsilk', 'CornflowerBlue', 'aquamarine', 'thistle', 'salmon'];
+    this.colors = ['CornflowerBlue', 'darkcyan', 'mediumpurple', 'salmon', 'coral', 'gold' ];
     this.connectText = 'Connect';
     this.disconnectText = 'Exit Connection Mode';
    }

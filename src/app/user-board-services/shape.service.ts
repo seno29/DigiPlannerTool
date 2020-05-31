@@ -46,7 +46,7 @@ export class ShapeService {
         this.image = new fabric.Image(imageEle, {
           width: canvas.width,
           height: canvas.height,
-          opacity: 0.4,
+          opacity: 0.7,
         });
         canvas.setBackgroundImage(this.image);
         canvas.renderAll();
@@ -54,7 +54,7 @@ export class ShapeService {
     }
   }
 
-  addEllipse(canvas: fabric.Canvas, renderer: Renderer2, color?: String) {
+  addEllipse(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
     const ellipse = new fabric.Ellipse({
       originX: 'center',
       originY: 'center',
@@ -68,7 +68,7 @@ export class ShapeService {
     this.addText(ellipse, canvas, renderer);
   }
 
-  addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: String) {
+  addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
     const rect = new fabric.Rect({
       originX: 'center',
       originY: 'center',
@@ -108,11 +108,12 @@ export class ShapeService {
   ): fabric.IText {
     const text = new fabric.IText('Double click to edit', {
       fill: '#333',
+      charSpacing : 100,
       fontSize: 15,
       originX: 'center',
       originY: 'center',
       textAlign: 'center',
-      fontFamily: 'Segoe UI',
+      fontFamily:  'Trebuchet MS',
       top: 0,
       left: 0,
       selectable: false,
@@ -138,6 +139,12 @@ export class ShapeService {
       this.groupService.unGroup(group, canvas);
       shape.fill = color;
       this.groupService.regroup(shape, text, canvas, renderer);
+      for(const obj of canvas._objects) {
+        if(obj.id === text.id) {
+          canvas.setActiveObject(obj);
+          break;
+        }
+      }
     }
   }
 
@@ -147,11 +154,10 @@ export class ShapeService {
       : this.userDatabaseService.getRoomData(roomCode).subscribe(
           (roomData) => {
             canvas.boardTitle = roomData.room_title;
-            canvas.loadFromJSON(roomData.canvas_json, () => {
+            canvas.loadFromJSON(JSON.parse(roomData.canvas_json), () => {
               canvas.renderAll();
             });
             this.setBackground(canvas, roomData.base64);
-            console.log("Hiiiii");
           },
           (error) => {
             canvas.boardTitle = 'UserUI';

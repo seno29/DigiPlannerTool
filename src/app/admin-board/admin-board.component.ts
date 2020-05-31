@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { AdminBoardService } from '../admin-board services/admin-board.service';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-admin-board',
@@ -15,15 +16,12 @@ export class AdminBoardComponent implements OnInit {
 
   colors = [
     'aqua',
-    'salmon',
+    'BlueViolet',
+    'orange',
     'magenta',
     'red',
     'blue',
     'lime',
-    'chocolate',
-    'CornflowerBlue',
-    'orange',
-    'olive'
   ];
 
   selectedColor: string;
@@ -33,7 +31,8 @@ export class AdminBoardComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private adminBoardService: AdminBoardService
+    private adminBoardService: AdminBoardService,
+    private location:Location
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +55,12 @@ export class AdminBoardComponent implements OnInit {
 
   exportJsonAdmin() {
     this.convertedCanvas = this.canvas.toDataURL();
-    this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode);
+    this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode)
+      .subscribe(responseData=>{
+        alert(responseData+' No errors Data sent successfully');
+      });
+
+    this.location.back();
   }
 
   togglePen() {
@@ -71,8 +75,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale,
-        opacity: 0.7,
+        scaleY: scale
       });
       this.canvas.add(img);
     });
@@ -86,8 +89,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale,
-        opacity: 0.7,
+        scaleY: scale
       });
       this.canvas.add(img);
     });
@@ -108,8 +110,7 @@ export class AdminBoardComponent implements OnInit {
         radius: 50,
         fill: this.selectedColor,
         left: 10,
-        top: 10,
-        opacity: 0.7,
+        top: 10
       })
     );
   }
@@ -121,7 +122,6 @@ export class AdminBoardComponent implements OnInit {
         width: 100,
         height: 100,
         fill: this.selectedColor,
-        opacity: 0.7,
         left: 10,
         top: 10,
       })
@@ -136,8 +136,7 @@ export class AdminBoardComponent implements OnInit {
         height: 80,
         fill: this.selectedColor,
         left: 10,
-        top: 10,
-        opacity: 0.7,
+        top: 10
       })
     );
   }
@@ -152,8 +151,7 @@ export class AdminBoardComponent implements OnInit {
         stroke: this.selectedColor,
         fontSize: 20,
         fontFamily: 'Verdana',
-        textAlign: 'center',
-        opacity: 0.7,
+        textAlign: 'center'
       })
     );
   }

@@ -55,8 +55,7 @@ export class LoginComponent implements OnInit {
           }
         },
         (err)=>{
-          console.log('cannot get data from database'); 
-          this.showSnackBar('user does not exist','cancel');
+          this.showSnackBar('user does not exist!','cancel');
           this.signOut();
         }
         ); 

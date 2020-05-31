@@ -39,11 +39,15 @@ export class CreateBoardDialogComponent implements OnInit {
           this.isexist = true;
         }
         this.emptyRoomCode = false;
-      });
+      },
+      (err) => {
+        this.isexist = true;
+      }  
+      );
     }else{
       this.isexist = false;
       this.emptyRoomCode=true;
     }
-
+    
   }
 }

@@ -15,8 +15,8 @@ export class BoardService {
 
   constructor(private http:HttpClient) { }
   
-  isExist(room_code:string):Observable<string>{
-    return this.http.get<string>(`${URI}/roomIdExists/${room_code}`);
+  isExist(room_code:string){
+    return this.http.get(`${URI}/roomIdExists/${room_code}`);
   }
   
   createBoard(room_code:string,board_title:string,userId:string):Observable<string> {

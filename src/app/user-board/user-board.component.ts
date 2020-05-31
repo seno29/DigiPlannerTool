@@ -34,7 +34,6 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.socketService.socket.connect();
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
     this.canvas = this.shapeService.initCanvas(this.renderer);
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
@@ -43,8 +42,8 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.socketService.socket.disconnect();
+  ngOnDestroy(): void{
+    // this.socketService.socket.emit('disconnect');
   }
 
   addObj(shape) {
@@ -52,7 +51,6 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       shape,
       this.canvas.selectedColor,
       this.constants.roomID,
-      this.canvas
     );
   }
 
@@ -76,7 +74,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.shapeService.setBackground(this.canvas, 'assets');
       this.socketService.clearCanvas(this.canvas, this.constants.roomID);
       document.getElementById('deleteBtn')?.remove();
-      this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId']));
+      this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   showSnackBar(message: string, action: string): void {

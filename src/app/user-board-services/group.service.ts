@@ -16,7 +16,7 @@ export class GroupService {
   constructor(private scalingService: ScalingService, private constants: ConstantsService,
               private socketService: SocketService, private userDatabase: UserDatabaseService) {
     this.givingId = 0;
-    this.currentUser="Unknown";
+    this.currentUser = 'Unknown';
   }
 
   makeLine(coords: fabric.Point) {
@@ -31,7 +31,7 @@ export class GroupService {
 
   createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas, x: number, y: number,
               connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>,
-              renderer: Renderer2, groupID: number): fabric.Group {
+              renderer: Renderer2, groupID: number, editing: boolean): fabric.Group {
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
       left: x,
@@ -50,10 +50,11 @@ export class GroupService {
       text.id = groupID;
     }
     group.type = 'group';
+    group.editing = editing;
     group.setControlsVisibility(this.constants.HideControls);
     this.addEventListeners(canvas, group, renderer);
     canvas.add(group);
-    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId']));
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
     return group;
   }
 
@@ -72,6 +73,8 @@ export class GroupService {
 
   unGroup(group: fabric.Group, canvas: fabric.Canvas) {
     this.selectedGroup.push(group);
+    group.editing = true;
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
@@ -83,13 +86,10 @@ export class GroupService {
 
   regroup(shape: fabric.Object, text: fabric.IText,
           canvas: fabric.Canvas, renderer: Renderer2) {
-    console.log('regroup');
     let g: fabric.Group;
     let  u = 0;
-    console.log(text.id);
-    for(const ob of this.selectedGroup){
-      if(ob.id === text.id){
-        console.log('condition satistfied');
+    for (const ob of this.selectedGroup){
+      if (ob.id === text.id){
         g = ob;
         break;
       }
@@ -106,9 +106,11 @@ export class GroupService {
       groupCoord.y,
       g.connections,
       renderer,
-      g.id
+      g.id,
+      false
     );
     this.selectedGroup.splice(u, 1);
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   drawLineTwoPoints(canvas: fabric.Canvas) {
@@ -126,7 +128,7 @@ export class GroupService {
     group2.connections.push({ name: 'p2', line, connectedGroup: group1.id });
     canvas.connect = false;
     canvas.connectButtonText = this.constants.connectText;
-    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId']));
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   moveLines(group: fabric.Group) {
@@ -152,8 +154,7 @@ export class GroupService {
       group = gr;
     } else {
       group = canvas.getActiveObject();
-      this.socketService.deleteGroup(group.id, this.constants.roomID, canvas);
-      console.log('Delete');
+      this.socketService.deleteGroup(group.id, this.constants.roomID);
     }
     for (const connection of group.connections) {
       // tslint:disable-next-line: forin
@@ -167,7 +168,7 @@ export class GroupService {
     }
     canvas.remove(group);
     canvas.renderAll();
-    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId']));
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   addDeleteBtn(x: number, y: number, canvas: fabric.Canvas, renderer: Renderer2) {
@@ -210,7 +211,7 @@ export class GroupService {
 
     group.on('scaling', (e) => {
       document.getElementById('deleteBtn')?.remove();
-      this.socketService.sendGroup(group, this.constants.roomID, canvas);
+      this.socketService.sendGroup(group, this.constants.roomID);
     });
 
     group.on('moving', (e) => {
@@ -219,12 +220,12 @@ export class GroupService {
         this.moveLines(group);
         canvas.renderAll();
       }
-      this.socketService.sendGroup(group, this.constants.roomID, canvas);
+      this.socketService.sendGroup(group, this.constants.roomID);
     });
 
     group.on('rotating', (e) => {
       document.getElementById('deleteBtn')?.remove();
-      this.socketService.sendGroup(group, this.constants.roomID, canvas);
+      this.socketService.sendGroup(group, this.constants.roomID);
     });
 
     group.on('removed', (e) => {
@@ -242,14 +243,13 @@ export class GroupService {
               f: canvas.selectedElements[0].id,
               s: canvas.selectedElements[1].id,
               roomId: this.constants.roomID,
-            },
-            canvas);
+            }, );
             canvas.selectedElements.pop();
             canvas.selectedElements.pop();
           }
         } else {
           group.isEditable = false;
-          this.socketService.somethingModified(group.id, this.currentUser, this.constants.roomID, canvas);
+          this.socketService.somethingModified(group.id, this.currentUser, this.constants.roomID);
           this.unGroup(group, canvas);
           const text1 = group._objects[1];
           text1.lockMovementX = false;

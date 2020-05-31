@@ -13,9 +13,7 @@ export class UserDatabaseService {
     delete canvasJSON.backgroundImage;
     this.http.put(`http://localhost:4200/drawingUserView/${this.constants.roomID}`,
       {canvas_json: JSON.stringify(canvasJSON)}, {responseType: 'text'})
-      .subscribe( responseData => {
-        console.log('added');
-    });
+      .subscribe( responseData => {});
    }
 
   getRoomData(): Observable<RoomData> {

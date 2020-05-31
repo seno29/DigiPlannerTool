@@ -7,7 +7,7 @@ import { UserDatabaseService } from '../user-board-services/user-database.servic
 export class SocketService {
   constructor(public socket: Socket, private userDatabase: UserDatabaseService) { }
 
-  sendGroup(group: fabric.Group, id: string, canvas: fabric.Canvas) {
+  sendGroup(group: fabric.Group, id: string) {
     this.socket.emit('groupAltered',
       [{
         id: group.id,
@@ -18,16 +18,13 @@ export class SocketService {
         scaleY: group.scaleY
       },
       id]);
-
-    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId']));
   }
 
-  somethingAdded(shape: string, color: string, id: string, canvas: fabric.Canvas) {
+  somethingAdded(shape: string, color: string, id: string) {
     this.socket.emit('addedObject', [shape, color, id]);
   }
 
-  somethingModified(groupId: any, currentUser, id: string, canvas: fabric.Canvas) {
-    console.log('modified');
+  somethingModified(groupId: any, currentUser, id: string) {
     this.socket.emit('modifiedObject', [groupId, currentUser, id]);
   }
 
@@ -35,7 +32,7 @@ export class SocketService {
     this.socket.emit('clearCanvas', [canvas, id]);
   }
 
-  colorChange(data, color: string, id: string, canvas: fabric.Canvas) {
+  colorChange(data, color: string, id: string) {
     this.socket.emit('colorChange', [data, color, id]);
   }
 
@@ -43,15 +40,15 @@ export class SocketService {
     this.socket.emit('joinRoom', id);
   }
 
-  deleteGroup(data, id: string, canvas: fabric.Canvas) {
+  deleteGroup(data, id: string) {
     this.socket.emit('deleteGroup', [data, id]);
   }
 
-  regr(text: any, textId: any, id: string, canvas: fabric.Canvas) {
+  regr(text: any, textId: any, id: string) {
     this.socket.emit('regrouping', [text, textId, id]);
   }
 
-  drawLines(can: any, canvas: fabric.Canvas) {
+  drawLines(can: any) {
     const arr = [can.f, can.s, can.roomId];
     this.socket.emit('drawingLines', arr);
   }

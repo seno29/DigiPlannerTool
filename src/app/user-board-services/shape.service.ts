@@ -65,7 +65,7 @@ export class ShapeService {
       strokeWidth: 0.3,
       selectable: false,
     });
-    this.addText(ellipse, canvas, renderer, 'Double click to edit', -1, 100, 100);
+    this.addText(ellipse, canvas, renderer, 'Double click to edit', -1, 100, 100, false);
   }
 
   addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
@@ -82,7 +82,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(rect, canvas, renderer, 'Double click to edit', -1, 100, 100);
+    this.addText(rect, canvas, renderer, 'Double click to edit', -1, 100, 100, false);
   }
 
   addTriangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string){
@@ -99,7 +99,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(triangle, canvas, renderer, 'Double click to edit', -1, 100, 100);
+    this.addText(triangle, canvas, renderer, 'Double click to edit', -1, 100, 100, false);
   }
 
   addText(
@@ -109,7 +109,8 @@ export class ShapeService {
     textVal: string,
     groupID: number,
     x: number,
-    y: number) {
+    y: number,
+    editing) {
     const text = new fabric.IText(textVal, {
       fill: '#333',
       charSpacing : 100,
@@ -123,13 +124,12 @@ export class ShapeService {
       selectable: false,
     });
     this.addTextListener(canvas, shape, text, renderer);
-    return this.groupService.createGroup(shape, text, canvas, x, y, [], renderer, groupID);
+    return this.groupService.createGroup(shape, text, canvas, x, y, [], renderer, groupID, editing);
   }
 
   addTextListener(canvas, shape, text, renderer){
     text.on('editing:exited', () => {
-      console.log('editing exit');
-      this.socketService.regr(text.text, text.id, this.constants.roomID, canvas);
+      this.socketService.regr(text.text, text.id, this.constants.roomID);
       this.groupService.regroup(shape, text, canvas, renderer);
     });
   }
@@ -143,14 +143,13 @@ export class ShapeService {
       this.socketService.colorChange(
         group.id,
         color,
-        this.constants.roomID,
-        canvas
+        this.constants.roomID
       );
       this.groupService.unGroup(group, canvas);
       shape.fill = color;
       this.groupService.regroup(shape, text, canvas, renderer);
       for (const obj of canvas._objects) {
-        if(obj.id === text.id) {
+        if (obj.id === text.id) {
           canvas.setActiveObject(obj);
           break;
         }
@@ -164,7 +163,7 @@ export class ShapeService {
       : this.userDatabaseService.getRoomData().subscribe(
           (roomData) => {
             canvas.boardTitle = roomData.room_title;
-            if(roomData.canvas_json) {this.loadCanvas(canvas, JSON.parse(roomData.canvas_json), renderer)};
+            if (roomData.canvas_json) {this.loadCanvas(canvas, JSON.parse(roomData.canvas_json), renderer); }
             this.setBackground(canvas, roomData.base64);
           },
           (error) => {
@@ -184,7 +183,7 @@ export class ShapeService {
       if (object.type === 'group'){
         const shape = object._objects[0];
         const groupCoord = object.getPointByOrigin(0, 0);
-        const group = this.addText(shape, canvas, renderer, object._objects[1].text, object.id, groupCoord.x, groupCoord.y);
+        const group = this.addText(shape, canvas, renderer, object._objects[1].text, object.id, groupCoord.x, groupCoord.y, object.editing);
         groupArray.push(group);
       }
     }
@@ -196,8 +195,34 @@ export class ShapeService {
         }
       }
     }
+
+    for (const group of groupArray){
+      if (group.editing){
+        const shape = group._objects[0];
+        const text = group._objects[1];
+        text.fill = '#7f8c8d';
+        text.fontStyle = 'italic';
+        shape.set('opacity', 0.7);
+        text.set('text', ` Someone is editing`);
+        this.ungroupOnLoad(group, canvas);
+        text.lockMovementX = false;
+        text.lockMovementY = false;
+      }
+    }
+    canvas.renderAll();
   }
 
+  ungroupOnLoad(group, canvas){
+    this.groupService.selectedGroup.push(group);
+    group.editing = true;
+    const items = group._objects;
+    group._restoreObjectsState();
+    canvas.remove(group);
+    for (const item of items) {
+      item.selectable = false;
+      canvas.add(item);
+    }
+  }
 
   drawLinesWhileLoading(canvas, object, group){
     canvas.selectedElements.push(group);

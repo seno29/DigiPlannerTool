@@ -3,7 +3,6 @@ import { GroupService } from '../user-board-services/group.service';
 import { ShapeService } from '../user-board-services/shape.service';
 import { fabric } from 'fabric';
 import { SocketService } from './socket.service';
-import { computeMsgId } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root',
@@ -39,8 +38,6 @@ export class UserSocketService {
     });
 
     this.socketService.socket.on('addedObject', (data) => {
-      console.log('obj added');
-      console.log(data);
       if (data[0] === 'rect') {
         this.shapeService.addRectangle(canvas, renderer, data[1]);
       } else if (data[0] === 'ellipse') {
@@ -51,10 +48,8 @@ export class UserSocketService {
     });
 
     this.socketService.socket.on('modifiedObject', (data) => {
-      let h=data[0];
+      const h = data[0];
       document.getElementById('deleteBtn')?.remove();
-
-      console.log('obj modified');
       let gr;
       for (const ob of canvas._objects) {
         if (ob.id === h) {
@@ -62,12 +57,12 @@ export class UserSocketService {
           break;
         }
       }
-      const shape=gr._objects[0];
+      const shape = gr._objects[0];
       const text = gr._objects[1];
-      text.fill="#7f8c8d";
-      text.fontStyle="italic";
-      shape.set("opacity",0.7);
-      text.set('text',`${data[1].firstName} is editing`);
+      text.fill = '#7f8c8d';
+      text.fontStyle = 'italic';
+      shape.set('opacity', 0.7);
+      text.set('text', `${data[1].firstName} is editing`);
       this.groupService.unGroup(gr, canvas);
       text.lockMovementX = false;
       text.lockMovementY = false;
@@ -75,23 +70,20 @@ export class UserSocketService {
 
     this.socketService.socket.on('regrouping', (h: any) => {
       document.getElementById('deleteBtn')?.remove();
-      console.log('Regrouped');
       let g: fabric.Group;
-      for(const ob of this.groupService.selectedGroup){
-        if(ob.id === h[1]){
+      for (const ob of this.groupService.selectedGroup){
+        if (ob.id === h[1]){
           g = ob;
           break;
         }
       }
       const shape = g._objects[0];
       const text = g._objects[1];
-      text.fill="#333";
-      text.fontStyle="normal";
-      text.set("text",h[0]);
-      shape.set("opacity",1);
+      text.fill = '#333';
+      text.fontStyle = 'normal';
+      text.set('text', h[0]);
+      shape.set('opacity', 1);
       this.groupService.regroup(shape, text, canvas, renderer);
-      console.log(canvas);
-      console.log(text);
     });
 
     this.socketService.socket.on('clearCanvas', (can) => {
@@ -138,8 +130,6 @@ export class UserSocketService {
       }
       this.groupService.drawLineTwoPoints(canvas);
       canvas.selectedElements.splice(0, 2);
-      console.log(canvas);
-      console.log('drawing');
     });
   }
 }

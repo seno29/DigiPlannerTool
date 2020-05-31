@@ -7,15 +7,15 @@
     <div class="button-row-right">
 
       <button mat-flat-button (click)="addRectangle()" color="accent" [disabled]="canvas.connect">
-        <mat-icon>add_box</mat-icon>
+        <mat-icon>crop_3_2</mat-icon>
         Rectangle
       </button>
       <button mat-flat-button (click)="addEllipse()" color="accent" [disabled]="canvas.connect">
-        <mat-icon>add_circle</mat-icon>
+        <mat-icon>radio_button_unchecked</mat-icon>
         Ellipse
       </button>
       <button mat-flat-button (click)="addTriangle()" color="accent" [disabled]="canvas.connect">
-        <mat-icon></mat-icon>
+        <mat-icon>change_history</mat-icon>
         Triangle
       </button>
       <button class="connectButton" mat-flat-button (click)="connect()" color="accent">

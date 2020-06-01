@@ -124,7 +124,10 @@ export class UserSocketService {
         s: data[1],
       };
       for (const obj of canvas._objects) {
-        if (h.f === obj.id || h.s === obj.id) {
+        if (h.f === obj.id) {
+          canvas.selectedElements.push(obj);
+        }
+        if(h.s === obj.id){
           canvas.selectedElements.push(obj);
         }
       }

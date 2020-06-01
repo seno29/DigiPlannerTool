@@ -65,7 +65,7 @@ export class ShapeService {
       strokeWidth: 0.3,
       selectable: false,
     });
-    this.addText(ellipse, canvas, renderer, 'Double click to edit', -1, 100, 100, false);
+    this.addText(ellipse, canvas, renderer, 'Double click to edit', -1, 100, 100, false, 0, 1, 1);
   }
 
   addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
@@ -82,7 +82,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(rect, canvas, renderer, 'Double click to edit', -1, 100, 100, false);
+    this.addText(rect, canvas, renderer, 'Double click to edit', -1, 100, 100, false, 0, 1, 1);
   }
 
   addTriangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string){
@@ -99,7 +99,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(triangle, canvas, renderer, 'Double click to edit', -1, 100, 100, false);
+    this.addText(triangle, canvas, renderer, 'Double click to edit', -1, 100, 100, false, 0, 1, 1);
   }
 
   addText(
@@ -110,7 +110,10 @@ export class ShapeService {
     groupID: number,
     x: number,
     y: number,
-    editing) {
+    editing: boolean,
+    angle: number,
+    scaleX: number,
+    scaleY: number) {
     const text = new fabric.IText(textVal, {
       fill: '#333',
       charSpacing : 100,
@@ -124,7 +127,7 @@ export class ShapeService {
       selectable: false,
     });
     this.addTextListener(canvas, shape, text, renderer);
-    return this.groupService.createGroup(shape, text, canvas, x, y, [], renderer, groupID, editing);
+    return this.groupService.createGroup(shape, text, canvas, x, y, [], renderer, groupID, editing, angle, scaleX, scaleY);
   }
 
   addTextListener(canvas, shape, text, renderer){
@@ -183,7 +186,8 @@ export class ShapeService {
       if (object.type === 'group'){
         const shape = object._objects[0];
         const groupCoord = object.getPointByOrigin(0, 0);
-        const group = this.addText(shape, canvas, renderer, object._objects[1].text, object.id, groupCoord.x, groupCoord.y, object.editing);
+        const group = this.addText(shape, canvas, renderer, object._objects[1].text, object.id, groupCoord.x,
+                                   groupCoord.y, object.editing, object.angle, object.scaleX, object.scaleY);
         groupArray.push(group);
       }
     }

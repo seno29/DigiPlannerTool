@@ -1,11 +1,11 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { fabric } from 'fabric';
-import { UserDatabaseService } from '../user-board-services/user-database.service';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  constructor(public socket: Socket, private userDatabase: UserDatabaseService) { }
+  constructor(public socket: Socket) {
+  }
 
   sendGroup(group: fabric.Group, id: string) {
     this.socket.emit('groupAltered',

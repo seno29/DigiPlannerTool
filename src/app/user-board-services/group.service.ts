@@ -31,9 +31,13 @@ export class GroupService {
 
   createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas, x: number, y: number,
               connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>,
-              renderer: Renderer2, groupID: number, editing: boolean): fabric.Group {
+              renderer: Renderer2, groupID: number, editing: boolean,
+              angle: number, scaleX: number, scaleY: number): fabric.Group {
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
+      angle,
+      scaleX,
+      scaleY,
       left: x,
       top: y,
       connections,
@@ -107,7 +111,10 @@ export class GroupService {
       g.connections,
       renderer,
       g.id,
-      false
+      false,
+      g.angle,
+      g.scaleX,
+      g.scaleY
     );
     this.selectedGroup.splice(u, 1);
     this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
@@ -188,6 +195,7 @@ export class GroupService {
     document.getElementById('deleteBtn').addEventListener('click', (event) => {
       this.delete(canvas);
     });
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   addEventListeners(canvas: fabric.Canvas, group: fabric.Group, renderer: Renderer2) {

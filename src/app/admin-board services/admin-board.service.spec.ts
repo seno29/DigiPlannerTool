@@ -22,7 +22,7 @@ describe('AdminBoardService', () => {
   });
 
   it('should PUT and return data', () => {
-    service.sendingData('base64string', '1234').subscribe((res) => {
+    service.sendingData('base64string', '1234','something@gmail.com').subscribe((res) => {
       expect(res).toEqual('OK');
     });
   });

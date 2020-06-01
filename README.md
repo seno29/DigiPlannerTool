@@ -14,5 +14,5 @@ This is an angular application build as a part of DigiPlanner App which is being
 
 ### Tech Stack:
 	Frontend - Angular
-	Backend - NodeJS ([DigiPlannerToolBackend](https://github.com/vgmehta/DigiPlannerToolBackend))
+	Backend - NodeJS ( [DigiPlannerToolBackend](https://github.com/vgmehta/DigiPlannerToolBackend) )
 	Database - Redis

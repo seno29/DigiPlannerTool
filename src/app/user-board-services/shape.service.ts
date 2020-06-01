@@ -90,7 +90,7 @@ export class ShapeService {
       originX: 'center',
       originY: 'center',
       width: 200,
-      height: 100,
+      height: 150,
       rx: 10,
       ry: 10,
       stroke: 'black',
@@ -99,7 +99,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(triangle, canvas, renderer, 'Double click to edit', -1, 100, 100, false);
+    this.addText(triangle, canvas, renderer, 'Double \ntap to edit', -1, 100, 100, false);
   }
 
   addText(

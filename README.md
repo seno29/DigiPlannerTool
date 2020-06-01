@@ -2,8 +2,8 @@
 
 This is an angular application build as a part of DigiPlanner App which is being used by teams in RFT and PI planning.This application covers requirement of collaborative white boarding tool where multiple team members can join the board and take part in discussion. Every change that is made on discussion board by any of the member is visible to all other members enabling them to brainstrom and collaborate on certain ideas.
 
-###Key Features:
-*
+### Key Features:
+
 1. Users are authenticated via google sign in.
 2. Admin can create board and set a layout for discussion which is not editable by other users.
 3. Multiple users can join board using a roomcode shared by admin.
@@ -12,7 +12,7 @@ This is an angular application build as a part of DigiPlanner App which is being
 6. Board can also be exported as image.
 7. Pen tool for doodling on the board.
 
-###Tech Stack:
+### Tech Stack:
 	Frontend - Angular
 	Backend - NodeJS ([DigiPlannerToolBackend](https://github.com/vgmehta/DigiPlannerToolBackend))
 	Database - Redis

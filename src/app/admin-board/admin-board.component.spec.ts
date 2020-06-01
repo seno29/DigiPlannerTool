@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { fabric } from 'fabric';
+import { RouterTestingModule } from "@angular/router/testing";
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AdminBoardComponent } from './admin-board.component';
+import { MatModule } from '../material.module';
 
 describe('AdminBoardComponent', () => {
   let component: AdminBoardComponent;
@@ -9,6 +11,7 @@ describe('AdminBoardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports : [RouterTestingModule,HttpClientTestingModule,MatModule],
       declarations: [ AdminBoardComponent ]
     })
     .compileComponents();

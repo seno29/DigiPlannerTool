@@ -1,27 +1,18 @@
 # DigiPlanner
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.6.
+This is an angular application build as a part of DigiPlanner App which is being used by teams in RFT and PI planning.This application covers requirement of collaborative white boarding tool where multiple team members can join the board and take part in discussion. Every change that is made on discussion board by any of the member is visible to all other members enabling them to brainstrom and collaborate on certain ideas.
 
-## Development server
+###Key Features:
+*
+1. Users are authenticated via google sign in.
+2. Admin can create board and set a layout for discussion which is not editable by other users.
+3. Multiple users can join board using a roomcode shared by admin.
+4. Users can view boards they have created or have been a part of.
+5. Different shapes can be added on board like rectangle, circle, ellipse and triangle. Shapes can be	rotated, moved and scaled on the board, two shapes can also be connected through a line by double clicking on shapes to be connected in the connect mode. Text can be added on the shapes, if text gets bigger shapes can adjust their size to fit the text. Different colors are provided to change the color of shapes.
+6. Board can also be exported as image.
+7. Pen tool for doodling on the board.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+###Tech Stack:
+	Frontend - Angular
+	Backend - NodeJS ([DigiPlannerToolBackend](https://github.com/vgmehta/DigiPlannerToolBackend))
+	Database - Redis

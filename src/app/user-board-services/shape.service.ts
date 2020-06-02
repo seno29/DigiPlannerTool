@@ -90,7 +90,7 @@ export class ShapeService {
       originX: 'center',
       originY: 'center',
       width: 200,
-      height: 100,
+      height: 150,
       rx: 10,
       ry: 10,
       stroke: 'black',
@@ -99,7 +99,7 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(triangle, canvas, renderer, 'Double click to edit', -1, 100, 100, false, 0, 1, 1);
+    this.addText(triangle, canvas, renderer, 'Double \ntap to edit', -1, 100, 100, false, 0, 1, 1);
   }
 
   addText(
@@ -165,9 +165,9 @@ export class ShapeService {
       ? (canvas.boardTitle = 'UserUI')
       : this.userDatabaseService.getRoomData().subscribe(
           (roomData) => {
-            canvas.boardTitle = roomData.room_title;
-            if (roomData.canvas_json) {this.loadCanvas(canvas, JSON.parse(roomData.canvas_json), renderer); }
-            this.setBackground(canvas, roomData.base64);
+            canvas.boardTitle = roomData.data.room_data.room_title;
+            if (roomData.data.room_data.canvas_json) {this.loadCanvas(canvas, JSON.parse(roomData.data.room_data.canvas_json), renderer); }
+            this.setBackground(canvas, roomData.data.room_data.base64);
           },
           (error) => {
             canvas.boardTitle = 'UserUI';

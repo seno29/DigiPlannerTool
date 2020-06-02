@@ -18,12 +18,10 @@ export class ScalingService {
 
     if (shape instanceof fabric.Ellipse && resize) {
       if (shape.width < textBoundingRect.width) {
-        shape.width += 60;
-        shape.height = textBoundingRect.height + 20;
+        shape.width = textBoundingRect.width + 60;
       }
       if (shape.height < textBoundingRect.height) {
-        shape.width = textBoundingRect.width + 20;
-        shape.height += 60;
+        shape.height = textBoundingRect.height + 60;
       }
       shape.rx = shape.width / 2;
       shape.ry = shape.height / 2;
@@ -31,15 +29,27 @@ export class ScalingService {
   }
 
   compareTextShape(shape: fabric.Shape, shapeDimen: number, textDimen: number): boolean {
+ if (shape instanceof fabric.Rect){
     if (shapeDimen < textDimen) {
-      if ((shape.height * shape.scaleY) === shapeDimen) {
-        shape.height = textDimen + 20;
-      }
-      else {
-        shape.width = textDimen + 20;
-      }
+      (shape.height * shape.scaleY) === shapeDimen ? shape.height = textDimen + 20 : shape.width = textDimen + 20;
       return true;
     }
     return false;
   }
+ if (shape instanceof fabric.Triangle){
+  if (shapeDimen / 2 < textDimen) {
+    if ((shape.height * shape.scaleY) === shapeDimen) {
+      shape.height = Math.max(shapeDimen, textDimen) * 1.5;
+      shape.width *= 1.5;
+    }
+    else {
+      shape.width = Math.max(shapeDimen, textDimen) * 2;
+      shape.height *= 1.5;
+     }
+    return true;
+  }
+  return false;
+  }
+ return true;
+ }
 }

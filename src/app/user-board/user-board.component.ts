@@ -40,6 +40,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
     this.authService.authState.subscribe((user) => {
       this.groupService.currentUser = user;
+      this.constants.userID = user.email;
     });
   }
 

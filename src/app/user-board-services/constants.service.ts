@@ -14,6 +14,7 @@ export class ConstantsService {
   colors: Array<string>;
   connectText: string;
   disconnectText: string;
+  public userID: string;
   public roomID: string;
 
 

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SocialUser, AuthService } from 'angularx-social-login';
 import { BoardService } from '../board.service';
 
+
 @Component({
   selector: 'app-view-boards',
   templateUrl: './view-boards.component.html',
@@ -22,8 +23,13 @@ export class ViewBoardsComponent implements OnInit {
         this.router.navigate(['/login']);
       }
     });
-    this.boardService.viewBoard(this.currentUser.email).subscribe((boardsData) => {
-      this.boards=boardsData;
+    this.boardService.viewBoard(this.currentUser.email).subscribe((result) => {
+      if(result['success']){
+        let data = result['data'];
+        this.boards = data.boards;
+      }else{
+        console.log('unable to fetch boards');
+      }
     });
   }
 }

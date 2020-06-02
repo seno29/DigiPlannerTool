@@ -3,6 +3,8 @@ import { fabric } from 'fabric';
 import { AdminBoardService } from '../admin-board services/admin-board.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService,SocialUser } from 'angularx-social-login';
 
 @Component({
   selector: 'app-admin-board',
@@ -13,16 +15,10 @@ export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
   title = 'adminboard';
   convertedCanvas;
+  currentUser:SocialUser;
+  userId:string
 
-  colors = [
-    'aqua',
-    'BlueViolet',
-    'orange',
-    'magenta',
-    'red',
-    'blue',
-    'lime',
-  ];
+  colors = ['aqua', 'BlueViolet', 'orange', 'magenta', 'red', 'blue', 'lime'];
 
   selectedColor: string;
   roomCode: string;
@@ -32,8 +28,10 @@ export class AdminBoardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private adminBoardService: AdminBoardService,
-    private location:Location
-  ) { }
+    private location: Location,
+    private authService:AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.canvas = new fabric.Canvas('canvas', {
@@ -50,17 +48,27 @@ export class AdminBoardComponent implements OnInit {
       this.boardTitle = params['boardTitle'];
     });
 
-    //AdminSocketService can be used here for multiple admins
+    this.authService.authState.subscribe((user) => {
+      this.currentUser=user;
+      this.userId=this.currentUser.email;
+    });
   }
 
   exportJsonAdmin() {
     this.convertedCanvas = this.canvas.toDataURL();
-    this.adminBoardService.sendingData(this.convertedCanvas, this.roomCode)
-      .subscribe(responseData=>{
-        alert(responseData+' No errors Data sent successfully');
+    this.adminBoardService
+      .sendingData(this.convertedCanvas, this.roomCode, this.userId)
+      .subscribe((responseData) => {
+        this.showSnackBar( responseData["messages"][0] , 'OK' );
       });
 
     this.location.back();
+  }
+
+  showSnackBar(message: string, action: string): void {
+    this.snackBar.open(message, action, {
+      duration: 3000,
+    });
   }
 
   togglePen() {
@@ -75,7 +83,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale
+        scaleY: scale,
       });
       this.canvas.add(img);
     });
@@ -89,7 +97,7 @@ export class AdminBoardComponent implements OnInit {
         top: 10,
         left: 10,
         scaleX: scale,
-        scaleY: scale
+        scaleY: scale,
       });
       this.canvas.add(img);
     });
@@ -110,7 +118,7 @@ export class AdminBoardComponent implements OnInit {
         radius: 50,
         fill: this.selectedColor,
         left: 10,
-        top: 10
+        top: 10,
       })
     );
   }
@@ -136,7 +144,7 @@ export class AdminBoardComponent implements OnInit {
         height: 80,
         fill: this.selectedColor,
         left: 10,
-        top: 10
+        top: 10,
       })
     );
   }
@@ -151,7 +159,7 @@ export class AdminBoardComponent implements OnInit {
         stroke: this.selectedColor,
         fontSize: 20,
         fontFamily: 'Verdana',
-        textAlign: 'center'
+        textAlign: 'center',
       })
     );
   }

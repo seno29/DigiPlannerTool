@@ -1,10 +1,17 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+// import { Socket } from 'ngx-socket-io';
+import * as io from 'socket.io-client';
 import { fabric } from 'fabric';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  constructor(public socket: Socket) {
+  private url = "http://localhost:4200";
+  public socket;
+  constructor() {
+  }
+
+  connect(){
+    this.socket = io(this.url);
   }
 
   sendGroup(group: fabric.Group, id: string) {
@@ -51,6 +58,14 @@ export class SocketService {
   drawLines(can: any) {
     const arr = [can.f, can.s, can.roomId];
     this.socket.emit('drawingLines', arr);
+  }
+
+  disconnect(){
+    if(this.socket){
+      this.socket.removeAllListeners();
+      this.socket.close();
+      this.socket = undefined;
+    }
   }
 }
 

@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   currentUser:SocialUser;
   userType:string="admin";
   inH:number;
- 
+  isLoggedIn:boolean = true;
   constructor(
     private authService:AuthService,
     private userService:UserService,
@@ -23,42 +23,40 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit():void {
-    console.log(this.userType);
     this.authService.authState.subscribe((user)=>{
       this.currentUser = user;
       if(this.currentUser){
         this.router.navigate(['/home']);
+      }else{
+        this.isLoggedIn = false;
       }
     }); 
   }
 
   onChange(event):void {   
     this.userType=event.value;
-    console.log(this.userType);
   }
 
   signIn():void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
       if(user){
         this.userService.getUserType(user.email).subscribe((result) => {
-          if(result != undefined){
-            if(result.toString() === '1' && this.userType === 'admin' ) {
-                this.showSnackBar('Login Successful','cancel');
-                this.router.navigate(['/home']);
-            } else if(result.toString()==='0' && this.userType === 'user' ) {
+          console.log(result['success']);
+          if(result['success']){
+            let data = result['data'];
+            console.log(data);
+            if((data['roles'][0] === 1 && this.userType === 'admin') || (data['roles'][0] === 2 && this.userType === 'user')) {
                 this.showSnackBar('Login Successful','cancel');
                 this.router.navigate(['/home']);
             } else {
-                this.showSnackBar('invalid user or usertype!','cancel');
                 this.signOut();
+                this.showSnackBar('invalid user or usertype!','cancel');
             } 
+          }else{
+            this.signOut();
+            this.showSnackBar(result['messages'],'cancel');
           }
-        },
-        (err)=>{
-          this.showSnackBar('user does not exist!','cancel');
-          this.signOut();
-        }
-        ); 
+        }); 
       }
     }).catch(error => {
       console.log(error);

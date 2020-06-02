@@ -11,7 +11,6 @@ export class CreateBoardDialogComponent implements OnInit {
   isexist:boolean = false;
   emptyRoomCode:boolean=true;
   emptyBoardtitle:boolean=true;
- 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
     public dialogRef:MatDialogRef<CreateBoardDialogComponent>,
@@ -31,19 +30,19 @@ export class CreateBoardDialogComponent implements OnInit {
   }
   validateRoomCode(roomcode:string){
     if(roomcode && roomcode.length>=4){
-      this.boardService.isExist(roomcode).subscribe((result) => {
-        console.log(result);
-        if ( result.toString() === 'false' ) {
-          this.isexist = false;
-        } else {
-          this.isexist = true;
-        }
+      this.boardService.isExist(this.data.userId,roomcode).subscribe((result) => {
+        this.isexist = result['success'];
         this.emptyRoomCode = false;
-      });
+      },
+      (err) => {
+        this.isexist = false;
+        this.emptyRoomCode = false;
+      }  
+      );
     }else{
       this.isexist = false;
       this.emptyRoomCode=true;
     }
-
+    
   }
 }

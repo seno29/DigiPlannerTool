@@ -35,6 +35,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
+    this.socketService.connect();
     this.canvas = this.shapeService.initCanvas(this.renderer);
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
     this.authService.authState.subscribe((user) => {
@@ -45,6 +46,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void{
     // this.socketService.socket.emit('disconnect');
+    this.socketService.disconnect();
   }
 
   addObj(shape) {

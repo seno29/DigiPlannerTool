@@ -1,5 +1,6 @@
 # DigiPlanner
 
+
 This is an angular application build as a part of DigiPlanner App which is being used by teams in RFT and PI planning.This application covers requirement of collaborative white boarding tool where multiple team members can join the board and take part in discussion. Every change that is made on discussion board by any of the member is visible to all other members enabling them to brainstrom and collaborate on certain ideas.
 
 ### Key Features:

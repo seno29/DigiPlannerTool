@@ -11,7 +11,7 @@ export class AppComponent implements OnInit{
   title:string = 'digi-planner';
   currentUser:SocialUser;
   userType:string;
-  constructor(private authService:AuthService,private userService:UserService,private router:Router){
+  constructor(private authService:AuthService,private router:Router){
 
   }
 

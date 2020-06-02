@@ -31,13 +31,7 @@ export class CreateBoardDialogComponent implements OnInit {
   validateRoomCode(roomcode:string){
     if(roomcode && roomcode.length>=4){
       this.boardService.isExist(this.data.userId,roomcode).subscribe((result) => {
-        // console.log(result);
         this.isexist = result['success'];
-        // if ( result['success']) {
-        //   this.isexist = ;
-        // } else {false
-        //   this.isexist = true;
-        // }
         this.emptyRoomCode = false;
       },
       (err) => {

@@ -11,14 +11,12 @@ interface canvasData{
 })
 export class AdminBoardService {
 
-  roomCode:string;
   base64:string;
 
   constructor(private http:HttpClient) { }
 
   sendingData(base64,roomCode,userId){
 
-    this.roomCode = roomCode;
     this.base64 = base64;
 
     const post : canvasData={
@@ -26,8 +24,7 @@ export class AdminBoardService {
       is_published : 'true'
     };
 
-    return this.http.put('http://localhost:4200/board/' + userId + this.roomCode , post , {responseType:'json'})
+    return this.http.put(`http://localhost:4200/board/${userId}/${roomCode}` , post , {responseType:'json'});
 
   }
 }
-

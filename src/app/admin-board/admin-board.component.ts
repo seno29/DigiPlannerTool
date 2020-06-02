@@ -4,6 +4,7 @@ import { AdminBoardService } from '../admin-board services/admin-board.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService,SocialUser } from 'angularx-social-login';
 
 @Component({
   selector: 'app-admin-board',
@@ -14,6 +15,8 @@ export class AdminBoardComponent implements OnInit {
   canvas: fabric.Canvas;
   title = 'adminboard';
   convertedCanvas;
+  currentUser:SocialUser;
+  userId:string
 
   colors = ['aqua', 'BlueViolet', 'orange', 'magenta', 'red', 'blue', 'lime'];
 
@@ -26,6 +29,7 @@ export class AdminBoardComponent implements OnInit {
     private route: ActivatedRoute,
     private adminBoardService: AdminBoardService,
     private location: Location,
+    private authService:AuthService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -44,15 +48,18 @@ export class AdminBoardComponent implements OnInit {
       this.boardTitle = params['boardTitle'];
     });
 
-    //AdminSocketService can be used here for multiple admins
+    this.authService.authState.subscribe((user) => {
+      this.currentUser=user;
+      this.userId=this.currentUser.email;
+    });
   }
 
   exportJsonAdmin() {
     this.convertedCanvas = this.canvas.toDataURL();
     this.adminBoardService
-      .sendingData(this.convertedCanvas, this.roomCode)
+      .sendingData(this.convertedCanvas, this.roomCode, this.userId)
       .subscribe((responseData) => {
-        this.showSnackBar('Canvas saved successfully ', responseData);
+        this.showSnackBar( responseData["messages"][0] , 'OK' );
       });
 
     this.location.back();

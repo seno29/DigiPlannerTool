@@ -24,7 +24,7 @@ export class AdminBoardService {
       is_published : 'true'
     };
 
-    return this.http.put(`http://localhost:8080/board/${userId}/${roomCode}` , post , {responseType:'json'});
+    return this.http.put(`http://0.0.0.0:8080/board/${userId}/${roomCode}` , post , {responseType:'json'});
 
   }
 }

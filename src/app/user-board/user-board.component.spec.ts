@@ -34,7 +34,7 @@ describe('UserBoardComponent', () => {
 
   it(`should correctly initialize`, () => {
     const canvas = component.canvas;
-    expect(component.boardID).toBeTruthy();
+    expect(component.boardTitle).toBeTruthy();
     expect(canvas.connect).toBeFalse();
     expect(canvas.connectButtonText).toEqual('Connect');
     expect(canvas.selectedColor).toEqual('cornsilk');

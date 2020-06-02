@@ -11,19 +11,22 @@ export class UserDatabaseService {
 
   sendingCanvas(canvasJSON: any){
     delete canvasJSON.backgroundImage;
-    this.http.put(`http://localhost:4200/drawingUserView/${this.constants.roomID}`,
-      {canvas_json: JSON.stringify(canvasJSON)}, {responseType: 'text'})
+    this.http.put(`http://localhost:4200/board/${this.constants.userID}/${this.constants.roomID}`,
+      {canvas_json: JSON.stringify(canvasJSON)}, {responseType: 'json'})
       .subscribe( responseData => {});
    }
 
   getRoomData(): Observable<RoomData> {
-    return this.http.get(`${this.constants.URI}/drawingUserView/${this.constants.roomID}`) as Observable<RoomData>;
+    return this.http.get(`${this.constants.URI}/board/${this.constants.userID}/${this.constants.roomID}`) as Observable<RoomData>;
   }
 }
 
 interface RoomData{
-  room_title: string;
-  admin_id: string;
-  canvas_json: string;
-  base64: string;
+  success: string;
+  data: { room_data: {
+    canvas_json: string,
+    base64: string,
+    room_title: string,
+  }
+};
 }

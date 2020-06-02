@@ -21,7 +21,7 @@ export class ConstantsService {
   constructor() {
     this.HideControls = { tl: true, tr: false, bl: true, br: true, ml: true, mt: true, mr: true, mb: true, mtr: true };
     this.userBackURL = '../../assets/user_back.png';
-    this.PORT = '8080';
+    this.PORT = '4200';
     this.URI = `http://localhost:${this.PORT}`;
     this.starIconURL = '../assets/stars-black-48dp.svg';
     this.colors = ['CornflowerBlue', 'darkcyan', 'MediumAquaMarine', 'lemonchiffon', 'gold', 'silver', 'salmon', 'palevioletred', 'pink'];

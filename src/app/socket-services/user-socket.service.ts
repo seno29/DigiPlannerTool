@@ -100,11 +100,9 @@ export class UserSocketService {
           break;
         }
       }
-      const text = gr._objects[1];
       const shape = gr._objects[0];
-      this.groupService.unGroup(gr, canvas);
-      shape.fill = data[1];
-      this.groupService.regroup(shape, text, canvas, renderer);
+      shape.set('fill', data[1]);
+      canvas.renderAll();
     });
 
     this.socketService.socket.on('deleteGroup', (data) => {

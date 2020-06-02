@@ -23,7 +23,6 @@ export class ConstantsService {
     this.userBackURL = '../../assets/user_back.png';
     this.PORT = '8080';
     this.URI = `http://localhost:${this.PORT}`;
-    this.clientId = '610664320073-4ik734pbbflijv056jr130n5k6e7ia8q.apps.googleusercontent.com';
     this.starIconURL = '../assets/stars-black-48dp.svg';
     this.colors = ['CornflowerBlue', 'darkcyan', 'MediumAquaMarine', 'lemonchiffon', 'gold', 'silver', 'salmon', 'palevioletred', 'pink'];
     this.connectText = 'Connect';

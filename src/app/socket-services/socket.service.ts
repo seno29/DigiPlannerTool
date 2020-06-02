@@ -5,7 +5,7 @@ import { fabric } from 'fabric';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  private url = "http://0.0.0.0:8080";
+  private url = "http://localhost:8080";
   public socket;
   constructor() {
   }

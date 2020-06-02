@@ -18,7 +18,7 @@ export class ShapeService {
     private socketService: SocketService
   ) {}
 
-  initCanvas(roomCode){
+  initCanvas(renderer: Renderer2){
     this.image = null;
     fabric.Object.prototype.transparentCorners = false;
     const canvas = new fabric.Canvas('canvas', {
@@ -29,7 +29,7 @@ export class ShapeService {
     canvas.setWidth(1200 - 10);
     canvas.selectedElements = [];
     canvas.selectedColor = this.constants.colors[0];
-    this.getTitleFromDatabase(roomCode, canvas);
+    this.getTitleFromDatabase(canvas, renderer);
     return canvas;
   }
 
@@ -65,7 +65,7 @@ export class ShapeService {
       strokeWidth: 0.3,
       selectable: false,
     });
-    this.addText(ellipse, canvas, renderer);
+    this.addText(ellipse, canvas, renderer, 'Double click to edit', -1, 100, 100, false, 0, 1, 1);
   }
 
   addRectangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string) {
@@ -82,31 +82,39 @@ export class ShapeService {
       selectable: false,
       strokeLineJoin: 'round',
     });
-    this.addText(rect, canvas, renderer);
+    this.addText(rect, canvas, renderer, 'Double click to edit', -1, 100, 100, false, 0, 1, 1);
   }
 
-  addImage(canvas: fabric.Canvas, imageURL: string, renderer: Renderer2) {
-    const imgURL = imageURL || this.constants.starIconURL;
-    const imageEle = new Image();
-    imageEle.src = imgURL;
-    imageEle.onload = () => {
-      const image = new fabric.Image(imageEle, {
-        originX: 'center',
-        originY: 'center',
-        scaleX: 0.3,
-        scaleY: 0.3,
-        selectable: false,
-      });
-      this.addText(image, canvas, renderer);
-    };
+  addTriangle(canvas: fabric.Canvas, renderer: Renderer2, color?: string){
+    const triangle = new fabric.Triangle({
+      originX: 'center',
+      originY: 'center',
+      width: 200,
+      height: 100,
+      rx: 10,
+      ry: 10,
+      stroke: 'black',
+      strokeWidth: 0.3,
+      fill: color ? color : canvas.selectedColor,
+      selectable: false,
+      strokeLineJoin: 'round',
+    });
+    this.addText(triangle, canvas, renderer, 'Double click to edit', -1, 100, 100, false, 0, 1, 1);
   }
 
   addText(
     shape: fabric.Object,
     canvas: fabric.Canvas,
-    renderer: Renderer2
-  ): fabric.IText {
-    const text = new fabric.IText('Double click to edit', {
+    renderer: Renderer2,
+    textVal: string,
+    groupID: number,
+    x: number,
+    y: number,
+    editing: boolean,
+    angle: number,
+    scaleX: number,
+    scaleY: number) {
+    const text = new fabric.IText(textVal, {
       fill: '#333',
       charSpacing : 100,
       fontSize: 15,
@@ -118,8 +126,15 @@ export class ShapeService {
       left: 0,
       selectable: false,
     });
-    this.groupService.createGroup(shape, text, canvas, 100, 100, [], renderer);
-    // text.on('editing:exited', () => { this.groupService.regroup(shape, text, canvas, renderer); });
+    this.addTextListener(canvas, shape, text, renderer);
+    return this.groupService.createGroup(shape, text, canvas, x, y, [], renderer, groupID, editing, angle, scaleX, scaleY);
+  }
+
+  addTextListener(canvas, shape, text, renderer){
+    text.on('editing:exited', () => {
+      this.socketService.regr(text.text, text.id, this.constants.roomID);
+      this.groupService.regroup(shape, text, canvas, renderer);
+    });
   }
 
   changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2) {
@@ -131,23 +146,27 @@ export class ShapeService {
       this.socketService.colorChange(
         group.id,
         color,
-        this.groupService.getRoomId()
+        this.constants.roomID
       );
       this.groupService.unGroup(group, canvas);
       shape.fill = color;
       this.groupService.regroup(shape, text, canvas, renderer);
+      for (const obj of canvas._objects) {
+        if (obj.id === text.id) {
+          canvas.setActiveObject(obj);
+          break;
+        }
+      }
     }
   }
 
-  getTitleFromDatabase(roomCode: string, canvas: fabric.Canvas) {
-    roomCode === 'unknown'
+  getTitleFromDatabase(canvas: fabric.Canvas, renderer) {
+    this.constants.roomID === 'unknown'
       ? (canvas.boardTitle = 'UserUI')
-      : this.userDatabaseService.getRoomData(roomCode).subscribe(
+      : this.userDatabaseService.getRoomData().subscribe(
           (roomData) => {
             canvas.boardTitle = roomData.room_title;
-            canvas.loadFromJSON(roomData.canvas_json, () => {
-              canvas.renderAll();
-            });
+            if (roomData.canvas_json) {this.loadCanvas(canvas, JSON.parse(roomData.canvas_json), renderer); }
             this.setBackground(canvas, roomData.base64);
           },
           (error) => {
@@ -155,6 +174,75 @@ export class ShapeService {
             this.setBackground(canvas, this.constants.userBackURL);
           }
         );
+  }
+
+  loadCanvas(canvas: fabric.Canvas, canvasJson, renderer: Renderer2){
+    const newCanvas = new fabric.Canvas();
+    newCanvas.loadFromJSON(canvasJson);
+    this.groupService.givingId = newCanvas.givingId;
+    canvas.givingId = newCanvas.givingId;
+    const groupArray = [];
+    for (const object of newCanvas._objects){
+      if (object.type === 'group'){
+        const shape = object._objects[0];
+        const groupCoord = object.getPointByOrigin(0, 0);
+        const group = this.addText(shape, canvas, renderer, object._objects[1].text, object.id, groupCoord.x,
+                                   groupCoord.y, object.editing, object.angle, object.scaleX, object.scaleY);
+        groupArray.push(group);
+      }
+    }
+
+    for (const group of groupArray){
+      for (const object of newCanvas._objects){
+        if (object.id === group.id){
+          this.drawLinesWhileLoading(canvas, object, group);
+        }
+      }
+    }
+
+    for (const group of groupArray){
+      if (group.editing){
+        const shape = group._objects[0];
+        const text = group._objects[1];
+        text.fill = '#7f8c8d';
+        text.fontStyle = 'italic';
+        shape.set('opacity', 0.7);
+        text.set('text', ` Someone is editing`);
+        this.ungroupOnLoad(group, canvas);
+        text.lockMovementX = false;
+        text.lockMovementY = false;
+      }
+    }
+    canvas.renderAll();
+  }
+
+  ungroupOnLoad(group, canvas){
+    this.groupService.selectedGroup.push(group);
+    group.editing = true;
+    const items = group._objects;
+    group._restoreObjectsState();
+    canvas.remove(group);
+    for (const item of items) {
+      item.selectable = false;
+      canvas.add(item);
+    }
+  }
+
+  drawLinesWhileLoading(canvas, object, group){
+    canvas.selectedElements.push(group);
+    for (const connection of object.connections){
+      if (connection.name === 'p1'){
+        for (const connectedGroup of canvas._objects){
+          if (connectedGroup.id === connection.connectedGroup){
+            canvas.selectedElements.push(connectedGroup);
+            this.groupService.drawLineTwoPoints(canvas);
+            canvas.selectedElements.pop();
+            break;
+          }
+        }
+      }
+    }
+    canvas.selectedElements.pop();
   }
 }
 

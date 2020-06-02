@@ -1,47 +1,58 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
 import { fabric } from 'fabric';
 import { ActivatedRoute } from '@angular/router';
 import { ShapeService } from '../user-board-services/shape.service';
 import { ConstantsService } from '../user-board-services/constants.service';
 import { SocketService } from '../socket-services/socket.service';
 import { UserSocketService } from '../socket-services/user-socket.service';
+import { AuthService, SocialUser } from 'angularx-social-login';
 import { GroupService } from '../user-board-services/group.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserDatabaseService } from '../user-board-services/user-database.service';
+
 
 @Component({
   selector: 'app-user-board',
   templateUrl: './user-board.component.html',
   styleUrls: ['./user-board.component.css'],
 })
-export class UserBoardComponent implements OnInit {
+export class UserBoardComponent implements OnInit, OnDestroy {
   canvas: fabric.Canvas;
-  roomId: string;
   boardTitle: string;
 
   constructor(
     private shapeService: ShapeService,
+    private groupService: GroupService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
     public constants: ConstantsService,
     private socketService: SocketService,
     private userSocketService: UserSocketService,
-    private groupService: GroupService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
+    private userDatabase: UserDatabaseService
   ) {}
 
   ngOnInit(): void {
-    this.roomId =
-      this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
-    this.canvas = this.shapeService.initCanvas(this.roomId);
-    this.userSocketService.init(this.canvas, this.renderer, this.roomId);
-    this.groupService.setRoomId(this.roomId);
+    this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
+    this.socketService.connect();
+    this.canvas = this.shapeService.initCanvas(this.renderer);
+    this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
+    this.authService.authState.subscribe((user) => {
+      this.groupService.currentUser = user;
+    });
+  }
+
+  ngOnDestroy(): void{
+    // this.socketService.socket.emit('disconnect');
+    this.socketService.disconnect();
   }
 
   addObj(shape) {
     this.socketService.somethingAdded(
       shape,
       this.canvas.selectedColor,
-      this.roomId
+      this.constants.roomID,
     );
   }
 
@@ -55,17 +66,19 @@ export class UserBoardComponent implements OnInit {
     this.addObj('rect');
   }
 
-  addImage() {
-    this.shapeService.addImage(this.canvas, '', this.renderer);
-    this.addObj('image');
+  addTriangle() {
+    this.shapeService.addTriangle(this.canvas, this.renderer);
+    this.addObj('triangle');
   }
 
   clear() {
       this.canvas.clear();
       this.shapeService.setBackground(this.canvas, 'assets');
-      this.socketService.clearCanvas(this.canvas, this.roomId);
+      this.socketService.clearCanvas(this.canvas, this.constants.roomID);
       document.getElementById('deleteBtn')?.remove();
+      this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
+
   showSnackBar(message: string, action: string): void {
     const snackBarRef = this.snackBar.open(message, action, {
       duration: 3000,
@@ -78,8 +91,9 @@ export class UserBoardComponent implements OnInit {
   connect() {
     if (this.canvas.connect) {
       this.canvas.connect = false;
-      this.canvas.connectButtonText = this.constants.disconnectText;
-    } else {
+      this.canvas.connectButtonText = this.constants.connectText;
+    }
+    else {
       while (this.canvas.selectedElements.length > 0) {
         this.canvas.selectedElements.pop();
       }
@@ -88,22 +102,24 @@ export class UserBoardComponent implements OnInit {
     }
   }
 
-  changeColor(color: string) {
-    this.shapeService.changeColor(this.canvas, color, this.renderer);
-  }
-  exportAsImage(canvasContent){
-    if (canvasContent.msToBlob){
+  exportAsImage(canvasContent) {
+    // for IE, Edge
+    if (canvasContent.msToBlob) {
       const blob = canvasContent.msToBlob();
-      window.navigator.msSaveBlob(blob, 'board-image.jpg');
-    }
-    else{
+      window.navigator.msSaveBlob(blob, 'board-image.png');
+    } else {
+      // other browsers
       const image = canvasContent
-      .toDataURL( 'image/jpg', 1.0)
-      .replace( 'image/jpg', 'image/octet-stream');
+        .toDataURL('image/png', 1.0)
+        .replace('image/png', 'image/octet-stream');
       const link = document.createElement('a');
-      link.download = 'board-image.jpg';
+      link.download = 'board-image.png';
       link.href = image;
       link.click();
     }
+  }
+
+  changeColor(color: string) {
+    this.shapeService.changeColor(this.canvas, color, this.renderer);
   }
 }

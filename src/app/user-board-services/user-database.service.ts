@@ -6,16 +6,24 @@ import { ConstantsService } from './constants.service';
   providedIn: 'root'
 })
 export class UserDatabaseService {
+
   constructor(private http: HttpClient, private constants: ConstantsService) { }
 
-  getRoomData(code: string): Observable<RoomData> {
-    return this.http.get(`${this.constants.URI}/drawingUserView/${code}`) as Observable<RoomData>;
+  sendingCanvas(canvasJSON: any){
+    delete canvasJSON.backgroundImage;
+    this.http.put(`http://localhost:4200/drawingUserView/${this.constants.roomID}`,
+      {canvas_json: JSON.stringify(canvasJSON)}, {responseType: 'text'})
+      .subscribe( responseData => {});
+   }
+
+  getRoomData(): Observable<RoomData> {
+    return this.http.get(`${this.constants.URI}/drawingUserView/${this.constants.roomID}`) as Observable<RoomData>;
   }
 }
 
 interface RoomData{
   room_title: string;
   admin_id: string;
-  canvas_json: JSON;
+  canvas_json: string;
   base64: string;
 }

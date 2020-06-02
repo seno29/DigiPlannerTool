@@ -7,11 +7,11 @@ import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { UserBoardComponent } from './user-board/user-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {ShapeService } from './user-board-services/shape.service';
+import { ShapeService } from './user-board-services/shape.service';
 import { MatModule } from './material.module';
 
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider} from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
 
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
@@ -19,9 +19,10 @@ import { JoinRoomDialogComponent } from './join-room-dialog/join-room-dialog.com
 import { ViewBoardsComponent } from './view-boards/view-boards.component';
 import { CreateBoardDialogComponent } from './create-board-dialog/create-board-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { clientId } from './constants';
+
 
 const config = new AuthServiceConfig([
   {
@@ -30,7 +31,7 @@ const config = new AuthServiceConfig([
   },
 ]);
 
-const socketConfig: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
+// const socketConfig: SocketIoConfig = { url: 'http://localhost:4200', options: {} };
 
 export function provideConfig() {
   return config;
@@ -56,7 +57,7 @@ export function provideConfig() {
     MatModule,
     AppRoutingModule,
     HttpClientModule,
-    SocketIoModule.forRoot(socketConfig),
+    // SocketIoModule.forRoot(socketConfig),
   ],
   entryComponents: [
     JoinRoomDialogComponent,

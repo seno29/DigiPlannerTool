@@ -3,20 +3,20 @@ import { fabric } from 'fabric';
 import { ScalingService } from './scaling.service';
 import { ConstantsService } from './constants.service';
 import { SocketService } from '../socket-services/socket.service';
+import { UserDatabaseService } from './user-database.service';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
-  selectedGroup: fabric.Group;
+  selectedGroup: Array<fabric.Group> = [];
   givingId;
-  roomId: String;
-  constructor(
-    private scalingService: ScalingService,
-    private constants: ConstantsService,
-    private socketService: SocketService
-  ) {
+  currentUser;
+  constructor(private scalingService: ScalingService, private constants: ConstantsService,
+              private socketService: SocketService, private userDatabase: UserDatabaseService) {
     this.givingId = 0;
+    this.currentUser = 'Unknown';
   }
 
   makeLine(coords: fabric.Point) {
@@ -29,35 +29,37 @@ export class GroupService {
     });
   }
 
-  createGroup(
-    shape: fabric.Object,
-    text: fabric.Itext,
-    canvas: fabric.Canvas,
-    x: number,
-    y: number,
-    connections: Array<{
-      name: string;
-      line: fabric.Line;
-      connectedWith: fabric.Group;
-      i: any;
-    }>,
-    renderer: Renderer2
-  ) {
+  createGroup(shape: fabric.Object, text: fabric.Itext, canvas: fabric.Canvas, x: number, y: number,
+              connections: Array<{ name: string; line: fabric.Line; connectedWith: fabric.Group; i: any; }>,
+              renderer: Renderer2, groupID: number, editing: boolean,
+              angle: number, scaleX: number, scaleY: number): fabric.Group {
     this.scalingService.scaleShapes(shape, text.getBoundingRect());
     const group = new fabric.Group([shape, text], {
+      angle,
+      scaleX,
+      scaleY,
       left: x,
       top: y,
       connections,
       isEditable: true,
     });
-    group.id = this.givingId;
-    text.id = this.givingId;
+    if (groupID === -1) {
+      group.id = this.givingId;
+      text.id = this.givingId;
+      this.givingId += 1;
+      canvas.givingId = this.givingId;
+    }
+    else{
+      group.id = groupID;
+      text.id = groupID;
+    }
     group.type = 'group';
-    this.givingId += 1;
+    group.editing = editing;
     group.setControlsVisibility(this.constants.HideControls);
-    this.addEventListeners(canvas, group, text, renderer);
+    this.addEventListeners(canvas, group, renderer);
     canvas.add(group);
-    canvas.setActiveObject(group);
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
+    return group;
   }
 
   doubleClickEvent(obj, handler) {
@@ -74,7 +76,9 @@ export class GroupService {
   }
 
   unGroup(group: fabric.Group, canvas: fabric.Canvas) {
-    this.selectedGroup = group;
+    this.selectedGroup.push(group);
+    group.editing = true;
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
     const items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
@@ -84,24 +88,36 @@ export class GroupService {
     canvas.renderAll();
   }
 
-  regroup(
-    shape: fabric.Object,
-    text: fabric.IText,
-    canvas: fabric.Canvas,
-    renderer: Renderer2
-  ) {
+  regroup(shape: fabric.Object, text: fabric.IText,
+          canvas: fabric.Canvas, renderer: Renderer2) {
+    let g: fabric.Group;
+    let  u = 0;
+    for (const ob of this.selectedGroup){
+      if (ob.id === text.id){
+        g = ob;
+        break;
+      }
+      u++;
+    }
+    const groupCoord = g.getPointByOrigin(0, 0);
     canvas.remove(shape);
     canvas.remove(text);
-    const groupCoord = this.selectedGroup.getPointByOrigin(0, 0);
     this.createGroup(
       shape,
       text,
       canvas,
       groupCoord.x,
       groupCoord.y,
-      this.selectedGroup.connections,
-      renderer
+      g.connections,
+      renderer,
+      g.id,
+      false,
+      g.angle,
+      g.scaleX,
+      g.scaleY
     );
+    this.selectedGroup.splice(u, 1);
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   drawLineTwoPoints(canvas: fabric.Canvas) {
@@ -115,11 +131,11 @@ export class GroupService {
     ]);
     canvas.add(line);
     canvas.sendToBack(line);
-    group1.connections.push({ name: 'p1', line, connectedGroup: group2 });
-    group2.connections.push({ name: 'p2', line, connectedGroup: group1 });
-
+    group1.connections.push({ name: 'p1', line, connectedGroup: group2.id });
+    group2.connections.push({ name: 'p2', line, connectedGroup: group1.id });
     canvas.connect = false;
     canvas.connectButtonText = this.constants.connectText;
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   moveLines(group: fabric.Group) {
@@ -145,10 +161,8 @@ export class GroupService {
       group = gr;
     } else {
       group = canvas.getActiveObject();
-      this.socketService.deleteGroup(group.id, this.roomId);
-      console.log('Delete');
+      this.socketService.deleteGroup(group.id, this.constants.roomID);
     }
-
     for (const connection of group.connections) {
       // tslint:disable-next-line: forin
       for (const index in connection.connectedGroup.connections) {
@@ -161,14 +175,10 @@ export class GroupService {
     }
     canvas.remove(group);
     canvas.renderAll();
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
-  addDeleteBtn(
-    x: number,
-    y: number,
-    canvas: fabric.Canvas,
-    renderer: Renderer2
-  ) {
+  addDeleteBtn(x: number, y: number, canvas: fabric.Canvas, renderer: Renderer2) {
     document.getElementById('deleteBtn')?.remove();
     const btnLeft = x - 10;
     const btnTop = y - 10;
@@ -181,21 +191,14 @@ export class GroupService {
     cursor:pointer;
     width:20px;
     height:20px;`;
-    renderer.appendChild(
-      document.getElementsByClassName('canvas-container')[0],
-      delteBtn
-    );
+    renderer.appendChild(document.getElementsByClassName('canvas-container')[0], delteBtn);
     document.getElementById('deleteBtn').addEventListener('click', (event) => {
       this.delete(canvas);
     });
+    this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
-  addEventListeners(
-    canvas: fabric.Canvas,
-    group: fabric.Group,
-    text: fabric.IText,
-    renderer: Renderer2
-  ) {
+  addEventListeners(canvas: fabric.Canvas, group: fabric.Group, renderer: Renderer2) {
     group.on('selected', (e) => {
       this.addDeleteBtn(
         group.oCoords.tr.x,
@@ -216,6 +219,7 @@ export class GroupService {
 
     group.on('scaling', (e) => {
       document.getElementById('deleteBtn')?.remove();
+      this.socketService.sendGroup(group, this.constants.roomID);
     });
 
     group.on('moving', (e) => {
@@ -224,10 +228,12 @@ export class GroupService {
         this.moveLines(group);
         canvas.renderAll();
       }
+      this.socketService.sendGroup(group, this.constants.roomID);
     });
 
     group.on('rotating', (e) => {
       document.getElementById('deleteBtn')?.remove();
+      this.socketService.sendGroup(group, this.constants.roomID);
     });
 
     group.on('removed', (e) => {
@@ -244,16 +250,16 @@ export class GroupService {
             this.socketService.drawLines({
               f: canvas.selectedElements[0].id,
               s: canvas.selectedElements[1].id,
-              roomId: this.roomId,
-            });
+              roomId: this.constants.roomID,
+            }, );
             canvas.selectedElements.pop();
             canvas.selectedElements.pop();
           }
         } else {
           group.isEditable = false;
-          this.socketService.somethingModified(group.id, this.roomId);
+          this.socketService.somethingModified(group.id, this.currentUser, this.constants.roomID);
           this.unGroup(group, canvas);
-          var text1 = group._objects[1];
+          const text1 = group._objects[1];
           text1.lockMovementX = false;
           text1.lockMovementY = false;
           canvas.setActiveObject(text1);
@@ -268,13 +274,5 @@ export class GroupService {
         document.getElementById('deleteBtn')?.remove();
       }
     });
-  }
-
-  setRoomId(roomId: String) {
-    this.roomId = roomId;
-  }
-
-  getRoomId() {
-    return this.roomId;
   }
 }

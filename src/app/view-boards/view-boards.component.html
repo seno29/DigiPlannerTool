@@ -1,12 +1,12 @@
 
 <h2 class="title">Existing Boards</h2>
 
-<div *ngFor='let board of boards | keyvalue' class="card">
+<div *ngFor='let board of boards' class="card">
     <div class="container">
-        <p class="btitle"><b>{{board.value}}</b></p>
-        <p class="roomCode">Room Code: {{board.key}}</p>
+        <p class="btitle"><b>{{board.room_title}}</b></p>
+        <p class="roomCode">Room Code: {{board.room_id}}</p>
     </div>
     <button mat-button class="viewBtn">
-        <a routerLink='/userboard' [queryParams]='{room_code: board.key}'>View</a>
+        <a routerLink='/userboard' [queryParams]='{room_code: board.room_id}'>View</a>
     </button>
 </div>

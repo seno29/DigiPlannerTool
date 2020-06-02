@@ -7,8 +7,9 @@ import { URI } from './constants';
 })
 export class UserService {
   constructor(private http:HttpClient) { }
-
+  
   getUserType(email:string){
-    return this.http.get(`${URI}/users/${email}`);
+    return this.http.get(`${URI}/user/${email}`);
   }
+
 }

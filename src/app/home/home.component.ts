@@ -36,22 +36,20 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/login']);
       } else {
         this.userService.getUserType(this.currentUser.email).subscribe((result) => {
-          if(result != undefined) {
-            let userType = result.toString() === '1' ? 'admin' : 'user';
-            console.log(userType);
+          if(result['success']) {
+            let data = result['data'];
+            let userType = data['roles'][0] === 1 ? 'admin' : 'user';
             this.isAdmin = userType === 'admin' ? true : false;
             this.isUser = userType === 'user' ? true : false;
           }
-        },
-        (err)=>{console.log('cannot get data from database');}
-        );
+        });
       }
     });
   }
 
   createBoard():void {
     let dialogRef = this.dialog.open(CreateBoardDialogComponent,{
-      data:{boardTitle:null,roomCode:null}
+      data:{boardTitle:null,roomCode:null,userId:this.currentUser.email}
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -60,7 +58,7 @@ export class HomeComponent implements OnInit {
         let boardTitle:string=result.boardTitle;
 
         this.boardService.createBoard(roomCode,boardTitle,this.currentUser.email).subscribe((result) => {
-          if(result && result === 'OK') {
+          if(result['success'] === true) {
             this.showSnackBar('Board created!','OK');
             this.router.navigate(['/adminboard'],{
               queryParams:{roomCode:roomCode, boardTitle:boardTitle}
@@ -69,35 +67,32 @@ export class HomeComponent implements OnInit {
             this.showSnackBar('cannot create board!','cancel');
           }
         },
-        (err) => {console.log(err);}
+        (err) => {
+          console.log(err);
+        }
         );
-
-        this.showSnackBar('Board created!','OK');
-        this.router.navigate(['/adminboard'],{
-          queryParams:{roomCode:result.roomCode, boardTitle:result.boardTitle}
-        });
-      } else {
-        console.log('not valid info');
       }
     });
   }
 
   joinBoard():void {
     let dialogRef = this.dialog.open(JoinRoomDialogComponent,{
-      data:{roomCode:null}
+      data:{roomCode:null,userId:this.currentUser.email}
     });
     dialogRef.afterClosed().subscribe((result) => {
       if(result) {
         this.boardService.addJoinedRoom(result,this.currentUser.email).subscribe((value) => {
-          console.log(value);
-          if(value === '1'){
+          if(value['success']){
             this.showSnackBar('Now joining room','OK');
             this.router.navigate(['/userboard'],{queryParams:{room_code:result}});
           }else{
             this.showSnackBar('Unable to join room','cancel');
           }
         },
-        (err) => {console.log(err);}
+        (err) => {
+          console.log(err);
+          this.showSnackBar('Unable to join room','cancel');
+        }
         );
       } else {
         this.showSnackBar('Please enter the room code to join','cancel');

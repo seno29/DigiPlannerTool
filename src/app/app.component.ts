@@ -18,9 +18,7 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
       this.currentUser = user;
-      this.goToHome();
-    }); 
-     
+    });  
   }
 
   signOut(){

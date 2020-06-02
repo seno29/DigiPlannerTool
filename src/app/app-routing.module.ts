@@ -11,7 +11,8 @@ const routes: Routes = [
   { path:'home', component: HomeComponent },
   { path:'userboard', component: UserBoardComponent },
   { path:'adminboard', component: AdminBoardComponent },
-  { path:'viewboard' ,component: ViewBoardsComponent}
+  { path:'viewboard' ,component: ViewBoardsComponent},
+  { path: '', redirectTo:'/login', pathMatch: 'full' }
 ];
 
 @NgModule({

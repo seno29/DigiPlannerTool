@@ -17,7 +17,7 @@ export class JoinRoomDialogComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
   }
 
   onCancel(): void {
@@ -26,22 +26,25 @@ export class JoinRoomDialogComponent implements OnInit {
 
   validateRoomCode(roomcode:string){
     if(roomcode && roomcode.length>=4){
-      this.boardService.isExist(roomcode).subscribe((result) => {
+      this.boardService.isExist(this.data.userId,roomcode).subscribe((result) => {
         console.log(result);
-        if(result.toString() === 'true'){
-          this.isexist = true;
-        }else if(result.toString() === 'false'){
-          this.isexist = false;
-          this.message = 'room does not exist';
+        if(result['success']){
+          if(result['messages'][0] === 'Room Id exists and is accessible'){
+            this.isexist = true;
+          }else{
+            this.isexist = false;
+            this.message = result['messages'][0];
+          }
         }else{
           this.isexist = false;
-          this.message = 'you cannot join this room yet';
+          this.message = result['messages'][0];
         }
         this.emptyRoomCode = false;
       },
       (err) => {
+        console.log(err);
         this.isexist = false;
-        this.message = 'you cannot join this room yet';
+        this.message = 'room code does not exist';
       }  
       );
     }else{

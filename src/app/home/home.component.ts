@@ -81,8 +81,8 @@ export class HomeComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if(result) {
-        this.boardService.addJoinedRoom(result,this.currentUser.email).subscribe((result) => {
-          if(result['success']){
+        this.boardService.addJoinedRoom(result,this.currentUser.email).subscribe((value) => {
+          if(value['success']){
             this.showSnackBar('Now joining room','OK');
             this.router.navigate(['/userboard'],{queryParams:{room_code:result}});
           }else{

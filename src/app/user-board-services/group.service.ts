@@ -113,8 +113,8 @@ export class GroupService {
       g.id,
       false,
       g.angle,
-      g.scaleX,
-      g.scaleY
+      1,
+      1
     );
     this.selectedGroup.splice(u, 1);
     this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));

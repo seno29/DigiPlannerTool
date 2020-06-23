@@ -1,6 +1,6 @@
-import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { Component, OnInit, Renderer2, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { fabric } from 'fabric';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { ShapeService } from '../user-board-services/shape.service';
 import { ConstantsService } from '../user-board-services/constants.service';
 import { SocketService } from '../socket-services/socket.service';
@@ -21,7 +21,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   canvas: fabric.Canvas;
   boardTitle: string;
   convertedCanvas: any;
-  isUserEditing: boolean
+  isUserEditing: boolean;
+  @ViewChild('canvasContent') canvasContent: ElementRef<HTMLElement>;
+
   constructor(
     private shapeService: ShapeService,
     private groupService: GroupService,
@@ -33,8 +35,16 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private userDatabase: UserDatabaseService,
-    private adminBoardService: AdminBoardService
-  ) {}
+    private adminBoardService: AdminBoardService,
+    private router: Router
+  ) {
+    this.router.events.subscribe((val) => {
+      if(val instanceof NavigationStart && this.isUserEditing) {
+        let el: HTMLElement = this.canvasContent.nativeElement;
+        el.click();
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';

@@ -40,9 +40,13 @@
 
     <div class="button-col">
       <button mat-fab class="clearButton redButton but-col-right" matTooltip="Clear Screen" matTooltipPosition='after'
-        color="warn" (click)="showSnackBar('Do you want to clear the screen?','OK')" [disabled]="canvas.connect">
+        color="warn" (click)="showSnackBar('Do you want to clear the screen?','OK')" [disabled]="canvas.connect || isUserEditing">
         <mat-icon>layers_clear</mat-icon>
       </button>
+
+      <!-- <button class="convertCanvas" title="Save Canvas" mat-fab (click)="exportJsonAdmin()" color="warn">
+        <mat-icon>save</mat-icon>
+      </button> -->
 
       <button mat-fab class="redButton but-col-right" matTooltip="Export" matTooltipPosition='after' color="warn"
         (click)="exportAsImage(canvasContent)">

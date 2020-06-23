@@ -20,7 +20,7 @@ export class BoardService {
 
   addJoinedRoom(room_code:string,userId:string) {
     return this.http.post(`${URI}/room/${userId}/${room_code}`,{});
-  }
+  } 
 
   viewBoard(userId:string) {
     return this.http.get(`${URI}/user/${userId}`);

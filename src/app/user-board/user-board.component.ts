@@ -9,6 +9,7 @@ import { AuthService, SocialUser } from 'angularx-social-login';
 import { GroupService } from '../user-board-services/group.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserDatabaseService } from '../user-board-services/user-database.service';
+import { AdminBoardService } from '../admin-board services/admin-board.service';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { UserDatabaseService } from '../user-board-services/user-database.servic
 export class UserBoardComponent implements OnInit, OnDestroy {
   canvas: fabric.Canvas;
   boardTitle: string;
-
+  convertedCanvas: any;
+  isUserEditing: boolean
   constructor(
     private shapeService: ShapeService,
     private groupService: GroupService,
@@ -30,11 +32,13 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     private userSocketService: UserSocketService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private userDatabase: UserDatabaseService
+    private userDatabase: UserDatabaseService,
+    private adminBoardService: AdminBoardService
   ) {}
 
   ngOnInit(): void {
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
+    this.isUserEditing = false;
     this.socketService.connect();
     this.canvas = this.shapeService.initCanvas(this.renderer);
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
@@ -42,6 +46,9 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.groupService.currentUser = user;
       this.constants.userID = user.email;
     });
+    this.groupService.userEdit.subscribe((isEditing: boolean) => {
+      this.isUserEditing = isEditing;
+    })
   }
 
   ngOnDestroy(): void{
@@ -77,16 +84,19 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.shapeService.setBackground(this.canvas, 'assets');
       this.socketService.clearCanvas(this.canvas, this.constants.roomID);
       document.getElementById('deleteBtn')?.remove();
+      console.log(this.canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
       this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   showSnackBar(message: string, action: string): void {
-    const snackBarRef = this.snackBar.open(message, action, {
-      duration: 3000,
-    });
-    snackBarRef.onAction().subscribe(() => {
-      this.clear();
-    });
+    if(!this.isUserEditing){
+      const snackBarRef = this.snackBar.open(message, action, {
+        duration: 3000,
+      });
+      snackBarRef.onAction().subscribe(() => {
+        this.clear();
+      });
+    }
   }
 
   connect() {

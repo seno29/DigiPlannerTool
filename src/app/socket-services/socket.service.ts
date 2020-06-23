@@ -35,6 +35,14 @@ export class SocketService {
     this.socket.emit('modifiedObject', [groupId, currentUser, id]);
   }
 
+  editingStarted(groupId: any, currentUser, id: string) {
+    this.socket.emit('editingStart', [groupId, currentUser, id]);
+  }
+
+  editingEnded(groupId: any, currentUser, id: string) {
+    this.socket.emit('editingEnd', [groupId, currentUser, id]);
+  }
+
   clearCanvas(canvas: fabric.Canvas, id: string) {
     this.socket.emit('clearCanvas', [canvas, id]);
   }

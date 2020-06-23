@@ -4,19 +4,20 @@ import { GroupService } from './group.service';
 import { UserDatabaseService } from './user-database.service';
 import { ConstantsService } from './constants.service';
 import { SocketService } from '../socket-services/socket.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShapeService {
   private image: fabric.Image;
-
   constructor(
     private groupService: GroupService,
     private userDatabaseService: UserDatabaseService,
     private constants: ConstantsService,
     private socketService: SocketService
-  ) {}
+  ) {
+  }
 
   initCanvas(renderer: Renderer2){
     this.image = null;

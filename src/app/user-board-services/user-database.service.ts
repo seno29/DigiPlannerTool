@@ -16,12 +16,6 @@ export class UserDatabaseService {
       .subscribe( responseData => {});
    }
 
-   testFunc(canvasJSON: any) {
-    this.http.put(`http://localhost:8080/board/${this.constants.userID}/${this.constants.roomID}`,
-    {canvas_json: JSON.stringify(canvasJSON)}, {responseType: 'json'})
-    .subscribe( responseData => {});
-   }
-
   getRoomData(): Observable<RoomData> {
     return this.http.get(`${this.constants.URI}/board/${this.constants.userID}/${this.constants.roomID}`) as Observable<RoomData>;
   }

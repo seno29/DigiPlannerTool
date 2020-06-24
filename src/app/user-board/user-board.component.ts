@@ -21,7 +21,6 @@ import { Observable } from 'rxjs';
 export class UserBoardComponent implements OnInit, OnDestroy, ICanComponentDeactivate {
   canvas: fabric.Canvas;
   boardTitle: string;
-  convertedCanvas: any;
   isUserEditing: boolean;
   @ViewChild('canvasContent') canvasContent: ElementRef<HTMLElement>;
 

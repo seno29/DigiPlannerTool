@@ -211,7 +211,6 @@ export class GroupService {
         canvas,
         renderer
       );
-      // this.socketService.editingStarted(group.id, this.currentUser, this.constants.roomID);
     });
 
     group.on('modified', (e) => {
@@ -271,7 +270,6 @@ export class GroupService {
           canvas.setActiveObject(text1);
           text1.enterEditing();
           text1.selectAll();
-          // this.socketService.editingEnded(group.id, this.currentUser, this.constants.roomID);
         }
       })
     );

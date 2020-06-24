@@ -1,6 +1,6 @@
-import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { Component, OnInit, Renderer2, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { fabric } from 'fabric';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart, CanDeactivate } from '@angular/router';
 import { ShapeService } from '../user-board-services/shape.service';
 import { ConstantsService } from '../user-board-services/constants.service';
 import { SocketService } from '../socket-services/socket.service';
@@ -9,6 +9,8 @@ import { AuthService, SocialUser } from 'angularx-social-login';
 import { GroupService } from '../user-board-services/group.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserDatabaseService } from '../user-board-services/user-database.service';
+import { AdminBoardService } from '../admin-board services/admin-board.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -16,9 +18,11 @@ import { UserDatabaseService } from '../user-board-services/user-database.servic
   templateUrl: './user-board.component.html',
   styleUrls: ['./user-board.component.css'],
 })
-export class UserBoardComponent implements OnInit, OnDestroy {
+export class UserBoardComponent implements OnInit, OnDestroy, ICanComponentDeactivate {
   canvas: fabric.Canvas;
   boardTitle: string;
+  isUserEditing: boolean;
+  @ViewChild('canvasContent') canvasContent: ElementRef<HTMLElement>;
 
   constructor(
     private shapeService: ShapeService,
@@ -30,11 +34,14 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     private userSocketService: UserSocketService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private userDatabase: UserDatabaseService
+    private userDatabase: UserDatabaseService,
+    private adminBoardService: AdminBoardService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
+    this.isUserEditing = false;
     this.socketService.connect();
     this.canvas = this.shapeService.initCanvas(this.renderer);
     this.userSocketService.init(this.canvas, this.renderer, this.constants.roomID);
@@ -42,6 +49,14 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.groupService.currentUser = user;
       this.constants.userID = user.email;
     });
+    this.groupService.userEdit.subscribe((isEditing: boolean) => {
+      this.isUserEditing = isEditing;
+    });
+    window.onbeforeunload = function(e) {
+      if(this.isUserEditing){
+        this.shapeService.windowClose.next();
+      }
+    }.bind(this);
   }
 
   ngOnDestroy(): void{
@@ -77,16 +92,19 @@ export class UserBoardComponent implements OnInit, OnDestroy {
       this.shapeService.setBackground(this.canvas, 'assets');
       this.socketService.clearCanvas(this.canvas, this.constants.roomID);
       document.getElementById('deleteBtn')?.remove();
+      console.log(this.canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
       this.userDatabase.sendingCanvas(this.canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 
   showSnackBar(message: string, action: string): void {
-    const snackBarRef = this.snackBar.open(message, action, {
-      duration: 3000,
-    });
-    snackBarRef.onAction().subscribe(() => {
-      this.clear();
-    });
+    if(!this.isUserEditing){
+      const snackBarRef = this.snackBar.open(message, action, {
+        duration: 3000,
+      });
+      snackBarRef.onAction().subscribe(() => {
+        this.clear();
+      });
+    }
   }
 
   connect() {
@@ -123,4 +141,12 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   changeColor(color: string) {
     this.shapeService.changeColor(this.canvas, color, this.renderer);
   }
+
+  canDeactivate(): boolean {
+    return !this.isUserEditing;
+  }
+}
+
+export interface ICanComponentDeactivate extends Component {
+  canDeactivate: () => Observable<boolean> | boolean;
 }

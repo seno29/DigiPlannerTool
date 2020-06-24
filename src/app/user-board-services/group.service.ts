@@ -4,6 +4,7 @@ import { ScalingService } from './scaling.service';
 import { ConstantsService } from './constants.service';
 import { SocketService } from '../socket-services/socket.service';
 import { UserDatabaseService } from './user-database.service';
+import { Subject } from 'rxjs/internal/Subject';
 
 
 @Injectable({
@@ -13,10 +14,12 @@ export class GroupService {
   selectedGroup: Array<fabric.Group> = [];
   givingId;
   currentUser;
+  userEdit: Subject<boolean>;
   constructor(private scalingService: ScalingService, private constants: ConstantsService,
               private socketService: SocketService, private userDatabase: UserDatabaseService) {
     this.givingId = 0;
     this.currentUser = 'Unknown';
+    this.userEdit = new Subject<boolean>();
   }
 
   makeLine(coords: fabric.Point) {
@@ -85,6 +88,7 @@ export class GroupService {
     for (const item of items) {
       canvas.add(item);
     }
+    this.userEdit.next(true);
     canvas.renderAll();
   }
 
@@ -117,6 +121,7 @@ export class GroupService {
       1
     );
     this.selectedGroup.splice(u, 1);
+    this.userEdit.next(false);
     this.userDatabase.sendingCanvas(canvas.toJSON(['id', 'connections', 'givingId', 'editing']));
   }
 

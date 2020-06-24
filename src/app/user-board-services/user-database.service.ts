@@ -11,7 +11,7 @@ export class UserDatabaseService {
 
   sendingCanvas(canvasJSON: any){
     delete canvasJSON.backgroundImage;
-    this.http.put(`http://localhost:4200/board/${this.constants.userID}/${this.constants.roomID}`,
+    this.http.put(`http://localhost:8080/board/${this.constants.userID}/${this.constants.roomID}`,
       {canvas_json: JSON.stringify(canvasJSON)}, {responseType: 'json'})
       .subscribe( responseData => {});
    }

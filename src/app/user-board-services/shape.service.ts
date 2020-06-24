@@ -4,19 +4,22 @@ import { GroupService } from './group.service';
 import { UserDatabaseService } from './user-database.service';
 import { ConstantsService } from './constants.service';
 import { SocketService } from '../socket-services/socket.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShapeService {
   private image: fabric.Image;
-
+  windowClose: Subject<any>;
   constructor(
     private groupService: GroupService,
     private userDatabaseService: UserDatabaseService,
     private constants: ConstantsService,
     private socketService: SocketService
-  ) {}
+  ) {
+    this.windowClose = new Subject<any>();
+  }
 
   initCanvas(renderer: Renderer2){
     this.image = null;
@@ -135,6 +138,10 @@ export class ShapeService {
       this.socketService.regr(text.text, text.id, this.constants.roomID);
       this.groupService.regroup(shape, text, canvas, renderer);
     });
+    this.windowClose.subscribe(() => {
+      this.socketService.regr(text.text, text.id, this.constants.roomID);
+      this.groupService.regroup(shape, text, canvas, renderer);
+    })
   }
 
   changeColor(canvas: fabric.Canvas, color: string, renderer: Renderer2) {

@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { fabric } from 'fabric';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart, CanDeactivate } from '@angular/router';
 import { ShapeService } from '../user-board-services/shape.service';
 import { ConstantsService } from '../user-board-services/constants.service';
 import { SocketService } from '../socket-services/socket.service';
@@ -10,6 +10,7 @@ import { GroupService } from '../user-board-services/group.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserDatabaseService } from '../user-board-services/user-database.service';
 import { AdminBoardService } from '../admin-board services/admin-board.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { AdminBoardService } from '../admin-board services/admin-board.service';
   templateUrl: './user-board.component.html',
   styleUrls: ['./user-board.component.css'],
 })
-export class UserBoardComponent implements OnInit, OnDestroy {
+export class UserBoardComponent implements OnInit, OnDestroy, ICanComponentDeactivate {
   canvas: fabric.Canvas;
   boardTitle: string;
   convertedCanvas: any;
@@ -37,14 +38,7 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     private userDatabase: UserDatabaseService,
     private adminBoardService: AdminBoardService,
     private router: Router
-  ) {
-    this.router.events.subscribe((val) => {
-      if(val instanceof NavigationStart && this.isUserEditing) {
-        let el: HTMLElement = this.canvasContent.nativeElement;
-        el.click();
-      }
-    })
-  }
+  ) {}
 
   ngOnInit(): void {
     this.constants.roomID = this.route.snapshot.queryParamMap.get('room_code') || 'unknown';
@@ -58,7 +52,12 @@ export class UserBoardComponent implements OnInit, OnDestroy {
     });
     this.groupService.userEdit.subscribe((isEditing: boolean) => {
       this.isUserEditing = isEditing;
-    })
+    });
+    window.onbeforeunload = function(e) {
+      if(this.isUserEditing){
+        this.shapeService.windowClose.next();
+      }
+    }.bind(this);
   }
 
   ngOnDestroy(): void{
@@ -143,4 +142,12 @@ export class UserBoardComponent implements OnInit, OnDestroy {
   changeColor(color: string) {
     this.shapeService.changeColor(this.canvas, color, this.renderer);
   }
+
+  canDeactivate(): boolean {
+    return !this.isUserEditing;
+  }
+}
+
+export interface ICanComponentDeactivate extends Component {
+  canDeactivate: () => Observable<boolean> | boolean;
 }

@@ -1,16 +1,15 @@
 // src/app/auth/auth-guard.service.ts
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, CanDeactivate } from '@angular/router';
-import { UserBoardComponent } from '../user-board.component';
+import { ICanComponentDeactivate } from '../user-board.component';
+import { Observable } from 'rxjs';
 
-@Injectable()
-export class UserBoardGuardService implements CanDeactivate<boolean> {
-  constructor(public router: Router, private userBoardComponent: UserBoardComponent) {}
-  canDeactivate(): boolean {
-    if (this.userBoardComponent.isUserEditing) {
-    //   this.router.navigate(['login']);
-      return false;
-    }
-    return true;
+@Injectable({
+  providedIn: 'root',
+})
+export class UserBoardGuardService implements CanDeactivate<ICanComponentDeactivate> {
+  constructor(public router: Router) {}
+  canDeactivate(currentComponent: ICanComponentDeactivate): Observable<boolean> | boolean  {
+    return currentComponent.canDeactivate ? currentComponent.canDeactivate() : true;
   }
 }
